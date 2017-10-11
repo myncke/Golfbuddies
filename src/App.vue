@@ -1,12 +1,31 @@
 <template>
   <div id="app">
-    <header>
+    <!-- <header>
       <span>Vue.js PWA</span>
-    </header>
-    <main>
+    </header> -->
+    <!-- <main>
       <img src="./assets/logo.png" alt="Vue.js PWA">
       <router-view></router-view>
-    </main>
+    </main> -->
+
+    <v-app>
+      <v-navigation-drawer app></v-navigation-drawer>
+      <v-toolbar app></v-toolbar>
+      <main>
+        <v-content>
+          <v-container fluid>
+            <router-view></router-view>
+          </v-container>
+        </v-content>
+      </main>
+      <v-footer app></v-footer>
+    </v-app>
+
+    <!-- <v-app>
+      <main>
+        <v-container>Hello world</v-container>
+      </main>
+    </v-app> -->
   </div>
 </template>
 
