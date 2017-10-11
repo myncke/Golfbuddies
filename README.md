@@ -24,4 +24,15 @@ npm run unit
 npm test
 ```
 
+## ngrok setup for mobile webserver
+``` bash
+# install ngrok
+npm install -g ngrok
+
+# run server
+ngrok http 8080
+
+```
+
+
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
