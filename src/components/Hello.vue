@@ -11,17 +11,15 @@
     </ul>
     <h2>Ecosystem</h2>
     <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-      <li><button v-on:click="makeUser('Af3ug111EfTLf2PLAbf70GWEJew2')">SwagButton</button></li>
+      <li><button v-on:click="makeUser('Af3ug111EfTLf2PLAbf70GWEJew2')">Test User</button></li>
+      <li><button v-on:click="makeGame('Af3ug111EfTLf2PLAbf70GWEJew2')">Test Game</button></li>
     </ul>
   </div>
 </template>
 
 <script>
 import UserModel from '../models/UserModel'
+import GameModel from '../models/GameModel'
 export default {
   name: 'hello',
   data () {
@@ -31,8 +29,21 @@ export default {
   },
   methods: {
     makeUser: function (key) {
-      const model = new UserModel('Af3ug111EfTLf2PLAbf70GWEJew2', false, model => console.log(model), error => console.log(error))
+      const model = new UserModel('Af3ug111EfTLf2PLAbf70GWEJew2', false, false, model => {
+        console.log(model._toJson()) // On Success, print the model
+        model['nationality'] = 'Swagland' // Change a field from the object
+        model.save(() => console.log(model), error => console.log(error)) // Save the object :D
+      }, error => console.log(error))
       console.log(model)
+    },
+    makeGame: function (key) {
+      const game = new GameModel('uPNmM5JOnfKGdbDl2vuh', false, model => {
+        console.log(model._toJson())
+        model['competition'] = !model['competition']
+        model.save(() => console.log(model._toJson()), error => console.log(error))
+      }, error => console.log(error))
+      game.initSubcollection('GameUsers', list => console.log(list), error => console.log(error))
+      console.log(game)
     }
   }
 }

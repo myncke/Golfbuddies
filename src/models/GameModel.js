@@ -1,108 +1,76 @@
-import firebase from 'firebase';
-require('firebase/firestore')
-import DATABASE_REF from './FirebaseModel'
+import FirebaseModel from './FirebaseModel'
+import FirebaseSubColModel from './FirebaseSubColModel'
 
-export default class GameModel extends FirebaseModel{
+export class GameUser extends FirebaseModel {
 
-  private static firestoreFields = [
-    "competition",
-    "international",
-    "prefGameSex",
-    "specialWishes",
-    "prefGroupSize",
-    "creator",
+  static _firestoreFields = [
+    'specialWishes'
   ]
 
-  //Booleans
-  public competition;
-  public international;
+  // Strings
+  specialWishes
 
-  //Strings
-  public prefGameSex;
-  public specialWishes;
+  constructor (key, keepListening, onSuccess, onFailure) {
+    super(key, GameUser._firestoreFields, GameUser, keepListening, onSuccess, onFailure)
+  }
+}
 
-  //Integers
-  public prefGroupSize;
+export default class GameModel extends FirebaseSubColModel {
 
-  //References
-  private creator;
+  static _firestoreFields = [
+    'competition',
+    'international',
+    'prefGameSex',
+    'specialWishes',
+    'prefGroupSize',
+    'creator',
+    'date',
+    'location'
+  ]
 
-  getCreator(){
-    return creator.split('/Users/')[1];
+  static _subCollections = {
+    'GameUsers': GameUser
+  }
+
+  static collectionName = 'Game'
+
+  // Booleans
+  competition
+  international
+
+  // Strings
+  prefGameSex
+  specialWishes
+
+  // Integers
+  prefGroupSize
+
+  // References
+  creator
+
+  getCreator () {
+    return this.creator.split('/Users/')[1]
   }
 
   /**
    * Set the value of creator
    * @param user = UserModel to which we make a reference
    */
-  setCreator(user){
-    this.creator = DATABASE_REF + 'Users/' + user.key
-  }
-
-  //Timestamps
-  public date;
-
-  //Geopoints
-  public location;
-
-
-  constructor(key, keepListening, onSuccess, onFailure) {
-    super(key,keepListening,onSuccess,onFailure);
-    keepListening ? this.listenToFirebase(onSuccess,onFailure) : this.getOnceFromFirebase(onSuccess, onFailure);
-  }
-
-  constructor(key){
-    super(key);
-  }
-
-  private getDocRef(){
-    return firebase.firestore().collection('Game').doc(this.key);
-  }
-
-  private getOnceFromFirebase(onSuccess, onFailure){
-    this.getDocRef().get().then( doc => this.mapFields(doc, onSuccess,onFailure))
-      .catch( error => onFailure(error))
-  }
-
-  private listenToFirebase(onSuccess, onFailure){
-    this.getDocRef().get().onSnapshot( doc => this.mapFields(doc, onSuccess,onFailure))
-  }
-
-  //TODO; this can be simplified with reflection
-  private static mapFields(object, doc, onSuccess, onFailure){
-    if(doc.exists){
-      let model = object || new GameModel(doc.id);
-      let data = doc.data()
-      for (let field of GameModel.firestoreFields) {
-        model[field] = data[field];
-      }
-      console.log("Made an object: " + model.toString());
-      onSuccess(model);
+  setCreator (user) {
+    if (typeof user === 'string') {
+      this.creator.path = 'Users/' + user
     } else {
-      onFailure("Something went wrong, we couldn't find the document");
+      this.creator.path = 'Users/' + user.key
     }
   }
 
-  static getAllFromFirebase(onSuccess, onFailure){
-    let result = [];
-    firebase.firestore().collection('Game').get().then(
-      snapShot => snapShot.forEach(
-        doc => result.push(this.mapFields(undefined, doc, onSuccess, onFailure))
-      )
-    )
-    return result;
-  }
+  // Timestamps
+  date
 
-  toJson(){
-    let json = {};
-    for (let field of GameModel.firestoreFields) {
-      json[field] = this[field];
-    }
-    return json;
-  }
+  // Geopoints
+  location
 
-  save(onSuccess, onFailure){
-    this.getDocRef().set(this.toJson()).then(onSuccess()).catch(error => onFailure(error));
+  constructor (key, keepListening, onSuccess, onFailure) {
+    super(key, GameModel._subCollections, GameModel._firestoreFields, GameModel, keepListening, onSuccess, onFailure)
   }
-
 }
