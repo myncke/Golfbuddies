@@ -1,6 +1,8 @@
 import firebase from 'firebase'
 require('firebase/firestore')
 
+const uuidv1 = require('uuid/v1')
+
 /**
  * Contains some methods each model that is stored in firestore should contain and the documentation about them.
  */
@@ -25,6 +27,7 @@ class FirebaseModel {
    * @param onFailure = function(errorMessage:String)
    */
   constructor (key, firebaseParams, modelClass, keepListening, onSuccess, onFailure) {
+    key === undefined ? this.key = uuidv1() : this.key = key
     this.key = key
     this.firebaseParams = firebaseParams
     this.modelClass = modelClass
