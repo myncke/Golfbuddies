@@ -89,8 +89,28 @@ class FirebaseModel {
    * @param onFailure = function(errorMessage)
    */
   static getAllFromFirebase (modelClass, onSuccess, onFailure) {
+    FirebaseModel.getAllFromRef(FirebaseModel.getNormalRef(modelClass), modelClass, onSuccess, onFailure)
+  }
+
+  /**
+   * Gets a normal ref to the collection of the given modelClass
+   * @param modelClass
+   * @returns {firebase.firestore.CollectionReference}
+   */
+  static getNormalRef (modelClass) {
+    return firebase.firestore().collection(modelClass.collectionName)
+  }
+
+  /**
+   * Gets all the objects from the database from the collection given by ref
+   * @param ref = reference to the db
+   * @param modelClass = class to instantiate
+   * @param onSuccess = function(list<modelClass>)
+   * @param onFailure = function(error)
+   */
+  static getAllFromRef (ref, modelClass, onSuccess, onFailure) {
     let result = []
-    firebase.firestore().collection(modelClass.collectionName).get().then(
+    ref.get().then(
       snapShot => {
         snapShot.forEach(
           doc => FirebaseModel._mapFields(modelClass, undefined, doc, onSuccess, onFailure)
@@ -121,6 +141,10 @@ class FirebaseModel {
   save (onSuccess, onFailure) {
     this._getDocRef().set(this._toJson()).then(onSuccess(), error => onFailure(error))
   }
+
+  deleteObject (onSuccess, onFailure) {
+    this._getDocRef().delete().then(onSuccess, error => onFailure(error))
+  }
 }
 export default FirebaseModel
 
@@ -129,4 +153,3 @@ function NotImplementedError (message) {
   this.message = (message || 'NOT YET IMPLEMENTED')
 }
 NotImplementedError.prototype = Error.prototype
-

@@ -49,7 +49,7 @@ export default class GameModel extends FirebaseSubColModel {
   creator
 
   getCreator () {
-    return this.creator.split('/Users/')[1]
+    return this.creator.path.substr('Users/'.length)
   }
 
   /**

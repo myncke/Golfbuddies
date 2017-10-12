@@ -12,7 +12,8 @@
     <h2>Ecosystem</h2>
     <ul>
       <li><button v-on:click="makeUser('Af3ug111EfTLf2PLAbf70GWEJew2')">Test User</button></li>
-      <li><button v-on:click="makeGame('Af3ug111EfTLf2PLAbf70GWEJew2')">Test Game</button></li>
+      <li><button v-on:click="makeGame('uPNmM5JOnfKGdbDl2vuh')">Test Game</button></li>
+      <li><button v-on:click="makeSportClub('UMotjtm55NXUdmaFVTiD')">Test Club</button></li>
     </ul>
   </div>
 </template>
@@ -20,6 +21,7 @@
 <script>
 import UserModel from '../models/UserModel'
 import GameModel from '../models/GameModel'
+import SportClubModel from '../models/SportClubModel'
 export default {
   name: 'hello',
   data () {
@@ -29,7 +31,7 @@ export default {
   },
   methods: {
     makeUser: function (key) {
-      const model = new UserModel('Af3ug111EfTLf2PLAbf70GWEJew2', false, false, model => {
+      const model = new UserModel(key, false, false, model => {
         console.log(model._toJson()) // On Success, print the model
         model['nationality'] = 'Swagland' // Change a field from the object
         model.save(() => console.log(model), error => console.log(error)) // Save the object :D
@@ -37,13 +39,23 @@ export default {
       console.log(model)
     },
     makeGame: function (key) {
-      const game = new GameModel('uPNmM5JOnfKGdbDl2vuh', false, model => {
+      const game = new GameModel(key, false, model => {
         console.log(model._toJson())
         model['competition'] = !model['competition']
         model.save(() => console.log(model._toJson()), error => console.log(error))
       }, error => console.log(error))
       game.initSubcollection('GameUsers', list => console.log(list), error => console.log(error))
       console.log(game)
+    },
+    makeSportClub: function (key) {
+      const club = new SportClubModel(key, false, model => {
+        console.log(model._toJson())
+        model.closed = !model.closed
+        model.save(() => console.log(model._toJson()), error => console.log(error))
+      }, error => console.log(error))
+      club.initSubcollection('Members', list => console.log(list), error => console.log(error))
+      club.initSubcollection('Games', list => console.log(list), error => console.log(error))
+      console.log(club)
     }
   }
 }
