@@ -38,16 +38,11 @@ export default class UserModel extends FirebaseModel {
    * Constructor with currentUser == True, gets the current User's model
    * Otherwise it's a normal constructor
    * @param key = String
-   * @param currentUser = Bool
    * @param keepListening = Bool
    * @param onSuccess = function(model)
    * @param onFailure = function(error)
    */
-  constructor (key, currentUser, keepListening, onSuccess, onFailure) {
-    if (currentUser) {
-      super(firebase.auth().currentUser.uid, UserModel._firestoreFields, UserModel, keepListening, onSuccess, onFailure)
-    } else {
-      super(key, UserModel._firestoreFields, UserModel, keepListening, onSuccess, onFailure)
-    }
+  constructor (key, keepListening, onSuccess, onFailure) {
+    super(key || firebase.auth().currentUser.uid, UserModel._firestoreFields, UserModel, keepListening, onSuccess, onFailure)
   }
 }
