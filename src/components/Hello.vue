@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     makeUser: function (key) {
-      const model = new UserModel(key, false, false, model => {
+      const model = new UserModel(key, false, model => {
         console.log(model._toJson()) // On Success, print the model
         model['nationality'] = 'Swagland' // Change a field from the object
         model.save(() => console.log(model), error => console.log(error)) // Save the object :D
