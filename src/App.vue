@@ -2,7 +2,8 @@
   <v-app id="app">
     <v-navigation-drawer persistent clipped app v-model="drawer">
       <v-list dense>
-        <!-- <template v-for="(item, i) in items">
+        <template v-for="(item, i) in items">
+
           <v-layout
             row
             v-if="item.heading"
@@ -17,7 +18,10 @@
             <v-flex xs6 class="text-xs-center">
               <a href="#!" class="body-2 black--text">EDIT</a>
             </v-flex>
+
           </v-layout>
+
+          <!-- With Childeren -->
           <v-list-group v-else-if="item.children" v-model="item.model" no-action>
             <v-list-tile slot="item" @click="">
               <v-list-tile-action>
@@ -44,7 +48,9 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          <v-list-tile v-else @click="">
+          
+          <!-- Single Tile -->
+          <v-list-tile v-else @click="" :key="item.name" :to="item.path">
             <v-list-tile-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -54,44 +60,36 @@
               </v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
-        </template> -->
+        </template>
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar color="blue darken-3" dark app clipped-left fixed>
-      <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+    <v-toolbar color="green darken-1" dark app clipped-left fixed>
+      <v-toolbar-title style="width: 300px" class="ml-0 pl-3" >
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         Golfbuddies
       </v-toolbar-title>
-      <v-text-field solo prepend-icon="search" placeholder="Search"></v-text-field>
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>apps</v-icon>
+      <v-text-field solo prepend-icon="search" placeholder="Search" class="hidden-sm-and-down"></v-text-field> 
+      <!-- <v-spacer></v-spacer> -->
+      <v-btn flat :to="'/profile'">
+        <v-icon left>person</v-icon>
+        Profile
       </v-btn>
-      <v-btn icon>
-        <v-icon>notifications</v-icon>
+      <v-btn flat :to="'/signup'">
+        <v-icon left>face</v-icon>
+        Sign up
       </v-btn>
-      <v-btn icon large>
-        <v-avatar size="32px" tile>
-          <img
-            src="https://vuetifyjs.com/static/doc-images/logo.svg"
-            alt="Vuetify"
-          >
-        </v-avatar>
+      <v-btn flat :to="'signin'">
+        <v-icon left>lock_open</v-icon>
+        Sign in
       </v-btn>
     </v-toolbar>
 
     <main>
       <v-content>
-        <v-container fluid fill-height>
-          <v-layout justify-center align-center>
-            <v-tooltip right>
-              <v-btn icon large :href="source" target="_blank" slot="activator">
-                <v-icon large>code</v-icon>
-                <router-view></router-view>
-              </v-btn>
-              <span>Source</span>
-            </v-tooltip>
+        <v-container fluid fill-height class="pa-0">
+          <v-layout>
+            <router-view></router-view>
           </v-layout>
         </v-container>
       </v-content>
@@ -169,38 +167,39 @@
     name: 'app',
     data: () => ({
       dialog: false,
-      drawer: true,
+      drawer: false,
       items: [
-        { icon: 'contacts', text: 'Contacts' },
-        { icon: 'history', text: 'Frequently contacted' },
-        { icon: 'content_copy', text: 'Duplicates' },
+        { icon: 'events', text: 'Events', path: '/events' },
+        { icon: 'contacts', text: 'Contacts', path: '/contacts' },
+        // { icon: 'history', text: 'Frequently contacted', path: '/events/1' },
         {
           icon: 'keyboard_arrow_up',
           'icon-alt': 'keyboard_arrow_down',
-          text: 'Labels',
+          text: 'Groups',
           model: true,
           children: [
-            { icon: 'add', text: 'Create label' }
-          ]
+            { icon: 'add', text: 'Create Group', path: '/' }
+          ],
+          path: '/'
         },
-        {
-          icon: 'keyboard_arrow_up',
-          'icon-alt': 'keyboard_arrow_down',
-          text: 'More',
-          model: false,
-          children: [
-            { text: 'Import' },
-            { text: 'Export' },
-            { text: 'Print' },
-            { text: 'Undo changes' },
-            { text: 'Other contacts' }
-          ]
-        },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'chat_bubble', text: 'Send feedback' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'phonelink', text: 'App downloads' },
-        { icon: 'keyboard', text: 'Go to the old version' }
+        // {
+        //   icon: 'keyboard_arrow_up',
+        //   'icon-alt': 'keyboard_arrow_down',
+        //   text: 'More',
+        //   model: false,
+        //   children: [
+        //     { text: 'Import', path: '/' },
+        //     { text: 'Export', path: '/' },
+        //     { text: 'Print', path: '/' },
+        //     { text: 'Undo changes', path: '/' },
+        //     { text: 'Other contacts', path: '/' }
+        //   ],
+        //   path: '/'
+        // },
+        { icon: 'settings', text: 'Settings', path: '/settings' },
+        { icon: 'chat_bubble', text: 'Send feedback', path: '/feedback' },
+        { icon: 'help', text: 'Help', path: '/help' },
+        { icon: 'phonelink', text: 'Install App', path: '/install' }
       ]
     }),
     props: {
@@ -210,38 +209,5 @@
 </script>
 
 <style>
-body {
-  margin: 0;
-}
 
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-
-main {
-  text-align: center;
-  margin-top: 40px;
-}
-
-header {
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #35495E;
-  color: #ffffff;
-}
-
-header span {
-  display: block;
-  position: relative;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: .02em;
-  font-weight: 400;
-  box-sizing: border-box;
-  padding-top: 16px;
-}
 </style>
