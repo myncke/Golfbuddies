@@ -10,6 +10,23 @@ export default class FriendshipModel extends FirebaseModel {
 
   static collectionName = 'Friendship'
 
+  static getFriendsOfUser (user, onSuccess, onFailure) {
+    let key = user.key
+    let ref = FriendshipModel.getNormalRef(FriendshipModel)
+    let ref2 = FriendshipModel.getNormalRef(FriendshipModel)
+    ref.where('userKey1', '==', key)
+    ref2.where('userKey1', '==', key)
+    let all = []
+    FriendshipModel.getAllFromRef(ref, FriendshipModel, list => {
+      all.push(...list)
+      onSuccess(all)
+    }, onFailure)
+    FriendshipModel.getAllFromRef(ref, FriendshipModel, list => {
+      all.push(...list)
+      onSuccess(all)
+    }, onFailure)
+  }
+
   // Booleans
   closeFriend
 
@@ -18,7 +35,7 @@ export default class FriendshipModel extends FirebaseModel {
   userKey2
 
   getUser1 () {
-    return this.gameKey.path.substr('Users/'.length)
+    return this.userKey1.path.substr('Users/'.length)
   }
 
   /**
@@ -27,14 +44,14 @@ export default class FriendshipModel extends FirebaseModel {
    */
   setUser1 (user) {
     if (typeof user === 'string') {
-      this.gameKey.path = 'Users/' + user
+      this.userKey1.path = 'Users/' + user
     } else {
-      this.gameKey.path = 'Users/' + user.key
+      this.userKey1.path = 'Users/' + user.key
     }
   }
 
   getUser2 () {
-    return this.gameKey.path.substr('Users/'.length)
+    return this.userKey2.path.substr('Users/'.length)
   }
 
   /**
@@ -43,12 +60,11 @@ export default class FriendshipModel extends FirebaseModel {
    */
   setUser2 (user) {
     if (typeof user === 'string') {
-      this.gameKey.path = 'Users/' + user
+      this.userKey2.path = 'Users/' + user
     } else {
-      this.gameKey.path = 'Users/' + user.key
+      this.userKey2.path = 'Users/' + user.key
     }
   }
-
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, FriendshipModel._subCollections, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)

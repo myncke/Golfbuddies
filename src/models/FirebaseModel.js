@@ -78,7 +78,7 @@ class FirebaseModel {
         model[field] = data[field]
       }
       console.log('Made an object: ')
-      console.log(model._toJson())
+      console.log(model)
       onSuccess(model)
     } else {
       onFailure('Something went wrong, we couldn\'t find the document')
@@ -112,13 +112,15 @@ class FirebaseModel {
    * @param onFailure = function(error)
    */
   static getAllFromRef (ref, modelClass, onSuccess, onFailure) {
-    let result = []
     ref.get().then(
       snapShot => {
+        let result = []
         snapShot.forEach(
-          doc => FirebaseModel._mapFields(modelClass, undefined, doc, onSuccess, onFailure)
+          doc => FirebaseModel._mapFields(modelClass, undefined, doc, model => {
+            result.push(model)
+            onSuccess(result)
+          }, onFailure)
         )
-        onSuccess(result)
       },
       error => onFailure(error)
     )

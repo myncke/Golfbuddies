@@ -26,9 +26,9 @@ export class MessageModel extends FirebaseModel {
    */
   setBy (user) {
     if (typeof user === 'string') {
-      this.gameKey.path = 'Users/' + user
+      this.by.path = 'Users/' + user
     } else {
-      this.gameKey.path = 'Users/' + user.key
+      this.by.path = 'Users/' + user.key
     }
   }
 
