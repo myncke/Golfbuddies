@@ -5,7 +5,7 @@
         <v-card>
           <v-card-text>
             <v-container>
-              <form>
+              <form @submit.prevent="onSignup">
 
                 <v-layout row>
                   <v-flex xs-12>
