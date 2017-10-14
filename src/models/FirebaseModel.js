@@ -131,8 +131,10 @@ class FirebaseModel {
    */
   _toJson () {
     let json = {}
-    for (let field of this.firebaseParams) {
-      json[field] = this[field]
+    if (this.firebaseParams !== undefined) {
+      for (let field of this.firebaseParams) {
+        json[field] = this[field]
+      }
     }
     return json
   }

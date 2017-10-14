@@ -3,6 +3,17 @@ import FirebaseModel from './FirebaseModel'
 
 export default class UserModel extends FirebaseModel {
 
+  static signUpAndIn (email, password, onSuccess, onFailure) {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then(
+            () => onSuccess(),
+            error => onFailure(error)
+          )
+      }, error => onFailure(error))
+  }
+
   static _firestoreFields = [
     'firstName',
     'lastName',
