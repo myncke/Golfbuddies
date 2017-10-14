@@ -45,8 +45,8 @@ class FirebaseModel {
   }
 
     /** Only get the model once from firebase
-   * onSucces = function(model:FirebaseModel)
    * onFailure = function(errorMessage:String)
+     * @return {Promise<model>}
    **/
   async _getOnceFromFirebase (onFailure) {
     try {
@@ -68,8 +68,8 @@ class FirebaseModel {
   /** Map the firebase object to our own object
    * object = the object we want to map the fields on
    * doc = the documentSnapshot that we have to translate
-   * onSucces = function(model:FirebaseModel)
    * onFailure = function(errorMessage:String)
+   * @return {model}
    **/
   static _mapFields (ModelClass, object, doc, onFailure) {
     if (doc.exists) {
@@ -88,8 +88,9 @@ class FirebaseModel {
 
   /**
    * Gets all the models of the collectionName from firebase
-   * @param modelClass = Class of a model
-   * @param onFailure = function(errorMessage)
+   * @param modelClass = {Class of a model}
+   * @param onFailure = {function(errorMessage)}
+   * @return {Promise<list<model>>}
    */
   static async getAllFromFirebase (modelClass, onFailure) {
     return await FirebaseModel.getAllFromRef(FirebaseModel.getNormalRef(modelClass), modelClass, onFailure)
@@ -109,6 +110,7 @@ class FirebaseModel {
    * @param ref = reference to the db
    * @param modelClass = class to instantiate
    * @param onFailure = function(error)
+   * @return {Promise<list<model>>}
    */
   static async getAllFromRef (ref, modelClass, onFailure) {
     try {
@@ -143,13 +145,16 @@ class FirebaseModel {
   /**
    * Tries to save this object to firestore.
    * TODO: think about having validations in here
-   * @param onSuccess = function()
-   * @param onFailure = function(errorMessage:String)
+   * @return {Promise<void>}
    */
   async save () {
     return await this._getDocRef().set(this._toJson())
   }
 
+  /**
+   * Deletes the current object from the firestore database
+   * @return {Promise<void>}
+   */
   async deleteObject () {
     return await this._getDocRef().delete()
   }
