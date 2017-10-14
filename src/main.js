@@ -16,8 +16,6 @@ const config = {
   messagingSenderId: '755720795488'
 }
 
-firebase.initializeApp(config)
-
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false
@@ -27,5 +25,8 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  created () {
+    firebase.initializeApp(config)
+  }
 })
