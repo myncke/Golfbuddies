@@ -78,7 +78,7 @@ class FirebaseModel {
         model[field] = data[field]
       }
       console.log('Made an object: ')
-      console.log(model._toJson())
+      console.log(model)
       onSuccess(model)
     } else {
       onFailure('Something went wrong, we couldn\'t find the document')
@@ -129,8 +129,10 @@ class FirebaseModel {
    */
   _toJson () {
     let json = {}
-    for (let field of this.firebaseParams) {
-      json[field] = this[field]
+    if (this.firebaseParams !== undefined) {
+      for (let field of this.firebaseParams) {
+        json[field] = this[field]
+      }
     }
     return json
   }
