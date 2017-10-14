@@ -10,21 +10,9 @@ export default class FriendshipModel extends FirebaseModel {
 
   static collectionName = 'Friendship'
 
-  static getFriendsOfUser (user, onSuccess, onFailure) {
-    let key = user.key
+  static async getFriendsOfCurrentUser (onFailure) {
     let ref = FriendshipModel.getNormalRef(FriendshipModel)
-    let ref2 = FriendshipModel.getNormalRef(FriendshipModel)
-    ref.where('userKey1', '==', key)
-    ref2.where('userKey1', '==', key)
-    let all = []
-    FriendshipModel.getAllFromRef(ref, FriendshipModel, list => {
-      all.push(...list)
-      onSuccess(all)
-    }, onFailure)
-    FriendshipModel.getAllFromRef(ref, FriendshipModel, list => {
-      all.push(...list)
-      onSuccess(all)
-    }, onFailure)
+    return await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
   }
 
   // Booleans

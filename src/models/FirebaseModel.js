@@ -32,7 +32,7 @@ class FirebaseModel {
     this.firebaseParams = firebaseParams
     this.modelClass = modelClass
     if (typeof keepListening === 'boolean' && typeof onSuccess === 'function' && typeof onFailure === 'function') {
-      keepListening ? this._listenToFirebase(onSuccess, onFailure) : this._getOnceFromFirebase(onSuccess, onFailure)
+      keepListening ? this._listenToFirebase(onSuccess, onFailure) : this._getOnceFromFirebase(onFailure).then(onSuccess)
     }
   }
 
@@ -48,12 +48,13 @@ class FirebaseModel {
    * onSucces = function(model:FirebaseModel)
    * onFailure = function(errorMessage:String)
    **/
-  _getOnceFromFirebase (onSuccess, onFailure) {
-    this._getDocRef().get()
-      .then(
-        doc => FirebaseModel._mapFields(this.modelClass, this, doc, onSuccess, onFailure),
-        error => onFailure(error)
-      )
+  async _getOnceFromFirebase (onFailure) {
+    try {
+      let doc = await this._getDocRef().get()
+      return FirebaseModel._mapFields(this.modelClass, this, doc, onFailure)
+    } catch (error) {
+      onFailure(error)
+    }
   }
 
   /** Keep listening for changes to the model
@@ -61,7 +62,7 @@ class FirebaseModel {
    * onFailure = function(errorMessage:String)
    **/
   _listenToFirebase (onSuccess, onFailure) {
-    this._getDocRef().get().onSnapshot(doc => FirebaseModel._mapFields(this.modelClass, this, doc, onSuccess, onFailure))
+    this._getDocRef().get().onSnapshot(doc => onSuccess(FirebaseModel._mapFields(this.modelClass, this, doc, onFailure)))
   }
 
   /** Map the firebase object to our own object
@@ -70,7 +71,7 @@ class FirebaseModel {
    * onSucces = function(model:FirebaseModel)
    * onFailure = function(errorMessage:String)
    **/
-  static _mapFields (ModelClass, object, doc, onSuccess, onFailure) {
+  static _mapFields (ModelClass, object, doc, onFailure) {
     if (doc.exists) {
       let model = object || new ModelClass(doc.id)
       let data = doc.data()
@@ -79,7 +80,7 @@ class FirebaseModel {
       }
       console.log('Made an object: ')
       console.log(model)
-      onSuccess(model)
+      return model
     } else {
       onFailure('Something went wrong, we couldn\'t find the document')
     }
@@ -88,11 +89,10 @@ class FirebaseModel {
   /**
    * Gets all the models of the collectionName from firebase
    * @param modelClass = Class of a model
-   * @param onSuccess = function(list<FirebaseModel>)
    * @param onFailure = function(errorMessage)
    */
-  static getAllFromFirebase (modelClass, onSuccess, onFailure) {
-    FirebaseModel.getAllFromRef(FirebaseModel.getNormalRef(modelClass), modelClass, onSuccess, onFailure)
+  static async getAllFromFirebase (modelClass, onFailure) {
+    return await FirebaseModel.getAllFromRef(FirebaseModel.getNormalRef(modelClass), modelClass, onFailure)
   }
 
   /**
@@ -108,22 +108,23 @@ class FirebaseModel {
    * Gets all the objects from the database from the collection given by ref
    * @param ref = reference to the db
    * @param modelClass = class to instantiate
-   * @param onSuccess = function(list<modelClass>)
    * @param onFailure = function(error)
    */
-  static getAllFromRef (ref, modelClass, onSuccess, onFailure) {
-    ref.get().then(
-      snapShot => {
-        let result = []
-        snapShot.forEach(
-          doc => FirebaseModel._mapFields(modelClass, undefined, doc, model => {
-            result.push(model)
-            onSuccess(result)
-          }, onFailure)
-        )
-      },
-      error => onFailure(error)
-    )
+  static async getAllFromRef (ref, modelClass, onFailure) {
+    try {
+      let snapShot = await ref.get()
+      let result = []
+      snapShot.forEach(
+        doc => {
+          console.log(doc)
+          result.push(FirebaseModel._mapFields(modelClass, undefined, doc, onFailure))
+        }
+      )
+      return result
+    } catch (error) {
+      console.log(error)
+      onFailure(error)
+    }
   }
 
   /**
@@ -145,12 +146,12 @@ class FirebaseModel {
    * @param onSuccess = function()
    * @param onFailure = function(errorMessage:String)
    */
-  save (onSuccess, onFailure) {
-    this._getDocRef().set(this._toJson()).then(onSuccess(), error => onFailure(error))
+  async save () {
+    return await this._getDocRef().set(this._toJson())
   }
 
-  deleteObject (onSuccess, onFailure) {
-    this._getDocRef().delete().then(onSuccess, error => onFailure(error))
+  async deleteObject () {
+    return await this._getDocRef().delete()
   }
 }
 export default FirebaseModel

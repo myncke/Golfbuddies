@@ -10,34 +10,29 @@ export default class FirebaseSubColModel extends FirebaseModel {
     this.subCollectionMap = subCollectionMap
   }
 
-  initSubcollection (key, onSuccess, onFailure) {
-    this._getAllFromSubCollectionFirebase(key, onSuccess, onFailure)
+  async initSubcollection (key, onFailure) {
+    return this._getAllFromSubCollectionFirebase(key, onFailure)
   }
 
   /**
    * Gets all the models of a docs subcollections from firebase
-   * @param onSuccess = function(List<Model>)
+   * @param key = the collection key
    * @param onFailure = function(errorMessage)
    * @private
    */
-  _getAllFromSubCollectionFirebase (key, onSuccess, onFailure) {
+  async _getAllFromSubCollectionFirebase (key, onFailure) {
     let result = []
-    this._getDocRef().collection(key).get().then(
-      snapShot => {
-        snapShot.forEach(
-          doc => {
-            FirebaseModel._mapFields(this.subCollectionMap[key], undefined, doc, model => {
-              result.push(model)
-            }, error => {
-              console.log(error)
-              onFailure(error)
-            })
-          }
-        )
-        this.subCollectionResult[key] = result
-        onSuccess(this.subCollectionResult[key])
-      },
-      error => onFailure(error)
-    )
+    try {
+      let snapShot = await this._getDocRef().collection(key).get()
+      snapShot.forEach(
+        doc => {
+          result.push(FirebaseModel._mapFields(this.subCollectionMap[key], undefined, doc, onFailure))
+        }
+      )
+    } catch (error) {
+      onFailure(error)
+    }
+    this.subCollectionResult[key] = result
+    return this.subCollectionResult[key]
   }
 }
