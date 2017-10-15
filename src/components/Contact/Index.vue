@@ -32,19 +32,14 @@
             <v-list-tile>
               <v-subheader v-text="'Friends'"></v-subheader>
             </v-list-tile>
-            <template v-for="model in friendUserModels">
-              <v-list-tile avatar v-bind:key="model.user.key" @click="openConversation(model)">
+            <template v-for="group in conversationModels">
+              <v-list-tile avatar v-bind:key="group.key" @click="openConversation(group)">
                 <v-list-tile-avatar>
-                  <img v-bind:src="makeInitialsImage(model.user)"/>
+                  <img v-bind:src="makeInitialsImage({ firsName: group.name, lastName: '' })"/>
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                  <v-list-tile-title v-html="model.user.nickname"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="model.user.firstName + ' ' + model.user.lastName"></v-list-tile-sub-title>
+                  <v-list-tile-title v-html="group.name"></v-list-tile-title>
                 </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-icon v-if="model.friendship.closeFriend" large color="red">favorite</v-icon>
-                  <v-icon v-else large color="red">favorite_border</v-icon>
-                </v-list-tile-action>
               </v-list-tile>
               <v-divider v-bind:inset="true"></v-divider>
             </template>
@@ -52,7 +47,12 @@
         </v-flex>
         <v-flex sm8 xs12 class="hidden-xs-only">
           <div>
-            <h1>Contact - Index</h1>
+            <h4>Contact - Index</h4>
+            <div v-for="message in messages">
+              <p>{{message.message}}</p>
+              <p>{{message.by.path}}</p>
+              <p>{{message.timestamp}}</p>
+            </div>
           </div>
         </v-flex>
       </v-layout>
@@ -71,7 +71,8 @@
         error: undefined,
         friendUserModels: [],
         conversationModels: [],
-        loading: true
+        loading: true,
+        messages: []
       }
     },
     created () {
@@ -86,6 +87,7 @@
         try {
           await firebase.auth().signInWithEmailAndPassword('omg.kvb@gmail.com', 'kekkek')
           let userModel = new UserModel()
+          console.log('USERMODEL KEY: ' + userModel.key)
           let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
             // throw error
             // this.error = error.message
@@ -109,19 +111,19 @@
         } catch (error) {
           this.error = error.message
           console.log(error)
-          // throw error
+          throw error
         }
       },
       initConversations: async function () {
-        let list = await ConversationGroupModel.getAllFromFirebase(ConversationGroupModel, error => { this.error = error })
-        for (let model of list) {
-          console.log(await model.initSubcollection('Messages', error => { /* this.error = error.message */ throw error }))
-          console.log(await model.initSubcollection('Participants', error => { /* this.error = error.message */ throw error }))
-        }
+        let list = await ConversationGroupModel.getMyConversations(error => { this.error = error })
+        console.log(list)
         this.conversationModels = list
       },
       makeInitialsImage: function (user) {
         return 'https://ui-avatars.com/api/?name=' + user.firstName + '+' + user.lastName + '&rounded=true'
+      },
+      openConversation: async function (conversationModel) {
+        this.messages = await conversationModel.initSubcollection('Messages', error => { /* this.error = error.message */ throw error })
       }
     }
   }

@@ -1,5 +1,6 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
+import firebase from 'firebase'
 
 export class MessageModel extends FirebaseModel {
 
@@ -41,6 +42,11 @@ export class MessageModel extends FirebaseModel {
 
 export default class ConversationGroupModel extends FirebaseSubColModel {
 
+  static async getMyConversations (onFailure) {
+    let ref = ConversationGroupModel.getNormalRef(ConversationGroupModel).where('participants.' + firebase.auth().currentUser.uid, '==', true)
+    return await ConversationGroupModel.getAllFromRef(ref, ConversationGroupModel, onFailure)
+  }
+
   static _firestoreFields = [
     'name',
     'participants'
@@ -50,7 +56,7 @@ export default class ConversationGroupModel extends FirebaseSubColModel {
     'Messages': MessageModel
   }
 
-  static collectionName = 'Game'
+  static collectionName = 'ConversationGroup'
 
   // Strings
   name

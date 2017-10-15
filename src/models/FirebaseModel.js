@@ -117,20 +117,20 @@ class FirebaseModel {
    * @return {Promise.<Array>}
    */
   static async getAllFromRef (ref, modelClass, onFailure) {
+    let result = []
     try {
       let snapShot = await ref.get()
-      let result = []
       snapShot.forEach(
         doc => {
           console.log(doc)
           result.push(FirebaseModel._mapFields(modelClass, undefined, doc, onFailure))
         }
       )
-      return result
     } catch (error) {
       console.log(error)
       onFailure(error)
     }
+    return result
   }
 
   /**

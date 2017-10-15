@@ -1,5 +1,6 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
+import firebase from 'firebase'
 
 /**
  * Class that only holds a key which is the name of this sportType
@@ -28,6 +29,24 @@ export class GameKey extends FirebaseModel {
  * Class that models a SportClub and all its subcollections
  */
 export default class SportClubModel extends FirebaseSubColModel {
+
+  /**
+   * Gets all the public clubs
+   * @param onFailure
+   * @return {Promise.<Array>}
+   */
+  static async getPublicClubs (onFailure) {
+    return await SportClubModel.getAllFromRef(SportClubModel.getNormalRef(SportClubModel).where('closed', '==', false), SportClubModel, onFailure)
+  }
+
+  /**
+   * Gets all the clubs you are a member of.
+   * @param onFailure
+   * @return {Promise.<Array>}
+   */
+  static async getMyClubs (onFailure) {
+    return await SportClubModel.getAllFromRef(SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true), SportClubModel, onFailure)
+  }
 
   static _firestoreFields = [
     'admin',
