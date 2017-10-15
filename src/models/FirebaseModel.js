@@ -44,6 +44,10 @@ class FirebaseModel {
     return firebase.firestore().collection(this.modelClass.collectionName).doc(this.key)
   }
 
+  makeDoc (collection, key) {
+    return firebase.firestore().collection(collection).doc(key)
+  }
+
     /** Only get the model once from firebase
    * onFailure = function(errorMessage:String)
      * @return {Promise<model>}

@@ -86,17 +86,22 @@
         try {
           await firebase.auth().signInWithEmailAndPassword('omg.kvb@gmail.com', 'kekkek')
           let userModel = new UserModel()
-          let list = await FriendshipModel.getFriendsOfCurrentUser(userModel, error => {
-            this.error = error.message
+          let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
+            // throw error
+            // this.error = error.message
+            console.log('ERROR AT FRIENDS')
+            console.log(error)
           })
+          console.log(list)
           this.friendUserModels = []
           list.forEach(model => {
-            let ref
-            userModel.key === model.userKey1.path ? ref = model.getUser2() : ref = model.getUser1()
-            let uModel = new UserModel(ref, false, user => {
+            let key
+            userModel.key === model.userKey1 ? key = model.userKey2 : key = model.userKey1
+            let uModel = new UserModel(key, false, user => {
               this.friendUserModels.push({user: user, friendship: model})
               this.loading = false
             }, error => {
+              // throw error
               this.error = error.message
             })
             console.log(uModel)
@@ -104,13 +109,14 @@
         } catch (error) {
           this.error = error.message
           console.log(error)
+          // throw error
         }
       },
       initConversations: async function () {
         let list = await ConversationGroupModel.getAllFromFirebase(ConversationGroupModel, error => { this.error = error })
         for (let model of list) {
-          console.log(await model.initSubcollection('Messages', error => { this.error = error.message /* throw error */ }))
-          console.log(await model.initSubcollection('Participants', error => { this.error = error.message /* throw error */ }))
+          console.log(await model.initSubcollection('Messages', error => { /* this.error = error.message */ throw error }))
+          console.log(await model.initSubcollection('Participants', error => { /* this.error = error.message */ throw error }))
         }
         this.conversationModels = list
       },

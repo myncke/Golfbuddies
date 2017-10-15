@@ -14,10 +14,13 @@ export default class FriendshipModel extends FirebaseModel {
   static async getFriendsOfCurrentUser (onFailure) {
     let ref = FriendshipModel.getNormalRef(FriendshipModel)
     let ref2 = ref
-    ref.where('userKey1', '==', firebase.auth().uid)
-    ref2.where('userKey2', '==', firebase.auth().uid)
+    ref = ref.where('userKey1', '==', firebase.auth().currentUser.uid)
+    ref2 = ref2.where('userKey2', '==', firebase.auth().currentUser.uid)
     let list = await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
     list.push(...(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure)))
+    console.log(await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure))
+    console.log(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure))
+    return list
   }
 
   // Booleans
@@ -28,11 +31,11 @@ export default class FriendshipModel extends FirebaseModel {
   userKey2
 
   getUser1 () {
-    return this.userKey1.path.substr('Users/'.length)
+    return this.makeDoc('Users', this.userKey1)
   }
 
   getUser2 () {
-    return this.userKey2.path.substr('Users/'.length)
+    return this.makeDoc('Users', this.userKey2)
   }
 
   constructor (key, keepListening, onSuccess, onFailure) {
