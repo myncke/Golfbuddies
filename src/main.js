@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase'
 import '../node_modules/vuetify/dist/vuetify.min.css'
+require('firebase/firestore')
 
 const config = {
   apiKey: 'AIzaSyC21Ih6lJtA89S3CPca0FkkPiALPPB-XJw',
@@ -28,5 +29,6 @@ new Vue({
   components: { App },
   created () {
     firebase.initializeApp(config)
+    firebase.firestore().enablePersistence()
   }
 })

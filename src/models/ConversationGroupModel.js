@@ -1,6 +1,5 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
-import { UserKey } from './SportClubModel'
 
 export class MessageModel extends FirebaseModel {
 
@@ -43,18 +42,21 @@ export class MessageModel extends FirebaseModel {
 export default class ConversationGroupModel extends FirebaseSubColModel {
 
   static _firestoreFields = [
-    'name'
+    'name',
+    'participants'
   ]
 
   static _subCollections = {
-    'Messages': MessageModel,
-    'Participants': UserKey
+    'Messages': MessageModel
   }
 
   static collectionName = 'Game'
 
   // Strings
   name
+
+  // Objects
+  participants
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, ConversationGroupModel._subCollections, ConversationGroupModel._firestoreFields, ConversationGroupModel, keepListening, onSuccess, onFailure)

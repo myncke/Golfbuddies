@@ -110,7 +110,7 @@ class FirebaseModel {
    * @param ref = reference to the db
    * @param modelClass = class to instantiate
    * @param onFailure = function(error)
-   * @return {Promise<list<model>>}
+   * @return {Promise.<Array>}
    */
   static async getAllFromRef (ref, modelClass, onFailure) {
     try {

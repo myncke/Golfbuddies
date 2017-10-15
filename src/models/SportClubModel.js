@@ -14,17 +14,6 @@ export class SportTypeModel extends FirebaseModel {
 }
 
 /**
- * Class that only holds a key to another UserModel
- */
-export class UserKey extends FirebaseModel {
-  static _firestoreFields = []
-
-  constructor (key, keepListening, onSuccess, onFailure) {
-    super(key, UserKey._firestoreFields, UserKey, keepListening, onSuccess, onFailure)
-  }
-}
-
-/**
  * Class that only holds a key to another GameModel
  */
 export class GameKey extends FirebaseModel {
@@ -46,11 +35,11 @@ export default class SportClubModel extends FirebaseSubColModel {
     'location',
     'name',
     'closed',
-    'sportType'
+    'sportType',
+    'members'
   ]
 
   static _subCollections = {
-    'Members': UserKey,
     'Games': GameKey
   }
 
@@ -108,6 +97,9 @@ export default class SportClubModel extends FirebaseSubColModel {
 
   // Geopoints
   location
+
+  // Objects
+  members
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, SportClubModel._subCollections, SportClubModel._firestoreFields, SportClubModel, keepListening, onSuccess, onFailure)
