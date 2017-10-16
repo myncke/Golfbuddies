@@ -26,9 +26,9 @@ export class MessageModel extends FirebaseModel {
    */
   setBy (user) {
     if (typeof user === 'string') {
-      this.by.path = 'Users/' + user
+      this.by = this.makeDoc('Users', user)
     } else {
-      this.by.path = 'Users/' + user.key
+      this.by = this.makeDoc('Users', user.key)
     }
   }
 
@@ -37,6 +37,7 @@ export class MessageModel extends FirebaseModel {
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, MessageModel._firestoreFields, MessageModel, keepListening, onSuccess, onFailure)
+    this.by = this.makeDoc('Users')
   }
 }
 
@@ -45,6 +46,20 @@ export default class ConversationGroupModel extends FirebaseSubColModel {
   static async getMyConversations (onFailure) {
     let ref = ConversationGroupModel.getNormalRef(ConversationGroupModel).where('participants.' + firebase.auth().currentUser.uid, '==', true)
     return await ConversationGroupModel.getAllFromRef(ref, ConversationGroupModel, onFailure)
+  }
+
+  async getMessagesOrdered (startAt, limit, onFailure) {
+    let list = await this._getAllFromSubCollectionOrdered('Messages', 'timestamp', 'desc', startAt, limit, onFailure)
+    list = list.reverse()
+    this.setSubcollection(list, 'Messages')
+    return list
+  }
+
+  listenToMessagesOrdered (startAt, limit, onSuccess, onFailure) {
+    this.listenToSubColOrdered('Messages', 'timestamp', 'desc', startAt, limit, list => {
+      let revList = list.reverse()
+      onSuccess(revList)
+    }, error => onFailure(error))
   }
 
   static _firestoreFields = [

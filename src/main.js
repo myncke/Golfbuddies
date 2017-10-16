@@ -6,6 +6,8 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase'
 import '../node_modules/vuetify/dist/vuetify.min.css'
+import dateUtils from './utils/DateUtils'
+import VueChatScroll from 'vue-chat-scroll'
 require('firebase/firestore')
 
 const config = {
@@ -18,6 +20,7 @@ const config = {
 }
 
 Vue.use(Vuetify)
+Vue.use(VueChatScroll)
 
 Vue.config.productionTip = false
 
@@ -32,3 +35,5 @@ new Vue({
     firebase.firestore().enablePersistence()
   }
 })
+
+Vue.filter('formatDate', dateUtils.dateToString)

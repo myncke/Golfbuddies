@@ -27,8 +27,9 @@ class FirebaseModel {
    * @param onFailure = function(errorMessage:String)
    */
   constructor (key, firebaseParams, modelClass, keepListening, onSuccess, onFailure) {
-    key === undefined ? this.key = uuidv1() : this.key = key
-    this.key = key
+    // key === undefined || key === null ? this.key = uuidv1() : this.key = key
+    this.key = key || uuidv1()
+    console.log('KEY: ' + this.key)
     this.firebaseParams = firebaseParams
     this.modelClass = modelClass
     if (typeof keepListening === 'boolean' && typeof onSuccess === 'function' && typeof onFailure === 'function') {
@@ -44,7 +45,16 @@ class FirebaseModel {
     return firebase.firestore().collection(this.modelClass.collectionName).doc(this.key)
   }
 
+  /**
+   * Make a doc or collection reference
+   * @param collection
+   * @param key
+   * @return {*}
+   */
   makeDoc (collection, key) {
+    if (key === undefined) {
+      return firebase.firestore().collection(collection)
+    }
     return firebase.firestore().collection(collection).doc(key)
   }
 
@@ -94,7 +104,7 @@ class FirebaseModel {
    * Gets all the models of the collectionName from firebase
    * @param modelClass = {Class of a model}
    * @param onFailure = {function(errorMessage)}
-   * @return {Promise<list<model>>}
+   * @return {Promise.<Array>}
    */
   static async getAllFromFirebase (modelClass, onFailure) {
     return await FirebaseModel.getAllFromRef(FirebaseModel.getNormalRef(modelClass), modelClass, onFailure)
@@ -107,6 +117,11 @@ class FirebaseModel {
    */
   static getNormalRef (modelClass) {
     return firebase.firestore().collection(modelClass.collectionName)
+  }
+
+  static async getFromRef (ref, modelClass, onFailure) {
+    let doc = await ref.get()
+    return FirebaseModel._mapFields(modelClass, undefined, doc, onFailure)
   }
 
   /**
