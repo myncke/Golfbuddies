@@ -6,6 +6,9 @@
 
     <!-- TODO: this needs a lot of work xD -->
     <div v-if="!loading">
+
+      <!-- CONTACTS PANE -->
+
       <v-layout row fill-height wrap style="width: 100vw; min-height: 100vh">
         <v-flex sm4 xs12 fill-height>
           <v-list two-line dark style="height: 100vh; overflow:scroll;">
@@ -13,7 +16,7 @@
               <v-subheader v-text="'Friends'"></v-subheader>
             </v-list-tile>
             <template v-for="model in friendUserModels">
-              <v-list-tile avatar v-bind:key="model.user.key" @click="openConversation(model)">
+              <v-list-tile avatar v-bind:key="model.user.key" @click="console.log('TODO, not sure what to do here :/')">
                 <v-list-tile-avatar>
                   <img v-bind:src="'https://ui-avatars.com/api/?name=' + model.user.firstName + '+' + model.user.lastName + '&rounded=true'"/>
                 </v-list-tile-avatar>
@@ -44,6 +47,9 @@
             </template>
           </v-list>
         </v-flex>
+
+        <!-- CHAT PANE -->
+
         <v-flex sm8 xs12 class="hidden-xs-only" >
           <div style="height: 70vh; overflow: scroll" v-chat-scroll>
             <h4>Contact - Index</h4>
@@ -54,11 +60,11 @@
                   <v-card class="message-card">
                     <p class="caption timestamp">{{message.timestamp | formatDate}}</p>
                     <v-layout row>
-                      <v-flex sm9>
-                        <p class="title message">{{message.message}}</p>
-                      </v-flex>
                       <v-flex sm3>
-                        <p class="caption by">{{message.byModel.nickname}}</p>
+                        <p class="caption by-him">{{message.byModel.nickname}}</p>
+                      </v-flex>
+                      <v-flex sm9>
+                        <p class="message message-him">{{message.message}}</p>
                       </v-flex>
                     </v-layout>
                   </v-card>
@@ -68,10 +74,10 @@
                     <p class="caption timestamp">{{message.timestamp | formatDate}}</p>
                     <v-layout row>
                       <v-flex sm9>
-                        <p class="title message">{{message.message}}</p>
+                        <p class="message message-me">{{message.message}}</p>
                       </v-flex>
                       <v-flex sm3>
-                        <p class="caption by">{{message.byModel.nickname}}</p>
+                        <p class="caption by-me">{{message.byModel.nickname}}</p>
                       </v-flex>
                     </v-layout>
                   </v-card>
@@ -173,10 +179,7 @@
               message.byModel = await UserModel.getFromRef(message.by, UserModel, error => { this.error = error.message; throw error })
             }
             this.messages = list
-            // this.scrollChatBottom()
           }.bind(this), error => { this.error = error; throw error })
-          // let messages = await conversationModel.getMessagesOrdered(undefined, undefined, error => { this.error = error.message; throw error })
-          // this.messages = messages
         } catch (error) {
           this.error = error.message
           throw error
@@ -202,7 +205,6 @@
         messageModel.timestamp = Date.now()
         await this.currentConversation.addSubcollectionDoc('Messages', messageModel, error => { this.error = error })
         console.log('SENT')
-        // this.scrollChatBottom()
       }
     }
   }
@@ -222,10 +224,23 @@
   }
 
   .message{
+    font-size: 15px !important;
   }
 
-  .by{
+  .message-me{
+    text-align: start;
+  }
+
+  .message-him{
     text-align: end;
+  }
+
+  .by-me{
+    text-align: end;
+  }
+
+  .by-him{
+    text-align: start;
   }
 
 </style>
