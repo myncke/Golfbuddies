@@ -49,7 +49,7 @@
               </v-list-tile-content>
             </v-list-tile>
           </v-list-group>
-          
+
           <!-- Single Tile -->
           <v-list-tile v-else @click="" :key="item.name" :to="item.path">
             <v-list-tile-action>
@@ -70,7 +70,7 @@
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
         Golfbuddies
       </v-toolbar-title>
-      <v-text-field solo prepend-icon="search" placeholder="Search" class="hidden-sm-and-down"></v-text-field> 
+      <v-text-field solo prepend-icon="search" placeholder="Search" class="hidden-sm-and-down"></v-text-field>
       <!-- <v-spacer></v-spacer> -->
       <v-btn flat :to="'/profile'">
         <v-icon left>person</v-icon>
@@ -80,7 +80,7 @@
         <v-icon left>face</v-icon>
         Sign up
       </v-btn>
-      <v-btn flat :to="'signin'">
+      <v-btn flat @click="openModal()">
         <v-icon left>lock_open</v-icon>
         Sign in
       </v-btn>
@@ -95,6 +95,8 @@
         </v-container>
       </v-content>
     </main>
+
+    <signin ref="signInModal"></signin>
 
     <v-btn fab bottom right color="pink" dark fixed @click.stop="dialog = !dialog">
       <v-icon>add</v-icon>
@@ -164,6 +166,7 @@
 </template>
 
 <script>
+  import signin from './components/User/Signin'
   export default {
     name: 'app',
     computed: {
@@ -208,8 +211,16 @@
         { icon: 'phonelink', text: 'Install App', path: '/install' }
       ]
     }),
+    methods: {
+      openModal: function () {
+        this.$refs.signInModal.changeModal(true)
+      }
+    },
     props: {
       source: String
+    },
+    components: {
+      'signin': signin
     }
   }
 </script>
