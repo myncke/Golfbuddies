@@ -52,7 +52,6 @@
 
         <v-flex sm8 xs12 class="hidden-xs-only" >
           <div style="height: 70vh; overflow: scroll" v-chat-scroll>
-            <h4>Contact - Index</h4>
             <p class="red--text">{{error}}</p>
             <div v-for="message in messages">
               <v-layout row>
@@ -99,12 +98,32 @@
                 <v-btn class="primary" @click="sendMessage()">
                   Send Message <span style="margin-left: 5px"><v-icon>send</v-icon></span>
                 </v-btn>
+                <v-btn raised round @click="settings = !settings">
+                  Settings <span style="margin-left: 5px"><v-icon>settings</v-icon></span>
+                </v-btn>
               </v-flex>
             </v-layout>
           </div>
         </v-flex>
       </v-layout>
     </div>
+    <v-dialog v-model="settings">
+      <v-card>
+        <v-card-title>
+          <p class="title">Settings</p>
+        </v-card-title>
+        <v-card-text>
+          <p class="subheading">Rename Group</p>
+          <v-text-field
+            label="Group Name"
+            v-model="groupName">
+          </v-text-field>
+          <v-btn color="primary" dark @click="renameGroup(); settings = !settings">Save Name</v-btn>
+          <p class="subheading">Invite Friends</p>
+          <p>TODO</p>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -123,7 +142,9 @@
         loading: true,
         currentConversation: undefined,
         messages: [],
-        text: ''
+        text: '',
+        groupName: '',
+        settings: false
       }
     },
     created () {
@@ -136,7 +157,6 @@
     methods: {
       initFriends: async function () {
         try {
-          await firebase.auth().signInWithEmailAndPassword('omg.kvb@gmail.com', 'kekkek')
           let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
             this.error = error.message
           })
@@ -172,6 +192,7 @@
       openConversation: async function (conversationModel) {
         try {
           this.currentConversation = conversationModel
+          this.groupName = conversationModel.name
           this.messages = []
           this.error = undefined
           conversationModel.listenToMessagesOrdered(undefined, undefined, async function (list) {
@@ -205,6 +226,14 @@
         messageModel.timestamp = Date.now()
         await this.currentConversation.addSubcollectionDoc('Messages', messageModel, error => { this.error = error })
         console.log('SENT')
+      },
+      renameGroup: async function () {
+        let group = this.currentConversation
+        if (group === undefined) {
+          return
+        }
+        group.name = this.groupName
+        group.save()
       }
     }
   }
