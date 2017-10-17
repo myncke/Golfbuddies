@@ -2,6 +2,7 @@
   <v-app id="app">
     <v-navigation-drawer persistent clipped app v-model="drawer">
       <v-list dense>
+        <h6>{{ currentUser }}</h6>
         <template v-for="(item, i) in items">
 
           <v-layout
@@ -165,6 +166,11 @@
 <script>
   export default {
     name: 'app',
+    computed: {
+      currentUser () {
+        return this.$store.getters.currentUser
+      }
+    },
     data: () => ({
       dialog: false,
       drawer: false,

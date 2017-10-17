@@ -2,10 +2,12 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import '../node_modules/vuetify/dist/vuetify.min.css'
 import App from './App'
 import router from './router'
 import firebase from 'firebase'
-import '../node_modules/vuetify/dist/vuetify.min.css'
+import Vuex from 'vuex'
+import { store } from './store'
 
 const config = {
   apiKey: 'AIzaSyC21Ih6lJtA89S3CPca0FkkPiALPPB-XJw',
@@ -17,13 +19,14 @@ const config = {
 }
 
 Vue.use(Vuetify)
-
+Vue.use(Vuex)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App },
   created () {
