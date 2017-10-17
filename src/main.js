@@ -8,6 +8,9 @@ import router from './router'
 import firebase from 'firebase'
 import Vuex from 'vuex'
 import { store } from './store'
+import dateUtils from './utils/DateUtils'
+import VueChatScroll from 'vue-chat-scroll'
+require('firebase/firestore')
 
 const config = {
   apiKey: 'AIzaSyC21Ih6lJtA89S3CPca0FkkPiALPPB-XJw',
@@ -20,6 +23,8 @@ const config = {
 
 Vue.use(Vuetify)
 Vue.use(Vuex)
+Vue.use(VueChatScroll)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -31,5 +36,8 @@ new Vue({
   components: { App },
   created () {
     firebase.initializeApp(config)
+    firebase.firestore().enablePersistence()
   }
 })
+
+Vue.filter('formatDate', dateUtils.dateToString)

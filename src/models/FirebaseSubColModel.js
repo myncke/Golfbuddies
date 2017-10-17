@@ -10,34 +10,111 @@ export default class FirebaseSubColModel extends FirebaseModel {
     this.subCollectionMap = subCollectionMap
   }
 
-  initSubcollection (key, onSuccess, onFailure) {
-    this._getAllFromSubCollectionFirebase(key, onSuccess, onFailure)
+  async initSubcollection (key, keepListening, onFailure) {
+    if (!keepListening) {
+      return this._getAllFromSubCollectionFirebase(key, onFailure)
+    }
+  }
+
+  setSubcollection (list, key) {
+    this.subCollectionResult[key] = list
+  }
+
+  /**
+   * Add a model to a subcollection of this model
+   * @param key
+   * @param model
+   * @param onFailure
+   * @return {Promise.<void>}
+   */
+  async addSubcollectionDoc (key, model, onFailure) {
+    try {
+      return this._getDocRef().collection(key).doc(model.key).set(model._toJson())
+    } catch (error) {
+      onFailure(error)
+      throw error
+    }
   }
 
   /**
    * Gets all the models of a docs subcollections from firebase
-   * @param onSuccess = function(List<Model>)
+   * @param key = the collection key
    * @param onFailure = function(errorMessage)
    * @private
    */
-  _getAllFromSubCollectionFirebase (key, onSuccess, onFailure) {
+  async _getAllFromSubCollectionFirebase (key, onFailure) {
+    this.subCollectionResult[key] = await this._getAllFromRefFirebase(this._getDocRef().collection(key), key, onFailure)
+    return this.subCollectionResult[key]
+  }
+
+  /**
+   *
+   * @param ref
+   * @param key
+   * @param onSuccess
+   * @param onFailure
+   * @return undefined
+   * @private
+   */
+  _listenToSubColRef (ref, key, onSuccess, onFailure) {
+    ref.onSnapshot(collection => {
+      let result = []
+      for (let doc of collection.docs) {
+        result.push(FirebaseModel._mapFields(this.subCollectionMap[key], undefined, doc, onFailure))
+      }
+      onSuccess(result)
+    })
+  }
+
+  async _getAllFromRefFirebase (ref, key, onFailure) {
     let result = []
-    this._getDocRef().collection(key).get().then(
-      snapShot => {
-        snapShot.forEach(
-          doc => {
-            FirebaseModel._mapFields(this.subCollectionMap[key], undefined, doc, model => {
-              result.push(model)
-            }, error => {
-              console.log(error)
-              onFailure(error)
-            })
-          }
-        )
-        this.subCollectionResult[key] = result
-        onSuccess(this.subCollectionResult[key])
-      },
-      error => onFailure(error)
-    )
+    try {
+      console.log('MODELCLASS:')
+      console.log(this.subCollectionMap[key])
+      let snapShot = await ref.get()
+      snapShot.forEach(
+        doc => {
+          result.push(FirebaseModel._mapFields(this.subCollectionMap[key], undefined, doc, onFailure))
+        }
+      )
+    } catch (error) {
+      onFailure(error)
+    }
+    return result
+  }
+
+  addRefOptions (ref, orderField, order, startAt, limit) {
+    if (orderField !== undefined) {
+      ref = ref.orderBy(orderField, order)
+    }
+    if (startAt !== undefined) {
+      ref = ref.startAt(startAt)
+    }
+    if (limit !== undefined) {
+      ref = ref.limit(limit)
+    }
+    return ref
+  }
+
+  async _getAllFromSubCollectionOrdered (key, orderField, order, startAt, limit, onFailure) {
+    let ref = this._getDocRef().collection(key)
+    ref = this.addRefOptions(ref, orderField, order, startAt, limit)
+    return await this._getAllFromRefFirebase(ref, key, onFailure)
+  }
+
+  /**
+   *
+   * @param key
+   * @param orderField
+   * @param order
+   * @param startAt
+   * @param limit
+   * @param onSuccess = {function(List<Model>)}
+   * @param onFailure = {function(error)}
+   */
+  listenToSubColOrdered (key, orderField, order, startAt, limit, onSuccess, onFailure) {
+    let ref = this._getDocRef().collection(key)
+    ref = this.addRefOptions(ref, orderField, order, startAt, limit)
+    this._listenToSubColRef(ref, key, onSuccess, onFailure)
   }
 }

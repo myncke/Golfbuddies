@@ -17,7 +17,7 @@ export default class GolfUserModel extends FirebaseModel {
   userKey
 
   getUserKey () {
-    return this.gameKey.path.substr('Users/'.length)
+    return this.userKey.path.substr('Users/'.length)
   }
 
   /**
@@ -26,9 +26,9 @@ export default class GolfUserModel extends FirebaseModel {
    */
   setUserKey (user) {
     if (typeof user === 'string') {
-      this.gameKey.path = 'Users/' + user
+      this.userKey.path = 'Users/' + user
     } else {
-      this.gameKey.path = 'Users/' + user.key
+      this.userKey.path = 'Users/' + user.key
     }
   }
 

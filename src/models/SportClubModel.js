@@ -1,5 +1,6 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
+import firebase from 'firebase'
 
 /**
  * Class that only holds a key which is the name of this sportType
@@ -10,17 +11,6 @@ export class SportTypeModel extends FirebaseModel {
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, SportTypeModel._firestoreFields, SportTypeModel, keepListening, onSuccess, onFailure)
-  }
-}
-
-/**
- * Class that only holds a key to another UserModel
- */
-export class UserKey extends FirebaseModel {
-  static _firestoreFields = []
-
-  constructor (key, keepListening, onSuccess, onFailure) {
-    super(key, UserKey._firestoreFields, UserKey, keepListening, onSuccess, onFailure)
   }
 }
 
@@ -40,17 +30,35 @@ export class GameKey extends FirebaseModel {
  */
 export default class SportClubModel extends FirebaseSubColModel {
 
+  /**
+   * Gets all the public clubs
+   * @param onFailure
+   * @return {Promise.<Array>}
+   */
+  static async getPublicClubs (onFailure) {
+    return await SportClubModel.getAllFromRef(SportClubModel.getNormalRef(SportClubModel).where('closed', '==', false), SportClubModel, onFailure)
+  }
+
+  /**
+   * Gets all the clubs you are a member of.
+   * @param onFailure
+   * @return {Promise.<Array>}
+   */
+  static async getMyClubs (onFailure) {
+    return await SportClubModel.getAllFromRef(SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true), SportClubModel, onFailure)
+  }
+
   static _firestoreFields = [
     'admin',
     'information',
     'location',
     'name',
     'closed',
-    'sportType'
+    'sportType',
+    'members'
   ]
 
   static _subCollections = {
-    'Members': UserKey,
     'Games': GameKey
   }
 
@@ -108,6 +116,9 @@ export default class SportClubModel extends FirebaseSubColModel {
 
   // Geopoints
   location
+
+  // Objects
+  members
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, SportClubModel._subCollections, SportClubModel._firestoreFields, SportClubModel, keepListening, onSuccess, onFailure)
