@@ -31,8 +31,8 @@ export const store = new Vuex.Store({
     }
   },
   getters: {
-    currentUser (state) {
-      return state.user.id
+    user (state) {
+      return state.user
     }
   }
 })
