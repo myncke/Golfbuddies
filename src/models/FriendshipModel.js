@@ -1,4 +1,5 @@
 import FirebaseModel from './FirebaseModel'
+import firebase from 'firebase'
 
 export default class FriendshipModel extends FirebaseModel {
 
@@ -10,45 +11,32 @@ export default class FriendshipModel extends FirebaseModel {
 
   static collectionName = 'Friendship'
 
+  static async getFriendsOfCurrentUser (onFailure) {
+    let ref = FriendshipModel.getNormalRef(FriendshipModel)
+    let ref2 = ref
+    ref = ref.where('userKey1', '==', firebase.auth().currentUser.uid)
+    ref2 = ref2.where('userKey2', '==', firebase.auth().currentUser.uid)
+    let list = await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
+    list.push(...(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure)))
+    console.log(await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure))
+    console.log(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure))
+    return list
+  }
+
   // Booleans
   closeFriend
 
-  // References
+  // Strings
   userKey1
   userKey2
 
   getUser1 () {
-    return this.gameKey.path.substr('Users/'.length)
-  }
-
-  /**
-   * Set the value of user1
-   * @param user = UserModel to which we make a reference
-   */
-  setUser1 (user) {
-    if (typeof user === 'string') {
-      this.gameKey.path = 'Users/' + user
-    } else {
-      this.gameKey.path = 'Users/' + user.key
-    }
+    return this.makeDoc('Users', this.userKey1)
   }
 
   getUser2 () {
-    return this.gameKey.path.substr('Users/'.length)
+    return this.makeDoc('Users', this.userKey2)
   }
-
-  /**
-   * Set the value of user2
-   * @param user = UserModel to which we make a reference
-   */
-  setUser2 (user) {
-    if (typeof user === 'string') {
-      this.gameKey.path = 'Users/' + user
-    } else {
-      this.gameKey.path = 'Users/' + user.key
-    }
-  }
-
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, FriendshipModel._subCollections, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)
