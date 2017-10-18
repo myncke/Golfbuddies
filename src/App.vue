@@ -2,7 +2,6 @@
   <v-app id="app">
     <v-navigation-drawer persistent clipped app v-model="drawer">
       <v-list dense>
-        <h6>{{ currentUser }}</h6>
         <template v-for="(item, i) in items">
 
           <v-layout
