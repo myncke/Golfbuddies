@@ -55,7 +55,8 @@ export default class SportClubModel extends FirebaseSubColModel {
     'name',
     'closed',
     'sportType',
-    'members'
+    'members',
+    'headerPic'
   ]
 
   static _subCollections = {
@@ -70,6 +71,7 @@ export default class SportClubModel extends FirebaseSubColModel {
   // Strings
   information
   name
+  headerPic
 
   // References
   admin // Reference to Users

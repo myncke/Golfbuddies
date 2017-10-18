@@ -132,6 +132,7 @@
   import UserModel from '../../models/UserModel'
   import ConversationGroupModel, { MessageModel } from '../../models/ConversationGroupModel'
   import dateUtils from '../../utils/DateUtils'
+  import ImageUtils from '../../utils/ImageUtils'
 
   export default {
     data () {
@@ -187,7 +188,7 @@
         }
       },
       makeInitialsImage: function (user) {
-        return 'https://ui-avatars.com/api/?name=' + user.firstName + '+' + user.lastName + '&rounded=true'
+        return ImageUtils.makeInitialsImage(user)
       },
       openConversation: async function (conversationModel) {
         try {
@@ -211,10 +212,6 @@
       },
       dateToString: function (date) {
         return dateUtils.dateToString(date)
-      },
-      scrollChatBottom: function () {
-        let container = document.getElementById('chatcontainer')
-        container.scrollTop = container.scrollHeight
       },
       sendMessage: async function () {
         let message = this.text
