@@ -9,6 +9,8 @@ import firebase from 'firebase'
 export class SportTypeModel extends FirebaseModel {
   static _firestoreFields = []
 
+  static collectionName = 'SportTypes'
+
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, SportTypeModel._firestoreFields, SportTypeModel, keepListening, onSuccess, onFailure)
   }

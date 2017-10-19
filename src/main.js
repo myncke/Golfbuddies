@@ -10,6 +10,7 @@ import Vuex from 'vuex'
 import { store } from './store'
 import dateUtils from './utils/DateUtils'
 import VueChatScroll from 'vue-chat-scroll'
+import VueResource from 'vue-resource'
 require('firebase/firestore')
 
 const config = {
@@ -24,6 +25,7 @@ const config = {
 Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueChatScroll)
+Vue.use(VueResource)
 
 Vue.config.productionTip = false
 

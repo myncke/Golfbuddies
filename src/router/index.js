@@ -12,6 +12,7 @@ import EventIndex from '../components/Event/Index'
 // Group
 import ClubsView from '../components/Group/ClubsView.vue'
 import DetailView from '../components/Group/DetailView.vue'
+import NewClubView from '../components/Group/New.vue'
 
 // Setting
 import SettingIndex from '../components/Setting/Index'
@@ -51,6 +52,11 @@ export default new Router({
       path: '/group/:clubId',
       name: 'groupDetails',
       component: DetailView
+    },
+    {
+      path: '/groups/new',
+      name: 'newGroup',
+      component: NewClubView
     },
     {
       path: '/contacts',
