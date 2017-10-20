@@ -16,8 +16,7 @@
         <v-card-text>
           <p class="subheading">Information:</p>
           <p class="body-1">{{model.specialWishes || 'None'}}</p>
-          <iframe width="100%" height="200" frameborder="0" style="border:0;"
-                  :src="'https://www.google.com/maps/embed/v1/place?q=' + model.location.latitude + ',+' + model.location.longitude + '&key=AIzaSyDuD6-jAzk7Gk7mko708x0VYslipwsoEt8'" allowfullscreen></iframe>
+          <location-view :location="model.location" :width="'100%'" :height="'200px'"></location-view>
         </v-card-text>
         <v-card-actions>
           <v-btn flat v-if="!model.inviteOnly">Share</v-btn>
@@ -70,9 +69,6 @@
             <golf-show v-if="this.subModel.buggie !== undefined" :model="this.subModel"></golf-show>
 
             <br>
-            <!--<p class="title">Location</p>
-            <iframe width="100%" height="450" frameborder="0" style="border:0;"
-                    :src="'https://www.google.com/maps/embed/v1/place?q=' + model.location.latitude + ',+' + model.location.longitude + '&key=AIzaSyDuD6-jAzk7Gk7mko708x0VYslipwsoEt8'" allowfullscreen></iframe>-->
           </v-card-text>
         </v-slide-y-transition>
       </v-card>
@@ -87,6 +83,7 @@
 import GameModel, { CollectionGameMap } from '../../models/GameModel'
 import GolfShow from './components/GolfGame/Show'
 import MessageShow from './components/Messages/Show'
+import LocationView from '../Shared/LocationView'
 
 export default {
   data: () => ({
@@ -119,7 +116,8 @@ export default {
   },
   components: {
     'golf-show': GolfShow,
-    'message-show': MessageShow
+    'message-show': MessageShow,
+    'location-view': LocationView
   }
 }
 </script>

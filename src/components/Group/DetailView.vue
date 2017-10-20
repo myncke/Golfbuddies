@@ -22,8 +22,7 @@
       </v-card-actions>
       <v-slide-y-transition>
         <v-card-text v-show="showLocation">
-          <iframe width="100%" height="450" frameborder="0" style="border:0;"
-                  :src="'https://www.google.com/maps/embed/v1/place?q=' + club.location.latitude + ',+' + club.location.longitude + '&key=AIzaSyDuD6-jAzk7Gk7mko708x0VYslipwsoEt8'" allowfullscreen></iframe>
+          <location-view v-if="club.location !== undefined" :location="club.location"></location-view>
         </v-card-text>
       </v-slide-y-transition>
       <v-slide-y-transition>
@@ -49,6 +48,7 @@
   import ImageUtils from '../../utils/ImageUtils'
   import GolfGameModel from '../../models/GolfGameModel'
   import GameCard from './components/GameCard.vue'
+  import LocationView from '../Shared/LocationView'
 
   export default {
     data: () => ({
@@ -93,7 +93,8 @@
       }
     },
     components: {
-      'game-card': GameCard
+      'game-card': GameCard,
+      'location-view': LocationView
     }
   }
 </script>

@@ -92,8 +92,7 @@
     </v-card-actions>
     <v-slide-y-transition>
       <v-card-text v-show="showLocation" v-if="model.game.location !== undefined">
-        <iframe width="100%" height="450" frameborder="0" style="border:0;"
-                :src="'https://www.google.com/maps/embed/v1/place?q=' + model.game.location.latitude + ',+' + model.game.location.longitude + '&key=AIzaSyDuD6-jAzk7Gk7mko708x0VYslipwsoEt8'" allowfullscreen></iframe>
+        <location-view :location="model.game.location"></location-view>
       </v-card-text>
     </v-slide-y-transition>
     <v-slide-y-transition>
@@ -111,6 +110,7 @@
 
 <script>
   import GameModel, { CollectionGameMap } from '../../../models/GameModel'
+  import LocationView from '../../../components/Shared/LocationView'
   import UserModel from '../../../models/UserModel'
   import ImageUtils from '../../../utils/ImageUtils'
 
@@ -168,6 +168,9 @@
       makeInitialsImage: function (user) {
         return ImageUtils.makeInitialsImage(user)
       }
+    },
+    components: {
+      'location-view': LocationView
     }
   }
 
