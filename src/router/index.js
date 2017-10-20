@@ -8,6 +8,7 @@ import ContactIndex from '../components/Contact/Index'
 // Event
 import Event from '../components/Event/Show'
 import EventIndex from '../components/Event/Index'
+import EventNew from '../components/Event/New'
 
 // Group
 import ClubsView from '../components/Group/ClubsView.vue'
@@ -32,6 +33,11 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/events/new',
+      name: 'newEvent',
+      component: EventNew
     },
     {
       path: '/events/:id',

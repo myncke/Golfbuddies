@@ -38,7 +38,12 @@ new Vue({
   components: { App },
   created () {
     firebase.initializeApp(config)
-    firebase.firestore().enablePersistence()
+    try {
+      firebase.firestore().enablePersistence()
+    } catch (error) {
+      console.log('PERSISTENCE FAILED:')
+      console.log(error.message)
+    }
   }
 })
 

@@ -4,6 +4,7 @@
       <p class="title"> New Club </p>
     </v-card-title>
     <v-card-text>
+      <p class="subheading red--text">{{error}}</p>
       <v-form>
         <v-layout row wrap>
           <v-flex md6 xs12 class="input-field">
@@ -13,7 +14,6 @@
               v-model="model.name"
               required
             ></v-text-field>
-
           </v-flex>
           <v-flex md6 xs12 class="input-field">
             <v-text-field
@@ -61,29 +61,48 @@
       </v-form>
     </v-card-text>
   </v-card>
-  <!-- // https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBE-PlO7hiB520Y0VN4_0JkMHk69v0n17w -->
 </template>
 
 <script>
   import SportClubModel, { SportTypeModel } from '../../models/SportClubModel'
-  let sportTypeMap = {
-    'golf': SportClubModel.getNormalRef(SportTypeModel).doc('Golf')
-  }
+  import UserModel from '../../models/UserModel'
+  import LocationUtils from '../../utils/LocationUtils'
+
   export default {
     data: () => ({
-      model: {}
+      model: {},
+      sportTypeMap: {},
+      rules: {
+
+      }
     }),
     created: function () {
       this.model = new SportClubModel()
+      this.model.closed = false
+      this.sportTypeMap = {
+        'golf': SportTypeModel.getNormalRef(SportTypeModel).doc('Golf')
+      }
+      this.model.sportType = 'golf'
     },
     methods: {
-      createClub: function () {
-        this.model.sportType = sportTypeMap[this.model.sportType]
-        this.getLocation()
+      createClub: async function () {
+        this.model.sportType = this.sportTypeMap[this.model.sportType]
+        await this.getLocation()
+        // TODO: We have to find a way to init the members
+        this.model.members = {}
+        this.model.admin = (new UserModel())._getDocRef()
+        await this.model.save()
+        this.$router.push({
+          name: 'groupDetails', params: { clubId: this.model.key }
+        })
       },
       getLocation: async function () {
-        let response = this.$http.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodeURIComponent(this.model.location) + '&key=AIzaSyBE-PlO7hiB520Y0VN4_0JkMHk69v0n17w')
-        console.log(response.body)
+        try {
+          let location = await LocationUtils.getLocation(this.model.location, this.$http)
+          this.model.location = {latitude: location.lat, longitude: location.lng}
+        } catch (error) {
+          this.error = 'Invalid location, please try again with a more precise location.'
+        }
       }
     }
   }

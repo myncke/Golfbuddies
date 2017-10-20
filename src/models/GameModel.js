@@ -1,5 +1,20 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
+import GolfGameModel from './GolfGameModel'
+
+let PrefGameSex = ['Men Only', 'Women Only', 'Mixed']
+export {PrefGameSex}
+
+let GameTypeNames = {
+  'Golf': GolfGameModel
+}
+export {GameTypeNames}
+
+let CollectionGameMap = {
+  'GolfGame': GolfGameModel
+}
+
+export {CollectionGameMap}
 
 export class GameUser extends FirebaseModel {
 
@@ -17,6 +32,10 @@ export class GameUser extends FirebaseModel {
 
 export default class GameModel extends FirebaseSubColModel {
 
+  static async getAllOpenGames (onFailure) {
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).orderBy('date', 'asc'), GameModel, onFailure)
+  }
+
   static _firestoreFields = [
     'competition',
     'international',
@@ -25,7 +44,9 @@ export default class GameModel extends FirebaseSubColModel {
     'prefGroupSize',
     'creator',
     'date',
-    'location'
+    'location',
+    'inviteOnly',
+    'subGame'
   ]
 
   static _subCollections = {
@@ -37,6 +58,7 @@ export default class GameModel extends FirebaseSubColModel {
   // Booleans
   competition
   international
+  inviteOnly
 
   // Strings
   prefGameSex
@@ -47,6 +69,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   // References
   creator
+  subGame
 
   getCreator () {
     return this.creator.path.substr('Users/'.length)

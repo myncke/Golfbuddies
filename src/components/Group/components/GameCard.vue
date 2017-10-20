@@ -3,7 +3,7 @@
     <v-card-text>
       <v-layout row>
         <v-spacer></v-spacer>
-        <p class="d-inline-block title">{{model.game.date | formatDate}}</p>
+        <p class="d-inline-block title">{{model.game.date.toDateString()}}</p>
       </v-layout>
 
 
@@ -75,6 +75,7 @@
       </v-layout>
 
       <!-- TODO: make a page where a user can sign up for a game and a game detail page -->
+      <!-- TODO: make sure the user is the correct gender before they can join  -->
       <v-btn block color="green" class="white--text" :disabled="(model.participants.length > model.game.prefGroupSize)" @click="'TODO!!!'">Join Game!</v-btn>
       <v-btn block color="blue" class="white--text" @click="'TODO!!!'">Open Game Page</v-btn>
     </v-card-text>
@@ -109,8 +110,7 @@
 </template>
 
 <script>
-  import GameModel from '../../../models/GameModel'
-  import GolfGameModel from '../../../models/GolfGameModel'
+  import GameModel, { CollectionGameMap } from '../../../models/GameModel'
   import UserModel from '../../../models/UserModel'
   import ImageUtils from '../../../utils/ImageUtils'
 
@@ -122,28 +122,48 @@
       checked: true
     }),
     props: {
-      game: GolfGameModel
+      game: Object
     },
     created: function () {
       this.model = this.game
-      this.initGame()
+      if (this.model !== undefined) {
+        this.initGame()
+      }
     },
     methods: {
       initGame: async function () {
-        let game = await GameModel.getFromRef(this.model.gameKey, GameModel, error => { this.error = error.message })
-        console.log('GAME')
-        console.log(game)
-        let subCol = await game.initSubcollection('GameUsers', error => { this.error = error.message })
-        for (let doc of subCol) {
-          let user = await UserModel.getFromRef(UserModel.getNormalRef(UserModel).doc(doc.key), UserModel, error => { this.error = error.message })
-          doc.user = user
+        let model
+        if (this.model.gameKey !== undefined) {
+          let game = await GameModel.getFromRef(this.model.gameKey, GameModel, error => { this.error = error.message })
+          model = this.model
+          model.game = game
+          model.participants = (await this.initParticipants(game)) || []
+          this.model = undefined
+          this.model = model
+          console.log(this.model)
+        } else if (this.model.subGame !== undefined) {
+          let game = this.game
+          let modelClass = CollectionGameMap[this.model.subGame.path.split('/')[0]]
+          model = await modelClass.getFromRef(this.model.subGame, modelClass, error => { throw error })
+          model.game = game
+          model.participants = (await this.initParticipants(model.game)) || []
+          this.model = undefined
+          this.model = model
+          console.log('MODELERONI')
+          console.log(this.model)
         }
-        let model = this.model
-        model.game = game
-        model.participants = subCol
-        this.model = undefined
-        this.model = model
-        console.log(this.model)
+      },
+      initParticipants: async function (game) {
+        try {
+          let subCol = await game.initSubcollection('GameUsers', error => { this.error = error.message })
+          for (let doc of subCol) {
+            doc.user = await UserModel.getFromRef(UserModel.getNormalRef(UserModel).doc(doc.key), UserModel, error => { this.error = error.message })
+          }
+          return subCol
+        } catch (error) {
+          console.log(error)
+          return []
+        }
       },
       makeInitialsImage: function (user) {
         return ImageUtils.makeInitialsImage(user)
