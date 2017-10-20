@@ -4,7 +4,6 @@
       <v-progress-circular style="display: inline-block;" indeterminate v-bind:size="100" color="green darken-1"></v-progress-circular>
     </div>
 
-    <!-- TODO: this needs a lot of work xD -->
     <div v-if="!loading">
 
       <!-- CONTACTS PANE -->

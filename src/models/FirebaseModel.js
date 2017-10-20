@@ -163,7 +163,6 @@ class FirebaseModel {
 
   /**
    * Tries to save this object to firestore.
-   * TODO: think about having validations in here
    * @return {Promise<void>}
    */
   async save () {

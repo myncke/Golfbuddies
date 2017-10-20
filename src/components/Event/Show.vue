@@ -1,43 +1,125 @@
 <template>
   <ul class="list ma-3">
-    <v-flex>
+    <v-flex v-if="model !== undefined">
       <v-card>
+        <!-- TODO: we should make a map of sportTypes to images -->
         <v-card-media
-          src="/static/img/latem.jpg"
+          src="/static/img/gameHeader.jpg"
           height="200px"
         >
         </v-card-media>
         <v-card-title primary-title>
           <div>
-            <div class="headline">Royal Latem Golf club</div>
-            <span class="grey--text">Wed, Oct 11</span>
+            <div class="headline">{{model.date.toDateString()}}</div>
           </div>
         </v-card-title>
+        <v-card-text>
+          <p class="subheading">Information:</p>
+          <p class="body-1">{{model.specialWishes || 'None'}}</p>
+          <iframe width="100%" height="200" frameborder="0" style="border:0;"
+                  :src="'https://www.google.com/maps/embed/v1/place?q=' + model.location.latitude + ',+' + model.location.longitude + '&key=AIzaSyDuD6-jAzk7Gk7mko708x0VYslipwsoEt8'" allowfullscreen></iframe>
+        </v-card-text>
         <v-card-actions>
-          <v-btn flat>Share</v-btn>
-          <v-btn flat color="purple">View</v-btn>
+          <v-btn flat v-if="!model.inviteOnly">Share</v-btn>
           <v-spacer></v-spacer>
-          <v-btn icon @click.native="show = !show">
+          <v-btn flat @click.native="show = !show">
             <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            More Info
           </v-btn>
         </v-card-actions>
         <v-slide-y-transition>
           <v-card-text v-show="show">
-            I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            <p class="title">General Information</p>
+            <v-layout row wrap>
+
+              <!-- Booleans -->
+
+              <v-flex lg4 sm6 xs12>
+                <v-checkbox
+                  label="Competitive"
+                  v-model="model.competition"
+                  disabled
+                ></v-checkbox>
+              </v-flex>
+
+              <v-flex lg4 sm6 xs12>
+                <v-checkbox
+                  label="International"
+                  v-model="model.international"
+                  disabled
+                ></v-checkbox>
+              </v-flex>
+
+              <v-flex xs12></v-flex>
+
+              <v-flex sm6 xs12>
+                <p class="subheading">Preferred Group Size: {{model.prefGroupSize}} Players</p>
+              </v-flex>
+              <v-flex sm6 xs12>
+                <p class="subheading">Preferred Group Composition: {{model.prefGameSex}}</p>
+              </v-flex>
+            </v-layout>
+
+            <br>
+            <v-divider></v-divider>
+            <br>
+
+            <!-- Specific Game Information -->
+
+            <p class="title">Game-Specific Information</p>
+            <golf-show v-if="this.subModel.buggie !== undefined" :model="this.subModel"></golf-show>
+
+            <br>
+            <!--<p class="title">Location</p>
+            <iframe width="100%" height="450" frameborder="0" style="border:0;"
+                    :src="'https://www.google.com/maps/embed/v1/place?q=' + model.location.latitude + ',+' + model.location.longitude + '&key=AIzaSyDuD6-jAzk7Gk7mko708x0VYslipwsoEt8'" allowfullscreen></iframe>-->
           </v-card-text>
         </v-slide-y-transition>
       </v-card>
     </v-flex>
+    <br>
+    <p class="title text-xs-center" v-if="messages.length > 0">Messages</p>
+    <message-show v-for="message in messages" :model="message" :key="message.key"></message-show>
   </ul>
 </template>
 
 <script>
+import GameModel, { CollectionGameMap } from '../../models/GameModel'
+import GolfShow from './components/GolfGame/Show'
+import MessageShow from './components/Messages/Show'
+
 export default {
-  // el: '#view',
-  data () {
-    return {
-      show: false
+  data: () => ({
+    show: false,
+    model: undefined,
+    subModel: {},
+    messages: [],
+    error: ''
+  }),
+  created: function () {
+    this.initModel(this.$route.params.id)
+  },
+  methods: {
+    initModel: async function (gameId) {
+      this.model = await GameModel.getFromRef(GameModel.getNormalRef(GameModel).doc(gameId), GameModel, this.onFailure)
+      console.log(this.model)
+      let subClass = CollectionGameMap[this.model.subGame.path.split('/')[0]]
+      console.log(this.model.subGame)
+      this.subModel = await GameModel.getFromRef(this.model.subGame, subClass, this.onFailure)
+      // this.messages = await this.model.getFirstXMessages(0, 100, error => { this.error = error.message })
+      this.messages = await this.model.initSubcollection('Messages', this.onFailure)
+
+      console.log(this.model)
+      console.log(this.subModel)
+      console.log(this.messages)
+    },
+    onFailure: function (error) {
+      this.error = error.message
     }
+  },
+  components: {
+    'golf-show': GolfShow,
+    'message-show': MessageShow
   }
 }
 </script>

@@ -56,7 +56,6 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <!-- TODO: make this method -->
         <v-btn color="primary" block @click="createClub()">Create Club</v-btn>
       </v-form>
     </v-card-text>

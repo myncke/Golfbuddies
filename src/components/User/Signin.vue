@@ -43,7 +43,6 @@
         }).then(() => {
           if (this.error === '') {
             this.open = false
-            // TODO: add new usermodel to the central state
           }
         })
       },

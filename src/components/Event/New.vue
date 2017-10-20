@@ -88,7 +88,7 @@
     <v-layout row style="height: auto">
       <v-btn color="primary" :disabled="page < 3" @click.native="page = Math.max(1,page-1)">Back</v-btn>
       <v-spacer style="height: 1px"></v-spacer>
-      <v-btn color="primary" :disabled="!valid" @click.native="nextPage()">Continue</v-btn>
+      <v-btn color="primary" :disabled="!valid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
     </v-layout>
   </div>
 </template>
@@ -126,7 +126,8 @@
         ]
       },
       sportType: 'Golf',
-      sportTypes: []
+      sportTypes: [],
+      loading: false
     }),
     created: function () {
       this.model = new GameModel()
@@ -139,10 +140,10 @@
         if (this.page < 3) {
           this.page += 1
         } else {
-          // TODO: make a page for the game details
-          console.log('COMPLETE')
+          this.loading = true
           await this.submit()
-          // this.$router.push()
+          this.loading = false
+          this.$router.push({name: 'event', params: {id: this.model.key}})
         }
       },
       getLocation: async function () {
