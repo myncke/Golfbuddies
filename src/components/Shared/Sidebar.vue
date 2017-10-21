@@ -35,7 +35,8 @@
           <v-list-tile
             v-for="(child, i) in item.children"
             :key="i"
-            @click=""
+            @click="open = false"
+            :to="child.path"
           >
             <v-list-tile-action v-if="child.icon">
               <v-icon>{{ child.icon }}</v-icon>
@@ -65,6 +66,8 @@
 </template>
 
 <script>
+import SportClubModel from '../../models/SportClubModel'
+
 export default {
   data: () => ({
     open: false,
@@ -77,7 +80,8 @@ export default {
         text: 'Groups',
         model: true,
         children: [
-          { icon: 'add', text: 'Create Group', path: '/' }
+          { icon: 'group_work', text: 'All Groups', path: '/groups' },
+          { icon: 'add', text: 'Create Group', path: '/group/new' }
         ],
         path: '/'
       },
@@ -91,6 +95,11 @@ export default {
   methods: {
     switchOpenState () {
       this.open = !this.open
+      console.log(
+        SportClubModel.getAllFromRef(
+          SportClubModel.getNormalRef(SportClubModel).where('members.' + this.$store.getters.user.uid, '==', true), SportClubModel, () => ({})
+        )
+      )
     }
   }
 }

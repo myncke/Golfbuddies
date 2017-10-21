@@ -31,7 +31,7 @@ export default new Router({
       component: EventIndex
     },
     {
-      path: '/events/new',
+      path: '/event/new',
       name: 'newEvent',
       component: EventNew
     },
@@ -56,7 +56,7 @@ export default new Router({
       component: Group
     },
     {
-      path: '/groups/new',
+      path: '/group/new',
       name: 'newGroup',
       component: GroupNew
     },
