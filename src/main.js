@@ -44,6 +44,7 @@ new Vue({
       console.log('PERSISTENCE FAILED:')
       console.log(error.message)
     }
+    this.$store.dispatch('initUser')
   }
 })
 
