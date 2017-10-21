@@ -12,7 +12,7 @@ import EventNew from '../components/Event/New'
 // Group
 import Group from '../components/Group/Show'
 import GroupIndex from '../components/Group/Index'
-import NewClubView from '../components/Group/New'
+import GroupNew from '../components/Group/New'
 
 // Setting
 import SettingIndex from '../components/Setting/Index'
@@ -21,16 +21,13 @@ import SettingIndex from '../components/Setting/Index'
 import Feedback from '../components/Static/Feedback'
 import Help from '../components/Static/Help'
 
-// User
-import Signup from '../components/User/Signup'
-
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
+      name: 'root',
       component: EventIndex
     },
     {
@@ -61,7 +58,7 @@ export default new Router({
     {
       path: '/groups/new',
       name: 'newGroup',
-      component: NewClubView
+      component: GroupNew
     },
     {
       path: '/contacts',
@@ -82,11 +79,6 @@ export default new Router({
       path: '/help',
       name: 'help',
       component: Help
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: Signup
     }
   ]
 })
