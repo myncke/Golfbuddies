@@ -24,6 +24,10 @@
             </v-layout>
           </v-container>
         </v-content>
+        <v-footer class="pa-3">
+          <v-spacer></v-spacer>
+          <div>© {{ new Date().getFullYear() }}</div>
+        </v-footer>
       </main>
     </v-layout>
     
@@ -35,7 +39,7 @@
 </template>
 
 <script>
-  import sidebar from './components/Sidebar'
+  import sidebar from './components/Shared/Sidebar'
   import landing from './components/Static/Landing'
 
   export default {
@@ -57,3 +61,9 @@
     }
   }
 </script>
+
+<style>
+main {
+  width: 100%;
+}
+</style>

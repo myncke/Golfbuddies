@@ -40,7 +40,7 @@
       goToGroupDetails: function () {
         console.log('Redirecting')
         this.$router.push({
-          name: 'groupDetails', params: { clubId: this.club.key }
+          name: 'group', params: { id: this.club.key }
         })
       }
     }

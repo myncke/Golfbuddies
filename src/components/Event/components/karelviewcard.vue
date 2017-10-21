@@ -1,5 +1,7 @@
 <template>
-  <v-card style="margin: 10px" v-if="model != undefined && model.game != undefined" >
+   <v-card class="ma-3" v-if="false" >  <!--  model != undefined && model.game != undefined -->
+
+
     <v-card-text>
       <v-layout row>
         <v-spacer></v-spacer>
@@ -107,86 +109,3 @@
     </v-slide-y-transition>
   </v-card>
 </template>
-
-<script>
-  import GameModel, { CollectionGameMap } from '../../../models/GameModel'
-  import LocationView from '../../../components/Shared/LocationView'
-  import UserModel from '../../../models/UserModel'
-  import ImageUtils from '../../../utils/ImageUtils'
-
-  export default {
-    data: () => ({
-      model: undefined,
-      showLocation: false,
-      showMembers: false,
-      checked: true
-    }),
-    props: {
-      game: Object
-    },
-    created: function () {
-      this.model = this.game
-      if (this.model !== undefined) {
-        this.initGame()
-      }
-    },
-    methods: {
-      initGame: async function () {
-        let model
-        if (this.model.gameKey !== undefined) {
-          let game = await GameModel.getFromRef(this.model.gameKey, GameModel, error => { this.error = error.message })
-          model = this.model
-          model.game = game
-          model.participants = (await this.initParticipants(game)) || []
-          this.model = undefined
-          this.model = model
-          console.log(this.model)
-        } else if (this.model.subGame !== undefined) {
-          let game = this.game
-          let modelClass = CollectionGameMap[this.model.subGame.path.split('/')[0]]
-          model = await modelClass.getFromRef(this.model.subGame, modelClass, error => { throw error })
-          model.game = game
-          model.participants = (await this.initParticipants(model.game)) || []
-          this.model = undefined
-          this.model = model
-          console.log('MODELERONI')
-          console.log(this.model)
-        }
-      },
-      initParticipants: async function (game) {
-        try {
-          let subCol = await game.initSubcollection('GameUsers', error => { this.error = error.message })
-          for (let doc of subCol) {
-            doc.user = await UserModel.getFromRef(UserModel.getNormalRef(UserModel).doc(doc.key), UserModel, error => { this.error = error.message })
-          }
-          return subCol
-        } catch (error) {
-          console.log(error)
-          return []
-        }
-      },
-      makeInitialsImage: function (user) {
-        return ImageUtils.makeInitialsImage(user)
-      }
-    },
-    components: {
-      'location-view': LocationView
-    }
-  }
-
-</script>
-
-<style scoped>
-  .initials-img {
-    width: 40px;
-    height: 40px;
-    display: inline;
-  }
-
-  .member {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
-    margin-left: 5px;
-  }
-</style>

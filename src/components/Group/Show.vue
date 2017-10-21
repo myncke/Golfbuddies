@@ -47,7 +47,7 @@
   import UserModel from '../../models/UserModel'
   import ImageUtils from '../../utils/ImageUtils'
   import GolfGameModel from '../../models/GolfGameModel'
-  import GameCard from './components/GameCard.vue'
+  import GameCard from '../Event/components/GameCard.vue'
   import LocationView from '../Shared/LocationView'
 
   export default {
@@ -63,7 +63,7 @@
     },
     methods: {
       initClub: function () {
-        let groupId = this.$route.params.clubId
+        let groupId = this.$route.params.id
         console.log(new SportClubModel(groupId, false, (model) => {
           this.club = model
           this.initMembers(model)

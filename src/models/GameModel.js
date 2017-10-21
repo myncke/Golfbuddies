@@ -19,9 +19,7 @@ export {CollectionGameMap}
 
 export class GameUser extends FirebaseModel {
 
-  static _firestoreFields = [
-    'specialWishes'
-  ]
+  static _firestoreFields = [ 'specialWishes' ]
 
   // Strings
   specialWishes
