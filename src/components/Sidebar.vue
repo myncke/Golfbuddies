@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer persistent clipped app v-model="open">
+  <v-navigation-drawer persistent clipped app v-model="open" >
     <v-list dense>
       <template v-for="(item, i) in items">
 
@@ -49,7 +49,7 @@
         </v-list-group>
 
         <!-- Single Tile -->
-        <v-list-tile v-else @click="" :key="item.name" :to="item.path">
+        <v-list-tile v-else @click="open = false" :key="item.name" :to="item.path">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -66,8 +66,8 @@
 
 <script>
 export default {
-  props: ['open'],
   data: () => ({
+    open: false,
     items: [
       { icon: 'events', text: 'Events', path: '/events' },
       { icon: 'contacts', text: 'Contacts', path: '/contacts' },
@@ -81,11 +81,17 @@ export default {
         ],
         path: '/'
       },
+      { icon: 'person', text: 'Profile', path: '/profile' },
       { icon: 'settings', text: 'Settings', path: '/settings' },
       { icon: 'chat_bubble', text: 'Send feedback', path: '/feedback' },
       { icon: 'help', text: 'Help', path: '/help' },
       { icon: 'phonelink', text: 'Install App', path: '/install' }
     ]
-  })
+  }),
+  methods: {
+    switchOpenState () {
+      this.open = !this.open
+    }
+  }
 }
 </script>

@@ -28,6 +28,41 @@ export const store = new Vuex.Store({
             console.log(error)
           }
         )
+    },
+    signUserIn ({commit}, payload) {
+      // TODO: add new usermodel to the central state
+      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+        .then(
+          user => {
+            const newUser = {
+              id: user.uid
+            }
+            commit('setUser', newUser)
+          }
+        )
+        .catch(
+          error => {
+            console.log(error)
+          }
+        )
+    },
+    signUserOut ({commit}) {
+      firebase.auth().signOut()
+        .then(
+          commit('setUser', null)
+        )
+        .catch(
+          error => {
+            console.log(error)
+          }
+        )
+    },
+    initUser ({commit}) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          commit('setUser', { id: user.uid })
+        }
+      })
     }
   },
   getters: {

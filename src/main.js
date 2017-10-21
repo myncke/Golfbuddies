@@ -37,6 +37,7 @@ new Vue({
   created () {
     firebase.initializeApp(config)
     firebase.firestore().enablePersistence()
+    this.$store.dispatch('initUser')
   }
 })
 
