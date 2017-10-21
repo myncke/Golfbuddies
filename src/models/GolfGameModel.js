@@ -39,8 +39,7 @@ export default class GolfGameModel extends FirebaseModel {
     }
   }
 
-
   constructor (key, keepListening, onSuccess, onFailure) {
-    super(key, GolfGameModel._subCollections, GolfGameModel._firestoreFields, GolfGameModel, keepListening, onSuccess, onFailure)
+    super(key, GolfGameModel._firestoreFields, GolfGameModel, keepListening, onSuccess, onFailure)
   }
 }
