@@ -30,11 +30,11 @@
       editMode: false
     }),
     created: function () {
-      this.initModel()
+      this.initModel(this.pId)
     },
     methods: {
       initModel: async function () {
-        this.model = new GolfUserModel(this.$store.getters.currentUser, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
+        this.model = new GolfUserModel(this.pId, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
         // this.model = await GolfUserModel.getFromRef(GolfUserModel.getNormalRef(GolfUserModel).doc(this.$store.getters.currentUser), GolfUserModel, error => console.log(error))
       },
       setEditMode: function (val) {
@@ -45,6 +45,9 @@
         await this.model.save()
         console.log('SAVED GOLFUSER')
       }
+    },
+    props: {
+      pId: String
     }
   }
 </script>

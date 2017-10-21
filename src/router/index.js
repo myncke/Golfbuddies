@@ -91,7 +91,7 @@ export default new Router({
       component: Signup
     },
     {
-      path: '/profile',
+      path: '/profile/:id?',
       name: 'profile',
       component: Profile
     }

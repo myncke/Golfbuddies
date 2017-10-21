@@ -78,7 +78,7 @@
 
           <v-divider></v-divider>
 
-          <golf-info ref="golf"></golf-info>
+          <golf-info :pId="this.model.key" ref="golf"></golf-info>
 
 
         </v-card-text>
@@ -101,7 +101,7 @@
 </template>
 <script>
   import UserModel, {sexes} from '../../models/UserModel'
-  import {countries} from '../../models/CountryModel'
+  import LocationUtils from '../../utils/LocationUtils'
   import GolfuserProfileCard from './components/GolfuserProfileCard'
 
   let refs = ['golf']
@@ -118,17 +118,26 @@
     computed: {
       // TODO: insert logic here, will do this when I have the latest store
       isMyProfile: function () {
-        return true
+        return this.model.key === this.$store.getters.currentUser
       }
     },
     created: function () {
-      this.countries = countries
+      let pId = this.$route.params.id
+      if (pId === undefined) {
+        if (this.$store.getters.currentUser === null) {
+          pId = this.$store.getters.currentUser.id
+        } else {
+          this.$router.push('/')
+        }
+      }
+
+      this.countries = LocationUtils.countries
       this.sexes = sexes
-      this.initUserModel()
+      this.initUserModel(pId)
     },
     methods: {
-      initUserModel: async function () {
-        this.model = new UserModel(this.$store.getters.currentUser, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
+      initUserModel: async function (pId) {
+        this.model = new UserModel(pId, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
       },
       setEditMode: function (mode) {
         for (let ref of refs) {
