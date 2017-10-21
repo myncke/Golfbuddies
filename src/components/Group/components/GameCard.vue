@@ -73,8 +73,7 @@
           <p class="subheading">Round Price: {{model.roundPrice}}</p>
         </v-flex>
       </v-layout>
-
-      <!-- TODO: make a page where a user can sign up for a game -->
+      
       <!-- TODO: make sure the user is the correct gender before they can join  -->
       <v-btn block color="green" class="white--text" :disabled="(model.participants.length > model.game.prefGroupSize)" @click="openJoin()">Join Game!</v-btn>
       <v-btn block color="blue" class="white--text" @click="'TODO!!!'">Open Game Page</v-btn>
