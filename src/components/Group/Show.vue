@@ -145,11 +145,6 @@
       height: 200px;
     }
   }
-  .initials-img {
-    width: 40px;
-    height: 40px;
-    display: inline;
-  }
 
   .member {
     display: inline-block;
