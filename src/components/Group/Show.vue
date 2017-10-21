@@ -4,23 +4,43 @@
       <v-flex>
         <v-card>
           <v-card-media :src="club.headerPic" height="400px">
-            <v-parallax :src="club.headerPic" class="resize-parallax">
-              <v-layout column align-left justify-end style="width:100%;">
-                <!-- <h1 class="white--text">{{club.name}}</h1>
-                <h4 class="white--text">Build your application today!</h4> -->
+            <v-container class="ma-0 container-text-gradient" fluid>
+              <v-layout column align-left justify-end>
+                <h1 class="white--text display-2">{{club.name}}</h1>
+                <h2 class="white--text subheading">{{club.information}}</h2>
               </v-layout>
-            </v-parallax>
+            </v-container>
           </v-card-media>
         </v-card>
       </v-flex>
+
+      <v-tabs fixed icons centered>
+        <v-tabs-bar class="white">
+          <v-tabs-slider class="yellow"></v-tabs-slider>
+          <v-tabs-item
+            v-for="i in items"
+            :key="i"
+            :href="'#tab-' + i"
+          > <v-icon>phone</v-icon>
+            {{ i }}
+          </v-tabs-item>
+        </v-tabs-bar>
+        <v-divider></v-divider>
+
+        <v-tabs-items>
+          <v-tabs-content
+            v-for="i in items"
+            :key="i"
+            :id="'tab-' + i"
+          >
+            <v-card flat>
+              <v-card-text>{{ text }}</v-card-text>
+            </v-card>
+          </v-tabs-content>
+        </v-tabs-items>
+      </v-tabs>
+
       <v-card>
-        <v-card-title primary-title>
-          <p class="text-xs-center headline" style="width: 100%">{{club.name}}</p>
-        </v-card-title>
-        <v-card-text style="margin: 10px">
-          <p>{{club.information}}</p>
-          <v-divider style="margin: 10px"></v-divider>
-        </v-card-text>
         <v-card-actions>
           <v-btn icon @click.native="showMembers = !showMembers; showLocation = false">
             <v-icon>{{ showMembers ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -69,7 +89,9 @@
       members: [],
       games: [],
       showLocation: false,
-      showMembers: false
+      showMembers: false,
+      items: ['Messages', 'Events', 'Members', 'Location'],
+      text: 't d.'
     }),
     created: function () {
       this.initClub()
@@ -114,14 +136,8 @@
 
 <style scoped>
 
-  .resize-parallax {
-    display: block;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
-    width: 100%;
-    height: auto;
+  .container-text-gradient {
+    background: linear-gradient(rgba(0,0,0,0.0) 70%, rgba(0,0,0,0.8));
   }
 
   @media screen and (max-width: 480px) {
