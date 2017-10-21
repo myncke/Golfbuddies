@@ -20,6 +20,7 @@ import Help from '../components/Static/Help'
 
 // User
 import Signup from '../components/User/Signup'
+import Profile from '../components/User/Profile'
 
 Vue.use(Router)
 
@@ -64,6 +65,11 @@ export default new Router({
       path: '/signup',
       name: 'signup',
       component: Signup
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     }
   ]
 })

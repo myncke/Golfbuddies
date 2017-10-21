@@ -36,6 +36,6 @@ export default class GolfUserModel extends FirebaseModel {
   federaalNummer
 
   constructor (key, keepListening, onSuccess, onFailure) {
-    super(key, GolfUser._subCollections, GolfUser._firestoreFields, GolfUser, keepListening, onSuccess, onFailure)
+    super(key, GolfUserModel._firestoreFields, GolfUserModel, keepListening, onSuccess, onFailure)
   }
 }

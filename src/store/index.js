@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    user: null
+    user: {id: 1}
   },
   mutations: {
     setUser (state, payload) {
@@ -32,7 +32,8 @@ export const store = new Vuex.Store({
   },
   getters: {
     currentUser (state) {
-      return state.user.id
+      // const currentUser = firebase.auth().currentUser
+      return 'Af3ug111EfTLf2PLAbf70GWEJew2' // currentUser === null ? 1 : currentUser.uid // state.user.id
     }
   }
 })
