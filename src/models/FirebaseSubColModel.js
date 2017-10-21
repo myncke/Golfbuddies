@@ -27,7 +27,7 @@ export default class FirebaseSubColModel extends FirebaseModel {
    */
   async addSubcollectionDoc (key, model, onFailure) {
     try {
-      return this._getDocRef().collection(key).doc(model.key).set(model._toJson())
+      return (await this._getDocRef().collection(key).doc(model.key).set(model._toJson()))
     } catch (error) {
       onFailure(error)
       throw error

@@ -76,8 +76,9 @@
 
       <!-- TODO: make a page where a user can sign up for a game -->
       <!-- TODO: make sure the user is the correct gender before they can join  -->
-      <v-btn block color="green" class="white--text" :disabled="(model.participants.length > model.game.prefGroupSize)" @click="'TODO!!!'">Join Game!</v-btn>
+      <v-btn block color="green" class="white--text" :disabled="(model.participants.length > model.game.prefGroupSize)" @click="openJoin()">Join Game!</v-btn>
       <v-btn block color="blue" class="white--text" @click="'TODO!!!'">Open Game Page</v-btn>
+      <join-dialog ref="join" :gameModel="model.game"></join-dialog>
     </v-card-text>
     <v-card-actions>
       <v-btn icon @click.native="showMembers = !showMembers; showLocation = false">
@@ -113,6 +114,7 @@
   import LocationView from '../../../components/Shared/LocationView'
   import UserModel from '../../../models/UserModel'
   import ImageUtils from '../../../utils/ImageUtils'
+  import GameJoin from '../../Event/Join'
 
   export default {
     data: () => ({
@@ -167,10 +169,14 @@
       },
       makeInitialsImage: function (user) {
         return ImageUtils.makeInitialsImage(user)
+      },
+      openJoin: function () {
+        this.$refs['join'].openDialog()
       }
     },
     components: {
-      'location-view': LocationView
+      'location-view': LocationView,
+      'join-dialog': GameJoin
     }
   }
 

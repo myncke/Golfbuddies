@@ -26,7 +26,7 @@
         </v-content>
       </main>
     </v-layout>
-    
+
     <v-container v-else fluid fill-height class="pa-0">
       <landing></landing>
     </v-container>
