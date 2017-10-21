@@ -10,10 +10,8 @@ export default class FirebaseSubColModel extends FirebaseModel {
     this.subCollectionMap = subCollectionMap
   }
 
-  async initSubcollection (key, keepListening, onFailure) {
-    if (!keepListening) {
-      return this._getAllFromSubCollectionFirebase(key, onFailure)
-    }
+  async initSubcollection (key, onFailure) {
+    return (await this._getAllFromSubCollectionFirebase(key, onFailure))
   }
 
   setSubcollection (list, key) {

@@ -96,7 +96,7 @@ class FirebaseModel {
       console.log(model)
       return model
     } else {
-      onFailure('Something went wrong, we couldn\'t find the document')
+      onFailure('Something went wrong, we couldn\'t find the document, doc: ' + doc.key)
     }
   }
 
@@ -163,7 +163,6 @@ class FirebaseModel {
 
   /**
    * Tries to save this object to firestore.
-   * TODO: think about having validations in here
    * @return {Promise<void>}
    */
   async save () {
