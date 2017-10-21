@@ -8,6 +8,7 @@
             <v-flex>
               <v-expansion-panel>
                 <v-expansion-panel-content v-model="open">
+                  <v-divider></v-divider>
                   <div slot="header">
                     <v-icon class="mr-3" left>filter_list</v-icon> Filters
                     <!-- <v-icon class="ml-5">event</v-icon>
@@ -65,6 +66,7 @@
                       </v-layout>
                     </v-card-text>
                   </v-card>
+                  <v-divider></v-divider>
                 </v-expansion-panel-content>
               </v-expansion-panel>
             </v-flex>
