@@ -8,8 +8,12 @@ import ContactIndex from '../components/Contact/Index'
 // Event
 import Event from '../components/Event/Show'
 import EventIndex from '../components/Event/Index'
+import EventNew from '../components/Event/New'
 
 // Group
+import ClubsView from '../components/Group/ClubsView.vue'
+import DetailView from '../components/Group/DetailView.vue'
+import NewClubView from '../components/Group/New.vue'
 
 // Setting
 import SettingIndex from '../components/Setting/Index'
@@ -31,6 +35,11 @@ export default new Router({
       component: Hello
     },
     {
+      path: '/events/new',
+      name: 'newEvent',
+      component: EventNew
+    },
+    {
       path: '/events/:id',
       name: 'event',
       component: Event
@@ -39,6 +48,21 @@ export default new Router({
       path: '/events',
       name: 'events',
       component: EventIndex
+    },
+    {
+      path: '/groups',
+      name: 'groups',
+      component: ClubsView
+    },
+    {
+      path: '/group/:clubId',
+      name: 'groupDetails',
+      component: DetailView
+    },
+    {
+      path: '/groups/new',
+      name: 'newGroup',
+      component: NewClubView
     },
     {
       path: '/contacts',
