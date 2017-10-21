@@ -22,12 +22,10 @@
 
 <script>
   import SportClubModel from '../../models/SportClubModel'
-  import ClubCard from './components/ClubCard.vue'
 
   export default {
     data: () => ({
       clubModels: [],
-      show: false,
       error: ''
     }),
     created: function () {
@@ -47,20 +45,6 @@
           name: 'group', params: { id: key }
         })
       }
-    },
-    components: {
-      'club-card': ClubCard
     }
   }
 </script>
-
-<style scoped>
-  .list {
-    width: 100%;
-    padding: 0;
-  }
-
-  .card-container {
-    margin: 20px;
-  }
-</style>
