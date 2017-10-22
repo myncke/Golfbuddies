@@ -51,14 +51,14 @@ export default new Router({
       component: GroupIndex
     },
     {
-      path: '/group/:id',
-      name: 'group',
-      component: Group
-    },
-    {
       path: '/group/new',
       name: 'newGroup',
       component: GroupNew
+    },
+    {
+      path: '/group/:id',
+      name: 'group',
+      component: Group
     },
     {
       path: '/contacts',

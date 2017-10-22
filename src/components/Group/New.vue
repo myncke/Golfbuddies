@@ -77,7 +77,6 @@
     }),
     created: function () {
       this.model = new SportClubModel()
-      this.model.closed = false
       this.sportTypeMap = {
         'golf': SportTypeModel.getNormalRef(SportTypeModel).doc('Golf')
       }
@@ -86,13 +85,14 @@
     methods: {
       createClub: async function () {
         this.model.sportType = this.sportTypeMap[this.model.sportType]
+        this.model.closed = this.model.closed || false
         await this.getLocation()
         // TODO: We have to find a way to init the members
         this.model.members = {}
         this.model.admin = (new UserModel())._getDocRef()
         await this.model.save()
         this.$router.push({
-          name: 'groupDetails', params: { clubId: this.model.key }
+          name: 'group', params: { clubId: this.model.key }
         })
       },
       getLocation: async function () {
