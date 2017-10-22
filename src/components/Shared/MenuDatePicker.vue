@@ -17,7 +17,8 @@
       prepend-icon="event"
       readonly
     ></v-text-field>
-    <v-date-picker v-model="date" no-title scrollable actions>
+    <v-date-picker v-model="date" no-title scrollable actions
+                   :allowed-dates="allowedFunction">
       <template slot-scope="{ save, cancel }">
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -32,8 +33,20 @@
 <script>
 export default {
   data: () => ({
-    date: null
-  })
+    date: null,
+    menu: false
+  }),
+  watch: {
+    date: function (newVal) {
+      console.log(this.date)
+      this.$emit('date-chosen', newVal)
+    }
+  },
+  methods: {
+  },
+  props: {
+    allowedFunction: Function
+  }
 }
 </script>
 
