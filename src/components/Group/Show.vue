@@ -3,7 +3,7 @@
     <v-layout column>
       <v-flex>
         <v-card>
-          <v-card-media :src="club.headerPic" height="400px">
+          <v-card-media :src="club.headerPic" height="300px">
             <v-container class="ma-0 container-text-gradient" fluid>
               <v-layout column align-left justify-end>
                 <h1 class="white--text display-2">{{club.name}}</h1>
@@ -90,7 +90,7 @@
       games: [],
       showLocation: false,
       showMembers: false,
-      items: ['Messages', 'Events', 'Members', 'Location'],
+      items: ['Messages', 'Events', 'Members', 'Pictures', 'Location'],
       text: 't d.'
     }),
     created: function () {
