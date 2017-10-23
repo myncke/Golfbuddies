@@ -29,7 +29,6 @@ class FirebaseModel {
   constructor (key, firebaseParams, modelClass, keepListening, onSuccess, onFailure) {
     // key === undefined || key === null ? this.key = uuidv1() : this.key = key
     this.key = key || uuidv1()
-    console.log('KEY: ' + this.key)
     this.firebaseParams = firebaseParams
     this.modelClass = modelClass
     if (typeof keepListening === 'boolean' && typeof onSuccess === 'function' && typeof onFailure === 'function') {
@@ -92,8 +91,6 @@ class FirebaseModel {
       for (let field of ModelClass._firestoreFields) {
         model[field] = data[field]
       }
-      console.log('Made an object: ')
-      console.log(model)
       return model
     } else {
       onFailure('Something went wrong, we couldn\'t find the document, doc: ' + doc.key)
@@ -137,12 +134,10 @@ class FirebaseModel {
       let snapShot = await ref.get()
       snapShot.forEach(
         doc => {
-          console.log(doc)
           result.push(FirebaseModel._mapFields(modelClass, undefined, doc, onFailure))
         }
       )
     } catch (error) {
-      console.log(error)
       onFailure(error)
     }
     return result

@@ -19,9 +19,7 @@ export {CollectionGameMap}
 
 export class GameUser extends FirebaseModel {
 
-  static _firestoreFields = [
-    'specialWishes'
-  ]
+  static _firestoreFields = [ 'specialWishes' ]
 
   // Strings
   specialWishes
@@ -35,6 +33,54 @@ export default class GameModel extends FirebaseSubColModel {
 
   static async getAllOpenGames (onFailure) {
     return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).orderBy('date', 'asc'), GameModel, onFailure)
+  }
+
+  static async getAllGamesWithFilter (filterObject, onFailure) {
+    let ref = GameModel.getNormalRef(GameModel)
+
+    for (let key of ['International', 'Competition']) {
+      if (filterObject.select && filterObject.select.indexOf(key) >= 0) {
+        ref = ref.where(key.toLowerCase(), '==', true)
+      }
+    }
+    if (filterObject.sex) {
+      ref = ref.where('prefGameSex', '==', filterObject.sex)
+    }
+
+    if (filterObject.group_size && filterObject.group_size !== 0) {
+      ref = ref.where('prefGroupSize', '==', filterObject.group_size)
+    }
+
+    ref = ref.where('date', '>=', filterObject.start || new Date())
+
+    if (filterObject.end) {
+      ref = ref.where('date', '<=', filterObject.end)
+    }
+
+    // TODO: add the max handicap
+
+    ref = ref.where('inviteOnly', '==', false)
+    ref = ref.orderBy('date', 'asc')
+    let list = await GameModel.getAllFromRef(ref, GameModel, onFailure)
+
+    if (!filterObject.select) return list
+
+    let result = []
+    for (let game of list) {
+      let gGame = await GolfGameModel.getFromRef(game.subGame, GolfGameModel, onFailure)
+      console.log(game)
+      console.log(gGame)
+      let canAdd = true
+      for (let gGameKey of ['Buggie', 'Overnight']) {
+        if (filterObject.select.indexOf(gGameKey) >= 0) {
+          canAdd = gGame[gGameKey.toLowerCase()]
+        }
+      }
+      if (canAdd) {
+        result.push(game)
+      }
+    }
+    return result
   }
 
   async getFirstXMessages (start, limit, onFailure) {

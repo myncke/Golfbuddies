@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import FirebaseModel from './FirebaseModel'
+import StringUtils from '../utils/StringUtils'
 
 let sexes = ['Male', 'Female']
 export {sexes}
@@ -15,6 +16,10 @@ export default class UserModel extends FirebaseModel {
             error => onFailure(error)
           )
       }, error => onFailure(error))
+  }
+
+  static async searchUser (input, onFailure) {
+    return await this.getAllFromRef(this.getNormalRef(UserModel).where('nickname', '>=', input.toLowerCase()).where('nickname', '<', StringUtils.makeLexiNext(input).toLowerCase()), UserModel, onFailure)
   }
 
   static _firestoreFields = [

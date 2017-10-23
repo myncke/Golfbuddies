@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 
 // Contact
 import ContactIndex from '../components/Contact/Index'
@@ -11,9 +10,9 @@ import EventIndex from '../components/Event/Index'
 import EventNew from '../components/Event/New'
 
 // Group
-import ClubsView from '../components/Group/ClubsView.vue'
-import DetailView from '../components/Group/DetailView.vue'
-import NewClubView from '../components/Group/New.vue'
+import Group from '../components/Group/Show'
+import GroupIndex from '../components/Group/Index'
+import GroupNew from '../components/Group/New'
 
 // Setting
 import SettingIndex from '../components/Setting/Index'
@@ -23,7 +22,6 @@ import Feedback from '../components/Static/Feedback'
 import Help from '../components/Static/Help'
 
 // User
-import Signup from '../components/User/Signup'
 import Profile from '../components/User/Profile'
 
 Vue.use(Router)
@@ -32,16 +30,16 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      name: 'root',
+      component: EventIndex
     },
     {
-      path: '/events/new',
+      path: '/event/new',
       name: 'newEvent',
       component: EventNew
     },
     {
-      path: '/events/:id',
+      path: '/event/:id',
       name: 'event',
       component: Event
     },
@@ -53,17 +51,17 @@ export default new Router({
     {
       path: '/groups',
       name: 'groups',
-      component: ClubsView
+      component: GroupIndex
     },
     {
-      path: '/group/:clubId',
-      name: 'groupDetails',
-      component: DetailView
-    },
-    {
-      path: '/groups/new',
+      path: '/group/new',
       name: 'newGroup',
-      component: NewClubView
+      component: GroupNew
+    },
+    {
+      path: '/group/:id',
+      name: 'group',
+      component: Group
     },
     {
       path: '/contacts',
@@ -84,11 +82,6 @@ export default new Router({
       path: '/help',
       name: 'help',
       component: Help
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: Signup
     },
     {
       path: '/profile/:id?',

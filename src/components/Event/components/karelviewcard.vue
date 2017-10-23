@@ -1,5 +1,7 @@
 <template>
-  <v-card style="margin: 10px" v-if="model != undefined && model.game != undefined" >
+   <v-card class="ma-3" v-if="false" >  <!--  model != undefined && model.game != undefined -->
+
+
     <v-card-text>
       <v-layout row>
         <v-spacer></v-spacer>
