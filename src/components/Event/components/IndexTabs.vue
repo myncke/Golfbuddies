@@ -7,7 +7,7 @@
           :key="tab"
           :href="'#tab-' + tab"
           ripple
-          @click="initTab(tab)"
+          @click="() => { currentTab = tab }"
         >
           {{ tab }}
         </v-tabs-item>
@@ -53,13 +53,26 @@
     data () {
       return {
         tabs: ['Explore', 'Calendar', 'Clubs'],
+        currentTab: 'Explore',
         exploreData: {
           games: []
         }
       }
     },
+    props: {
+      filter: Object
+    },
+    watch: {
+      filter: function (newValue) {
+        this.initTab(this.currentTab)
+      },
+      currentTab: function (newValue) {
+        this.initTab(newValue)
+        console.log(newValue)
+      }
+    },
     created: function () {
-      this.initExplore()
+      this.initTab(this.currentTab)
     },
     methods: {
       initTab: async function (tab) {
@@ -68,7 +81,8 @@
         }
       },
       initExplore: async function () {
-        this.exploreData.games = await GameModel.getAllOpenGames(error => { this.error = error.message })
+        console.log(this.filter)
+        this.exploreData.games = await GameModel.getAllGamesWithFilter(this.filter, error => { throw error })
         console.log(this.exploreData.games)
       }
     },
