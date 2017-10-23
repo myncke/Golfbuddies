@@ -8,7 +8,7 @@
           <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
           Golfbuddies
         </v-toolbar-title>
-        <v-text-field solo prepend-icon="search" placeholder="Search" class="hidden-sm-and-down"></v-text-field>
+        <user-search v-on:search-selected="goToProfile"></user-search>
         <v-spacer></v-spacer>
         <v-btn flat @click="$store.dispatch('signUserOut')">
           <v-icon left>lock_open</v-icon>
@@ -30,7 +30,7 @@
         </v-footer>
       </main>
     </v-layout>
-    
+
     <v-container v-else fluid fill-height class="pa-0">
       <landing></landing>
     </v-container>
@@ -41,6 +41,7 @@
 <script>
   import sidebar from './components/Shared/Sidebar'
   import landing from './components/Static/Landing'
+  import UserSelection from './components/Shared/UserSelection'
 
   export default {
     name: 'app',
@@ -57,7 +58,13 @@
     },
     components: {
       'sidebar': sidebar,
-      'landing': landing
+      'landing': landing,
+      'user-search': UserSelection
+    },
+    methods: {
+      goToProfile: function (user) {
+        // TODO: this when the profile page is merged
+      }
     }
   }
 </script>
