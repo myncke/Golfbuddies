@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="mobile-margin">
     <v-layout>
-      <v-flex >
-        <v-card>
+      <v-flex>
+        <v-card v-if="model !== undefined && model.game !== undefined">
           <v-card-media height="250px" v-if="model.game.location">
             <location-view :location="model.game.location"></location-view>
           </v-card-media>
