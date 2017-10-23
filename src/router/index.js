@@ -21,6 +21,9 @@ import SettingIndex from '../components/Setting/Index'
 import Feedback from '../components/Static/Feedback'
 import Help from '../components/Static/Help'
 
+// User
+import Profile from '../components/User/Profile'
+
 Vue.use(Router)
 
 export default new Router({
@@ -79,6 +82,11 @@ export default new Router({
       path: '/help',
       name: 'help',
       component: Help
+    },
+    {
+      path: '/profile/:id?',
+      name: 'profile',
+      component: Profile
     }
   ]
 })

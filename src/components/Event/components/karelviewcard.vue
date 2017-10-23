@@ -75,11 +75,11 @@
           <p class="subheading">Round Price: {{model.roundPrice}}</p>
         </v-flex>
       </v-layout>
-
-      <!-- TODO: make a page where a user can sign up for a game -->
+      
       <!-- TODO: make sure the user is the correct gender before they can join  -->
-      <v-btn block color="green" class="white--text" :disabled="(model.participants.length > model.game.prefGroupSize)" @click="'TODO!!!'">Join Game!</v-btn>
+      <v-btn block color="green" class="white--text" :disabled="(model.participants.length > model.game.prefGroupSize)" @click="openJoin()">Join Game!</v-btn>
       <v-btn block color="blue" class="white--text" @click="'TODO!!!'">Open Game Page</v-btn>
+      <join-dialog ref="join" :gameModel="model.game"></join-dialog>
     </v-card-text>
     <v-card-actions>
       <v-btn icon @click.native="showMembers = !showMembers; showLocation = false">
@@ -109,3 +109,91 @@
     </v-slide-y-transition>
   </v-card>
 </template>
+
+<script>
+  import GameModel, { CollectionGameMap } from '../../../models/GameModel'
+  import LocationView from '../../../components/Shared/LocationView'
+  import UserModel from '../../../models/UserModel'
+  import ImageUtils from '../../../utils/ImageUtils'
+  import GameJoin from '../../Event/Join'
+
+  export default {
+    data: () => ({
+      model: undefined,
+      showLocation: false,
+      showMembers: false,
+      checked: true
+    }),
+    props: {
+      game: Object
+    },
+    created: function () {
+      this.model = this.game
+      if (this.model !== undefined) {
+        this.initGame()
+      }
+    },
+    methods: {
+      initGame: async function () {
+        let model
+        if (this.model.gameKey !== undefined) {
+          let game = await GameModel.getFromRef(this.model.gameKey, GameModel, error => { this.error = error.message })
+          model = this.model
+          model.game = game
+          model.participants = (await this.initParticipants(game)) || []
+          this.model = undefined
+          this.model = model
+          console.log(this.model)
+        } else if (this.model.subGame !== undefined) {
+          let game = this.game
+          let modelClass = CollectionGameMap[this.model.subGame.path.split('/')[0]]
+          model = await modelClass.getFromRef(this.model.subGame, modelClass, error => { throw error })
+          model.game = game
+          model.participants = (await this.initParticipants(model.game)) || []
+          this.model = undefined
+          this.model = model
+          console.log('MODELERONI')
+          console.log(this.model)
+        }
+      },
+      initParticipants: async function (game) {
+        try {
+          let subCol = await game.initSubcollection('GameUsers', error => { this.error = error.message })
+          for (let doc of subCol) {
+            doc.user = await UserModel.getFromRef(UserModel.getNormalRef(UserModel).doc(doc.key), UserModel, error => { this.error = error.message })
+          }
+          return subCol
+        } catch (error) {
+          console.log(error)
+          return []
+        }
+      },
+      makeInitialsImage: function (user) {
+        return ImageUtils.makeInitialsImage(user)
+      },
+      openJoin: function () {
+        this.$refs['join'].openDialog()
+      }
+    },
+    components: {
+      'location-view': LocationView,
+      'join-dialog': GameJoin
+    }
+  }
+
+</script>
+
+<style scoped>
+  .initials-img {
+    width: 40px;
+    height: 40px;
+    display: inline;
+  }
+
+  .member {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    margin-left: 5px;
+  }
+</style>

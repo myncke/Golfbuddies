@@ -2,6 +2,9 @@ import firebase from 'firebase'
 import FirebaseModel from './FirebaseModel'
 import StringUtils from '../utils/StringUtils'
 
+let sexes = ['Male', 'Female']
+export {sexes}
+
 export default class UserModel extends FirebaseModel {
 
   static signUpAndIn (email, password, onSuccess, onFailure) {
