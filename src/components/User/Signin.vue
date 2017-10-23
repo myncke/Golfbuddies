@@ -1,30 +1,36 @@
 <template>
-  <v-dialog v-model="open">
-    <v-card>
-      <v-card-title>
-        <p class="title">Sign In</p>
-      </v-card-title>
-      <v-card-text>
-        <p class="subheading red--text">{{error}}</p>
-        <v-form>
-          <v-text-field
-            label="E-mail"
-            v-model="user.email"
-            :rules="emailRules"
-            required></v-text-field>
-          <v-text-field
-            label="E-mail"
-            v-model="user.password"
-            :type="'password'"
-            required></v-text-field>
-          <v-btn block color="primary" dark @click="signIn()">Sign In</v-btn>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+  <v-card>
+    <v-card-text>
+      <p class="subheading red--text">{{error}}</p>
+      <v-form>
+        <v-text-field
+          label="E-mail"
+          v-model="user.email"
+          :rules="emailRules"
+          required
+        ></v-text-field>
+
+        <v-text-field
+          label="Password"
+          v-model="user.password"
+          :type="'password'"
+          required
+        ></v-text-field>
+
+        <v-btn block color="primary" dark @click="signIn()">Sign In</v-btn>
+        <br>
+        <hr class="divider">
+        <br>
+        <v-btn block color="blue darken-4" @click="signIn()" disabled>Facebook</v-btn>
+        <v-btn block color="red darken-2" @click="signIn()" disabled>Google</v-btn>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
+
 <script>
   import firebase from 'firebase'
+
   export default {
     data: () => ({
       emailRules: [
@@ -42,13 +48,9 @@
           this.error = 'Invalid username or password'
         }).then(() => {
           if (this.error === '') {
-            this.open = false
-            // TODO: add new usermodel to the central state
+            this.$store.dispatch('signUserIn', this.user)
           }
         })
-      },
-      changeModal: function (val) {
-        this.open = val
       }
     }
   }
