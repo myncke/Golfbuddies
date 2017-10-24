@@ -11,7 +11,7 @@
 
 <script>
   import IndexTabs from './components/IndexTabs'
-  import Filter from '../Shared/filter'
+  import Filter from '../Shared/Filter/filter'
 
   export default {
     data: () => ({

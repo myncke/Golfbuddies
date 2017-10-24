@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import EventFilter from '../Shared/EventFilter.vue'
+  import EventFilter from './EventFilter.vue'
 
   export default {
     data: () => ({

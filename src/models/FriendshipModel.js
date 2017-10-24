@@ -6,7 +6,8 @@ export default class FriendshipModel extends FirebaseModel {
   static _firestoreFields = [
     'userKey1',
     'userKey2',
-    'closeFriend'
+    'closeFriend',
+    'conversationRef'
   ]
 
   static collectionName = 'Friendship'
@@ -37,6 +38,9 @@ export default class FriendshipModel extends FirebaseModel {
   getUser2 () {
     return this.makeDoc('Users', this.userKey2)
   }
+
+  // References
+  conversationRef
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, FriendshipModel._subCollections, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)

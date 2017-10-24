@@ -49,7 +49,7 @@ export default new Router({
       component: EventIndex
     },
     {
-      path: '/groups',
+      path: '/groups/:type?',
       name: 'groups',
       component: GroupIndex
     },
