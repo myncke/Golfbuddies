@@ -22,7 +22,7 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex md6 xs12 class="input-field">
-                  <v-text-field label="Location" v-model="model.location" prepend-icon="location_on" required
+                  <v-text-field label="Location" v-model="model.locationString" prepend-icon="location_on" required
                                 :rules="rules.locationRules"
                   ></v-text-field>
                 </v-flex>
@@ -148,7 +148,7 @@
       },
       getLocation: async function () {
         try {
-          let location = await LocationUtils.getLocation(this.model.location, this.$http)
+          let location = await LocationUtils.getLocation(this.model.locationString, this.$http)
           this.model.location = {latitude: location.lat, longitude: location.lng}
         } catch (error) {
           this.error = 'Invalid location, please try again with a more precise location.'
