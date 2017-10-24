@@ -22,18 +22,13 @@ import Feedback from '../components/Static/Feedback'
 import Help from '../components/Static/Help'
 
 // User
-import Profile from '../components/User/Profile'
-import Feed from '../components/User/Feed'
+import Profile from '../components/User/Show'
+import Feed from '../components/Main/Feed'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      name: 'root',
-      component: Feed
-    },
     {
       path: '/event/new',
       name: 'newEvent',
@@ -88,6 +83,11 @@ export default new Router({
       path: '/profile/:id?',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: '/',
+      name: 'root',
+      component: Feed
     }
   ]
 })

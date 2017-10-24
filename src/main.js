@@ -49,3 +49,7 @@ new Vue({
 })
 
 Vue.filter('formatDate', dateUtils.dateToString)
+
+Vue.prototype.$last = function (item, list) {
+  return item === list[list.length - 1]
+}

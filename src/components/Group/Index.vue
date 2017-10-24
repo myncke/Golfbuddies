@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid style="min-height: 0;" grid-list-lg>
+  <v-container fluid class="pa-0" grid-list-lg>
     <v-layout row wrap>
-      <v-flex xs12 sm6 lg4 v-for="club in clubModels" :key="club.key">
+      <v-flex xs12 v-for="club in clubModels" :key="club.key">
 
         <v-card color="blue-grey darken-1" class="white--text">
           <v-card-title primary-title>
@@ -34,9 +34,6 @@
     methods: {
       initModels: async function () {
         let list = (await SportClubModel.getPublicClubs(error => { this.error = error }))
-        list.push(...list)
-        list.push(...list)
-        list.push(...list)
         this.clubModels = list
       },
       goToGroupDetails: function (key) {

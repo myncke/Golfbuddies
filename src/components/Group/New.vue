@@ -1,5 +1,5 @@
 <template>
-  <v-card style="width: 100%; margin: 20px;">
+  <v-card style="width: 100%;">
     <v-card-title>
       <p class="title"> New Club </p>
     </v-card-title>
