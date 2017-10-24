@@ -23,6 +23,7 @@ import Help from '../components/Static/Help'
 
 // User
 import Profile from '../components/User/Profile'
+import Feed from '../components/User/Feed'
 
 Vue.use(Router)
 
@@ -31,7 +32,7 @@ export default new Router({
     {
       path: '/',
       name: 'root',
-      component: EventIndex
+      component: Feed
     },
     {
       path: '/event/new',

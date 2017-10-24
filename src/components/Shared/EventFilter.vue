@@ -62,7 +62,7 @@
     data: () => ({
       start: null,
       end: null,
-      group_size: null,
+      group_size: 0,
       hdc: 1,
       select: [],
       items: [

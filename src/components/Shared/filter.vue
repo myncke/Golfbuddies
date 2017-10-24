@@ -33,7 +33,7 @@
 
   export default {
     data: () => ({
-      open: false
+      open: true
     }),
     props: {
       type: String
