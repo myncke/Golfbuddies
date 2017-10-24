@@ -22,9 +22,18 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex md6 xs12 class="input-field">
-                  <v-text-field label="Location" v-model="model.locationString" prepend-icon="location_on" required
+                  <vuetify-google-autocomplete
+                    id="map"
+                    append-icon="search"
+                    classname="form-control"
+                    placeholder="Start typing"
+                    v-on:placechanged="getAddressData"
+                    types="address"
+                  >
+                  </vuetify-google-autocomplete>
+                  <!--<v-text-field label="Location" v-model="model.locationString" prepend-icon="location_on" required
                                 :rules="rules.locationRules"
-                  ></v-text-field>
+                  ></v-text-field>-->
                 </v-flex>
                 <v-flex xs12 class="input-field">
                   <v-text-field label="Special Wishes / Information" v-model="model.specialWishes" multiLine
@@ -98,6 +107,7 @@
   import GolfGameNew from './components/GolfGame/New.vue'
   import DateUtils from '../../utils/DateUtils'
   import UserModel from '../../models/UserModel'
+  import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
 
   export default {
     data: () => ({
@@ -173,10 +183,15 @@
         // Save both models
         await this.model.save()
         await subModel.save()
+      },
+      getAddressData (data) {
+        console.log(data)
+        return
       }
     },
     components: {
-      'golf-new': GolfGameNew
+      'golf-new': GolfGameNew,
+      'vuetify-google-autocomplete': VuetifyGoogleAutocomplete
     }
   }
 </script>
