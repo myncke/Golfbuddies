@@ -97,7 +97,8 @@ export default class GameModel extends FirebaseSubColModel {
     'date',
     'location',
     'inviteOnly',
-    'subGame'
+    'subGame',
+    'locationString'
   ]
 
   static _subCollections = {
