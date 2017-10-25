@@ -96,8 +96,14 @@
     created: function () {
       this.initClub()
     },
+    watch: {
+      $route: function (newVal) {
+        this.initClub()
+      }
+    },
     methods: {
       initClub: function () {
+        this.games = []
         let groupId = this.$route.params.id
         console.log(new SportClubModel(groupId, false, (model) => {
           this.club = model
