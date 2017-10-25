@@ -1,5 +1,5 @@
 <template>
-  <ul class="list ma-3">
+  <v-container class="pa-0">
     <v-flex v-if="model !== undefined">
       <v-card>
         <!-- TODO: we should make a map of sportTypes to images -->
@@ -76,7 +76,7 @@
     <br>
     <p class="title text-xs-center" v-if="messages.length > 0">Messages</p>
     <message-show v-for="message in messages" :model="message" :key="message.key"></message-show>
-  </ul>
+  </v-container>
 </template>
 
 <script>

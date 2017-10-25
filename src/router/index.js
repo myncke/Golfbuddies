@@ -85,6 +85,11 @@ export default new Router({
       component: Profile
     },
     {
+      path: '/feed',
+      name: 'feed',
+      component: Feed
+    },
+    {
       path: '/',
       name: 'root',
       component: Feed

@@ -11,7 +11,7 @@
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>Mats Myncke</v-list-tile-title>
-                  <v-list-tile-sub-title>Gent, Belgium &#9679; {{ new Date().getDate() }} Okt. 2017</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>Gent, Belgium &#9679; {{ new Date | moment("Do MMM. YYYY")}}</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -21,10 +21,13 @@
     </v-container>
 
     <v-container>
+      <event-nav-card></event-nav-card>
+    </v-container>
+
+    <v-container>
       <v-layout>
         <v-flex>
-            <v-card>
-               
+          <v-card>
             <v-list>
               <v-layout row align-center>
                 <v-btn flat class="green" :to="'/groups'"> Groups</v-btn>
@@ -52,38 +55,14 @@
     </v-container>
 
     <v-container>
-      <v-layout>
-        <v-flex>
-            <v-card>
-              <v-list>
-              <v-btn flat>My pictures</v-btn>
-              </v-list>
-            <v-container fluid v-bind="{ [`grid-list-${size}`]: true }">
-              <v-layout row wrap>
-                <v-flex
-                  xs4
-                  v-for="n in 9"
-                  :key="n"
-                >
-                  <v-card flat tile>
-                    <v-card-media
-                      :src="`https://unsplash.it/100/100?image=${Math.floor(Math.random() * 100) + 1}`"
-                      height="100px"
-                    >
-                    </v-card-media>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card>
-        </v-flex>
-      </v-layout>
+      <!-- pictures -->
     </v-container>
   </v-flex>
 </template>
 
 <script>
 import SportClubModel from '../../models/SportClubModel'
+import EventNavCard from '../Event/components/NavCard'
 
 export default {
   computed: {
@@ -117,6 +96,9 @@ export default {
         name: 'group', params: { id: key }
       })
     }
+  },
+  components: {
+    'event-nav-card': EventNavCard
   }
 }
 </script>
