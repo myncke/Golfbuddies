@@ -9,6 +9,8 @@ import firebase from 'firebase'
 export class SportTypeModel extends FirebaseModel {
   static _firestoreFields = []
 
+  static collectionName = 'SportTypes'
+
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, SportTypeModel._firestoreFields, SportTypeModel, keepListening, onSuccess, onFailure)
   }
@@ -55,7 +57,8 @@ export default class SportClubModel extends FirebaseSubColModel {
     'name',
     'closed',
     'sportType',
-    'members'
+    'members',
+    'headerPic'
   ]
 
   static _subCollections = {
@@ -70,6 +73,7 @@ export default class SportClubModel extends FirebaseSubColModel {
   // Strings
   information
   name
+  headerPic
 
   // References
   admin // Reference to Users

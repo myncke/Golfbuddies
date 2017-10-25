@@ -10,10 +10,8 @@ export default class FirebaseSubColModel extends FirebaseModel {
     this.subCollectionMap = subCollectionMap
   }
 
-  async initSubcollection (key, keepListening, onFailure) {
-    if (!keepListening) {
-      return this._getAllFromSubCollectionFirebase(key, onFailure)
-    }
+  async initSubcollection (key, onFailure) {
+    return (await this._getAllFromSubCollectionFirebase(key, onFailure))
   }
 
   setSubcollection (list, key) {
@@ -29,7 +27,7 @@ export default class FirebaseSubColModel extends FirebaseModel {
    */
   async addSubcollectionDoc (key, model, onFailure) {
     try {
-      return this._getDocRef().collection(key).doc(model.key).set(model._toJson())
+      return (await this._getDocRef().collection(key).doc(model.key).set(model._toJson()))
     } catch (error) {
       onFailure(error)
       throw error
