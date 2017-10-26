@@ -80,7 +80,8 @@ export default {
         text: 'Groups',
         model: true,
         children: [
-          { icon: 'group_work', text: 'All Groups', path: '/groups' },
+          { icon: 'group_work', text: 'All Groups', path: '/groups/open' },
+          { icon: 'group_work', text: 'My Groups', path: '/groups/my' },
           { icon: 'add', text: 'Create Group', path: '/group/new' }
         ],
         path: '/'

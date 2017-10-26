@@ -55,8 +55,8 @@
 </template>
 
 <script>
-  import { PrefGameSex } from '../../models/GameModel'
-  import MenuDatePicker from '../Shared/MenuDatePicker'
+  import { PrefGameSex } from '../../../models/GameModel'
+  import MenuDatePicker from '../MenuDatePicker'
 
   export default {
     data: () => ({
