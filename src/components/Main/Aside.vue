@@ -34,10 +34,8 @@
                 <v-spacer></v-spacer>
                 <v-btn flat class="green" :to="'/group/new'">New</v-btn>
               </v-layout>
-             
-              <template v-for="group in clubModels">
 
-                
+              <template v-for="group in clubModels"> 
                 <v-list-tile avatar v-bind:key="group.id" :to="`/group/${group.key}`">
                   <v-list-tile-avatar>
                     <img v-bind:src="group.headerPic">
