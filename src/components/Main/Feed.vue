@@ -16,12 +16,18 @@
                   </v-flex>
 
                   <v-flex column sm10>
-                    <v-btn small flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(item.key)">Golfpartij in Oostende</v-btn>
-                    <p class="pl-3 ma-0">{{ item.date | moment("hh:mm a") }} &#9679; {{item.location}} </p>
+                    <v-btn flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(item.key)">{{item.title}}</v-btn>
+                    <p class="pl-3 ma-0">{{ item.date | moment("hh:mm a") }} &#9679; {{item.locationString}} </p>
                     <div>
-                      <v-btn small outline value="going"><v-icon left dark>check</v-icon> Going</v-btn>
-                      <v-btn small outline value="maybe"><v-icon left dark>help_outline</v-icon> maybe </v-btn>
-                      <v-btn small outline value="ignore"><v-icon left dark>clear</v-icon>Ignore</v-btn>
+                      <v-btn small flat value="going" color="blue-grey" class="caption">
+                        <v-icon left dark color="" class="caption">check</v-icon> Going
+                      </v-btn>
+                      <v-btn small flat value="maybe" color="blue-grey" class="caption">
+                        <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe 
+                      </v-btn>
+                      <v-btn small flat value="ignore" color="blue-grey" class="caption">
+                        <v-icon left dark color="" class="caption">clear</v-icon>Ignore
+                      </v-btn>
                     </div>
                   </v-flex>
 

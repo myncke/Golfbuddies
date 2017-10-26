@@ -1,22 +1,79 @@
 <template>
   <v-container class="pa-0">
-    <v-flex v-if="model !== undefined">
+    <v-layout column v-if="model !== undefined">
+      <v-flex>
+        <v-card class="mb-3">
+          <v-card-media
+            src="/static/img/gameHeader.jpg"
+            height="200px"></v-card-media>
+        </v-card>
+      </v-flex>
+
+      <v-flex>
+        <v-layout row>
+          <v-flex column sm3 class="pl-0 pr-5 pt-3 pb-3">
+            <div class="title text-sm-right">{{ model.date | moment("D MMM.") }}</div>
+            <div class="text-sm-right">{{ model.date | moment("dddd") }}</div>
+          </v-flex>
+
+          <v-layout column justify-content-center class="pa-3">
+            <v-flex>
+              <h1 class="title ma-0">{{model.title}}</h1>
+            </v-flex>
+            <v-flex>
+              <p class="caption ma-0" color="grey--after lighten-1">
+                {{model.inviteOnly ? 'Public' : 'Private' }} &#9679; Hosted by
+                <a href="">{{ model.creator.name || 'Unkown' }}</a>
+              </p>
+            </v-flex>
+          </v-layout>
+        </v-layout>
+      </v-flex>
+
+      <v-divider class="mb-3"></v-divider>
+
+      <v-flex class="mb-3">
+        <v-card class=" pa-3">
+          <v-layout row>
+            <div>{{ model.date | moment("calendar") }}</div>
+            <v-spacer></v-spacer>
+            <div>{{model.locationString}}</div>
+          </v-layout>
+        </v-card>
+      </v-flex>
+
+
+
+
+      <v-flex class="mb-1">
+        <v-card>
+          <v-container>
+            <v-layout column>
+              <v-flex>
+                wanneer
+              </v-flex>
+              <v-flex>
+                waar
+              </v-flex>
+              <v-flex>
+                Golf data
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+
+
+
+
       <v-card>
         <!-- TODO: we should make a map of sportTypes to images -->
-        <v-card-media
-          src="/static/img/gameHeader.jpg"
-          height="200px"
-        >
-        </v-card-media>
-        <v-card-title primary-title>
-          <div>
-            <div class="headline">{{model.date.toDateString()}}</div>
-          </div>
-        </v-card-title>
+
+
         <v-card-text>
           <p class="subheading">Information:</p>
           <p class="body-1">{{model.specialWishes || 'None'}}</p>
-          <location-view :location="model.location" :width="'100%'" :height="'200px'"></location-view>
+          <!-- <location-view :location="model.location" :width="'100%'" :height="'200px'"></location-view> -->
         </v-card-text>
         <v-card-actions>
           <v-btn flat v-if="!model.inviteOnly">Share</v-btn>
@@ -72,10 +129,10 @@
           </v-card-text>
         </v-slide-y-transition>
       </v-card>
-    </v-flex>
-    <br>
+    </v-layout>
+    <!-- <br>
     <p class="title text-xs-center" v-if="messages.length > 0">Messages</p>
-    <message-show v-for="message in messages" :model="message" :key="message.key"></message-show>
+    <message-show v-for="message in messages" :model="message" :key="message.key"></message-show> -->
   </v-container>
 </template>
 
