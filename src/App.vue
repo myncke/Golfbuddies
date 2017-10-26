@@ -2,14 +2,20 @@
   <v-app id="app">
 
     <v-layout v-if="userIsAuthenticated">
-      <sidebar ref="drawer"></sidebar>
-      <v-toolbar color="green darken-1" dark app clipped-left fixed>
-        <v-toolbar-title style="width: 300px" class="ml-0 pl-3" >
+      <!-- <sidebar ref="drawer"></sidebar> -->
+      <v-toolbar color="green darken-1" dark app clipped-left fixed dense>
+        <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
           <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
-          Golfbuddies
+          <v-btn :to="'/'" flat dark>
+            Golfbuddies
+          </v-btn>
         </v-toolbar-title>
         <user-search v-on:search-selected="goToProfile"></user-search>
         <v-spacer></v-spacer>
+        <v-btn flat :to="'/contacts'">
+          <v-icon left>contacts</v-icon>
+          <p class="hidden-sm-and-down subheading mb-0">Contacts</p>
+        </v-btn>
         <v-btn flat @click="$store.dispatch('signUserOut')">
           <v-icon left>lock_open</v-icon>
           <p class="hidden-sm-and-down subheading mb-0"> SIGN OUT</p>
@@ -19,8 +25,22 @@
       <main>
         <v-content>
           <v-container fluid fill-height class="pa-0">
-            <v-layout>
-              <router-view></router-view>
+            <v-layout row>
+              <v-flex sm3>
+                <user-aside></user-aside>
+              </v-flex>
+
+              <v-flex sm6>
+                <v-container>
+                  <router-view transition="slide-x-transition"></router-view>
+                </v-container>
+              </v-flex>
+
+              <v-flex sm3>
+                <user-events> </user-events>
+              </v-flex>
+
+              
             </v-layout>
           </v-container>
         </v-content>
@@ -43,6 +63,9 @@
   import landing from './components/Static/Landing'
   import UserSelection from './components/Shared/Search/UserSearch.vue'
 
+  import MainAside from './components/Main/Aside'
+  import MainEvents from './components/Main/Events'
+
   export default {
     name: 'app',
     computed: {
@@ -59,7 +82,9 @@
     components: {
       'sidebar': sidebar,
       'landing': landing,
-      'user-search': UserSelection
+      'user-search': UserSelection,
+      'user-aside': MainAside,
+      'user-events': MainEvents
     },
     methods: {
       goToProfile: function (user) {
@@ -72,5 +97,9 @@
 <style>
 main {
   width: 100%;
+}
+
+user-search {
+  height: 20px;
 }
 </style>

@@ -11,6 +11,7 @@ import { store } from './store'
 import dateUtils from './utils/DateUtils'
 import VueChatScroll from 'vue-chat-scroll'
 import VueResource from 'vue-resource'
+
 require('firebase/firestore')
 
 const config = {
@@ -26,6 +27,7 @@ Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueChatScroll)
 Vue.use(VueResource)
+Vue.use(require('vue-moment'))
 
 Vue.config.productionTip = false
 
@@ -49,3 +51,7 @@ new Vue({
 })
 
 Vue.filter('formatDate', dateUtils.dateToString)
+
+Vue.prototype.$last = function (item, list) {
+  return item === list[list.length - 1]
+}

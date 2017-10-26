@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid style="min-height: 0;" grid-list-lg>
+  <v-container fluid class="pa-0" grid-list-lg>
     <group-search v-on:search-selected="(club) => { goToGroupDetails(club.key) }" style="width: 100%; padding: 10px;"></group-search>
     <v-layout row wrap>
-      <v-flex xs12 sm6 lg4 v-for="club in clubModels" :key="club.key">
+      <v-flex xs12 v-for="club in clubModels" :key="club.key">
 
         <v-card color="blue-grey darken-1" class="white--text">
           <v-card-title primary-title>

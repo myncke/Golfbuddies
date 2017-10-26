@@ -120,7 +120,7 @@
     .mobile-margin {
       margin-left: 0px;
       margin-right: 0px;
-      padding: 0px 0px 8px 0px;
+      padding: 3px 3px 8px 3px;
   }
 }
 </style>

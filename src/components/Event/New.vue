@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; padding: 10px">
+  <div style="width: 100%;">
     <v-stepper v-model="page">
       <v-stepper-header>
         <v-stepper-step step="1" :complete="page > 1">General Game Information</v-stepper-step>
