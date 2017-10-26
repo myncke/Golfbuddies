@@ -61,7 +61,7 @@
 <script>
   import sidebar from './components/Shared/Sidebar'
   import landing from './components/Static/Landing'
-  import UserSelection from './components/Shared/UserSelection'
+  import UserSelection from './components/Shared/Search/UserSearch.vue'
 
   import MainAside from './components/Main/Aside'
   import MainEvents from './components/Main/Events'
@@ -88,7 +88,7 @@
     },
     methods: {
       goToProfile: function (user) {
-        // TODO: this when the profile page is merged
+        this.$router.push({name: 'profile', params: {id: user.key}})
       }
     }
   }

@@ -15,7 +15,7 @@
               <v-subheader v-text="'Friends'"></v-subheader>
             </v-list-tile>
             <template v-for="model in friendUserModels">
-              <v-list-tile avatar v-bind:key="model.user.key" @click="console.log('TODO, not sure what to do here :/')">
+              <v-list-tile avatar v-bind:key="model.user.key" @click="openConversationFriend(model)">
                 <v-list-tile-avatar>
                   <img v-bind:src="'https://ui-avatars.com/api/?name=' + model.user.firstName + '+' + model.user.lastName + '&rounded=true'"/>
                 </v-list-tile-avatar>
@@ -205,6 +205,9 @@
           this.error = error.message
           throw error
         }
+      },
+      openConversationFriend: async function (model) {
+        this.openConversation(await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, error => { throw error }))
       },
       getCurrentUser: function () {
         return firebase.auth().currentUser
