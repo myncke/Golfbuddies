@@ -20,6 +20,7 @@
           <v-icon left>lock_open</v-icon>
           <p class="hidden-sm-and-down subheading mb-0"> SIGN OUT</p>
         </v-btn>
+        <notifications></notifications>
       </v-toolbar>
 
       <main>
@@ -62,6 +63,7 @@
   import sidebar from './components/Shared/Sidebar'
   import landing from './components/Static/Landing'
   import UserSelection from './components/Shared/Search/UserSearch.vue'
+  import Notifications from './components/Main/Notifications.vue'
 
   import MainAside from './components/Main/Aside'
   import MainEvents from './components/Main/Events'
@@ -84,7 +86,8 @@
       'landing': landing,
       'user-search': UserSelection,
       'user-aside': MainAside,
-      'user-events': MainEvents
+      'user-events': MainEvents,
+      'notifications': Notifications
     },
     methods: {
       goToProfile: function (user) {

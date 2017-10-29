@@ -1,4 +1,5 @@
 import FirebaseModel from './FirebaseModel'
+import UserModel from './UserModel'
 
 let NotificationMessages = {
   invited: 'You have been invited to a game: ',
@@ -8,6 +9,12 @@ let NotificationMessages = {
 export {NotificationMessages}
 
 export default class NotificationModel extends FirebaseModel {
+
+  static async getMyNotifications (onFailure) {
+    let key = (new UserModel()).key
+    let ref = NotificationModel.getNormalRef(NotificationModel).where('receivers.' + key + '.received', '==', true)
+    return await NotificationModel.getAllFromRef(ref, NotificationModel, onFailure)
+  }
 
   static _firestoreFields = [
     'receivers',
@@ -26,10 +33,11 @@ export default class NotificationModel extends FirebaseModel {
   /**
    * This is an object with keys == a key of a user and value an object of {seen: Boolean}
    *
-   * Example:
+   * Example (also default):
    *   {
    *    userKey: {
-   *      seen: false
+   *      seen: false,
+   *      received: true
    *    }
    *   }
    */

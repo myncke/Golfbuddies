@@ -43,7 +43,7 @@ export default class GameModel extends FirebaseSubColModel {
     notification.link = this.createShowLink()
     notification.receivers = {}
     for (let invite of Object.keys(this.invites)) {
-      notification.receivers[invite] = {seen: false}
+      notification.receivers[invite] = {seen: false, received: true}
     }
     await notification.save()
   }
