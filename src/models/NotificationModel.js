@@ -22,6 +22,17 @@ export default class NotificationModel extends FirebaseModel {
   link
 
   // Object
+
+  /**
+   * This is an object with keys == a key of a user and value an object of {seen: Boolean}
+   *
+   * Example:
+   *   {
+   *    userKey: {
+   *      seen: false
+   *    }
+   *   }
+   */
   receivers
 
   constructor (key, keepListening, onSuccess, onFailure) {
