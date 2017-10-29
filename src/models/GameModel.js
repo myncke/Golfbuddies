@@ -2,6 +2,7 @@ import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
 import GolfGameModel from './GolfGameModel'
 import MessageModel from './MessageModel'
+import NotificationModel, { NotificationMessages } from './NotificationModel'
 
 let PrefGameSex = ['Men Only', 'Women Only', 'Mixed']
 export {PrefGameSex}
@@ -30,6 +31,22 @@ export class GameUser extends FirebaseModel {
 }
 
 export default class GameModel extends FirebaseSubColModel {
+
+  createShowLink () {
+    return '/event/' + this.key
+  }
+
+  async sendInviteNotification () {
+    let notification = new NotificationModel()
+    notification.message = NotificationMessages.invited + this.title
+    notification.seen = false
+    notification.link = this.createShowLink()
+    notification.receivers = {}
+    for (let invite of Object.keys(this.invites)) {
+      notification.receivers[invite] = {seen: false}
+    }
+    await notification.save()
+  }
 
   static async getAllOpenGames (onFailure) {
     return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).orderBy('date', 'asc'), GameModel, onFailure)
@@ -99,7 +116,8 @@ export default class GameModel extends FirebaseSubColModel {
     'inviteOnly',
     'subGame',
     'locationString',
-    'title'
+    'title',
+    'invites'
   ]
 
   static _subCollections = {
@@ -117,9 +135,13 @@ export default class GameModel extends FirebaseSubColModel {
   // Strings
   prefGameSex
   specialWishes
+  title
 
   // Integers
   prefGroupSize
+
+  // Objects
+  invites = {}
 
   // References
   creator
