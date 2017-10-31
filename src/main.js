@@ -11,6 +11,7 @@ import { store } from './store'
 import dateUtils from './utils/DateUtils'
 import VueChatScroll from 'vue-chat-scroll'
 import VueResource from 'vue-resource'
+import MessagingHandler from './utils/MessagingHandler'
 
 require('firebase/firestore')
 
@@ -47,6 +48,12 @@ new Vue({
       console.log(error.message)
     }
     this.$store.dispatch('initUser')
+    this.initMessaging()
+  },
+  methods: {
+    initMessaging: async function () {
+      await MessagingHandler.init()
+    }
   }
 })
 
