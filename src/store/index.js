@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import * as firebase from 'firebase'
+import UserModel from '../models/UserModel'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -37,7 +38,8 @@ export const store = new Vuex.Store({
             const newUser = {
               id: user.uid
             }
-            commit('setUser', newUser)
+            commit('setUser', newUser);
+            (new UserModel()).addDeviceToken()
           }
         )
         .catch(
@@ -47,9 +49,12 @@ export const store = new Vuex.Store({
         )
     },
     signUserOut ({commit}) {
+      (new UserModel()).deleteDeviceToken()
       firebase.auth().signOut()
         .then(
-          commit('setUser', null)
+          () => {
+            commit('setUser', null)
+          }
         )
         .catch(
           error => {

@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import UserModel from '../models/UserModel'
 
 export default class MessagingHandler {
 
@@ -36,8 +35,7 @@ export default class MessagingHandler {
       .then((currentToken) => {
         if (currentToken) {
           console.log(currentToken)
-          MessagingHandler.token = currentToken;
-          (new UserModel().addDeviceToken())
+          MessagingHandler.token = currentToken
           // sendTokenToServer(currentToken);
           // updateUIForPushEnabled(currentToken);
         } else {
