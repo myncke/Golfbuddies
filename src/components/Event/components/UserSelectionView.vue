@@ -110,7 +110,7 @@
         }
       },
       addUserToInvites: function (userKey) {
-        this.model.invites[userKey] = true
+        this.model.invites[userKey] = {invited: true, accepted: false}
       },
       removeUserFromInvites: function (userKey) {
         delete this.model.invites[userKey]

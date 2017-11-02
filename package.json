@@ -76,7 +76,7 @@
     "sinon": "^2.1.0",
     "sinon-chai": "^2.8.0",
     "sw-precache-webpack-plugin": "^0.11.4",
-    "uglify-es": "^3.1.5",
+    "uglify-es": "^3.1.6",
     "url-loader": "^0.5.8",
     "vue-loader": "^12.1.0",
     "vue-style-loader": "^3.0.1",
@@ -86,7 +86,7 @@
     "webpack-bundle-analyzer": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.20.0",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.1"
   },
   "engines": {
     "node": ">= 4.0.0",
