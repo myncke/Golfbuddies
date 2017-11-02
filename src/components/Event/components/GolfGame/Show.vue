@@ -5,18 +5,20 @@
 
     <v-flex lg4 sm6 xs12>
       <v-checkbox
-        label="Buggie Included"
+        label="Buggie Possible"
         v-model="model.buggie"
         disabled
       ></v-checkbox>
+      <p class="caption" v-if="model.buggie">To reserve one, add it to your Special Wishes when joining</p>
     </v-flex>
 
     <v-flex lg4 sm6 xs12>
       <v-checkbox
-        label="Overnight"
+        label="Overnight Possible"
         v-model="model.overnight"
         disabled
       ></v-checkbox>
+      <p class="caption" v-if="model.overnight">To reserve a room, add it to your Special Wishes when joining</p>
     </v-flex>
 
     <!-- Text Values -->
