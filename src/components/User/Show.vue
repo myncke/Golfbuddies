@@ -116,7 +116,6 @@
       loading: false
     }),
     computed: {
-      // TODO: insert logic here, will do this when I have the latest store
       isMyProfile: function () {
         return this.model.key === this.$store.getters.currentUser
       }

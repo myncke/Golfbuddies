@@ -46,7 +46,7 @@
 <script>
   import GameCard from './GameCard.vue'
   import GameModel from '../../../models/GameModel'
-  import CalendarView from './CalendarView'
+  import CalendarView from './EventCalendarView'
 
   export default {
     data () {

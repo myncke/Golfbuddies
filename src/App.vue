@@ -3,7 +3,7 @@
 
     <v-layout v-if="userIsAuthenticated">
       <!-- <sidebar ref="drawer"></sidebar> -->
-      <v-toolbar color="green darken-1" dark app clipped-left fixed dense>
+      <v-toolbar color="green darken-1" dark app clipped-left fixed dense style="z-index: 10000">
         <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
           <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
           <v-btn :to="'/'" flat dark>

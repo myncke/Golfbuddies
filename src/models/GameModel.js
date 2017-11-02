@@ -84,12 +84,12 @@ export default class GameModel extends FirebaseSubColModel {
     return result
   }
 
-  static async getInvitedGames () {
-    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.invited', '==', true).orderBy('date', 'asc'), GameModel, onFailure)
+  static async getInvitedGames (onFailure) {
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
   }
 
-  static async getJoinedGames () {
-    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.accepted', '==', true).orderBy('date', 'asc'), GameModel, onFailure)
+  static async getJoinedGames (onFailure) {
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.accepted', '==', true), GameModel, onFailure)
   }
 
   async getFirstXMessages (start, limit, onFailure) {
@@ -158,7 +158,7 @@ export default class GameModel extends FirebaseSubColModel {
   location
 
   // Objects
-  invites
+  invites = {}
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, GameModel._subCollections, GameModel._firestoreFields, GameModel, keepListening, onSuccess, onFailure)

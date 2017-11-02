@@ -4,6 +4,9 @@
 
 <script>
   import GameModel from '../../models/GameModel'
+  import UserModel from '../../models/UserModel'
+  import FriendshipModel from '../../models/FriendshipModel'
+  import LocationBroadcastModel from '../../models/LocationBroadcastModel'
 
   export default {
     data: () => ({
@@ -13,18 +16,10 @@
     }),
     watch: {
       games: function (newVal) {
-        this.events = []
-        for (let game of this.games) {
-          this.events.push({
-            title: game.title,
-            start: game.date,
-            color: 'yellow',
-            textColor: 'black',
-            id: game.key,
-            isEvent: true
-          })
-        }
-        console.log(this.events)
+        this.fillEvents()
+      },
+      locationBroadcasts: function (newVal) {
+        this.fillEvents()
       }
     },
     created: function () {
@@ -33,23 +28,62 @@
     },
     methods: {
       initGames: async function () {
-        this.games = await GameModel.getInvitedGames()
+        this.games = await GameModel.getJoinedGames(error => console.log(error))
+        console.log(this.games)
       },
       initLocationBroadcasts: async function () {
-        // TODO: this
+        this.locationBroadcasts = []
+        let friendList = await FriendshipModel.getFriendsOfCurrentUser(error => console.log(error))
+        for (let model of friendList) {
+          this.locationBroadcasts.push(...(await LocationBroadcastModel.getBroadcastsFromUserOrdered(model.getFriendRef(), error => console.log(error))))
+        }
+        console.log(this.locationBroadcasts)
       },
       eventSelected: function (event, jsEvent, view) {
-        if(event.isEvent){
+        if (event.isEvent) {
           this.$router.push({name: 'event', params: {id: event.id}})
         } else {
-          // TODO: make a LocationBroadcast Show
+          this.$router.push({name: 'locationBroadcast', params: {id: event.id}})
         }
+      },
+      gamesToEvents: function () {
+        for (let game of this.games) {
+          this.events.push({
+            title: '[Event] ' + game.title,
+            start: game.date,
+            color: 'yellow',
+            textColor: 'black',
+            id: game.key,
+            isEvent: true
+          })
+        }
+      },
+      locationsToEvents: async function () {
+        for (let location of this.locationBroadcasts) {
+          let user = await UserModel.getFromRef(location.userKey, UserModel, error => console.log(error))
+          let event = {
+            title: '[Location] ' + user.nickname + ' - ' + location.location,
+            start: location.start,
+            end: location.end,
+            color: 'yellow',
+            textColor: 'black',
+            id: location.key,
+            isEvent: false
+          }
+          this.events.push(event)
+        }
+      },
+      fillEvents: function () {
+        this.events = []
+        this.gamesToEvents()
+        this.locationsToEvents()
+        console.log(this.events)
       }
     }
   }
 
 </script>
 
-<style>
-
+<style scoped>
+  @import '~fullcalendar/dist/fullcalendar.css';
 </style>
