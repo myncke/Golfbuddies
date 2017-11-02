@@ -90,6 +90,11 @@ export default new Router({
       component: Feed
     },
     {
+      path: '/calendar',
+      name: 'calendar',
+      component: null
+    },
+    {
       path: '/',
       name: 'root',
       component: Feed

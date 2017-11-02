@@ -29,9 +29,7 @@
           </v-layout>
 
           <v-layout row wrap v-if="tab == 'Calendar'">
-            <v-flex v-for="game in exploreData.games" :key="game.key" xs12>
-              <game-card :game="game"></game-card>
-            </v-flex>
+            <calendar-view :games="exploreData.games"></calendar-view>
           </v-layout>
 
           <v-layout row wrap v-if="tab == 'Clubs'">
@@ -48,6 +46,7 @@
 <script>
   import GameCard from './GameCard.vue'
   import GameModel from '../../../models/GameModel'
+  import CalendarView from './CalendarView'
 
   export default {
     data () {
@@ -87,7 +86,8 @@
       }
     },
     components: {
-      'game-card': GameCard
+      'game-card': GameCard,
+      'calendar-view': CalendarView
     }
   }
 </script>

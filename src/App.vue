@@ -40,7 +40,7 @@
                 <user-events> </user-events>
               </v-flex>
 
-              
+
             </v-layout>
           </v-container>
         </v-content>
@@ -95,11 +95,11 @@
 </script>
 
 <style>
-main {
-  width: 100%;
-}
+  main {
+    width: 100%;
+  }
 
-user-search {
-  height: 20px;
-}
+  user-search {
+    height: 20px;
+  }
 </style>

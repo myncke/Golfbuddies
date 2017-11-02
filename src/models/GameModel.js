@@ -2,6 +2,7 @@ import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
 import GolfGameModel from './GolfGameModel'
 import MessageModel from './MessageModel'
+import UserModel from './UserModel'
 
 let PrefGameSex = ['Men Only', 'Women Only', 'Mixed']
 export {PrefGameSex}
@@ -83,6 +84,14 @@ export default class GameModel extends FirebaseSubColModel {
     return result
   }
 
+  static async getInvitedGames () {
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.invited', '==', true).orderBy('date', 'asc'), GameModel, onFailure)
+  }
+
+  static async getJoinedGames () {
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.accepted', '==', true).orderBy('date', 'asc'), GameModel, onFailure)
+  }
+
   async getFirstXMessages (start, limit, onFailure) {
     return await this._getAllFromSubCollectionOrdered('Messages', 'timestamp', 'desc', start, limit, onFailure)
   }
@@ -99,7 +108,8 @@ export default class GameModel extends FirebaseSubColModel {
     'inviteOnly',
     'subGame',
     'locationString',
-    'title'
+    'title',
+    'invites'
   ]
 
   static _subCollections = {
@@ -146,6 +156,9 @@ export default class GameModel extends FirebaseSubColModel {
 
   // Geopoints
   location
+
+  // Objects
+  invites
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, GameModel._subCollections, GameModel._firestoreFields, GameModel, keepListening, onSuccess, onFailure)
