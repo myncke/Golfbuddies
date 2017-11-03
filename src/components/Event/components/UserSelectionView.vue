@@ -4,9 +4,9 @@
       <p class="title">Invite Users</p>
     </v-card-title>
     <v-card-text>
-      <p class="caption" style="margin-top: 20px;">User search:</p>
+      <p class="caption search-info">User search:</p>
       <user-search :toolbar="false" v-on:search-selected="addUser"></user-search>
-      <p class="caption" style="margin-top: 20px">Group search:</p>
+      <p class="caption search-info">Group search:</p>
       <group-search :toolbar="false" v-on:search-selected="addGroup"></group-search>
     </v-card-text>
     <v-card-actions>
@@ -124,5 +124,7 @@
 </script>
 
 <style>
-
+  .search-info{
+    margin-top: 20px
+  }
 </style>

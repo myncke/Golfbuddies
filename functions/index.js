@@ -3,26 +3,13 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
-
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send("Hello from Firebase!");
-});
-
 exports.sendNotification = functions.firestore
   .document('Notification/{notifId}')
   .onCreate(event => {
 
     console.log('TEST')
 
-    // Get an object representing the document
-    // e.g. {'name': 'Marie', 'age': 66}
-    var newValue = event.data.data();
+    let newValue = event.data.data();
 
     //TODO: we still need to add a nice icon to the notifications!
 
@@ -74,21 +61,3 @@ exports.sendNotification = functions.firestore
     }
 
   });
-
-
-/*exports.test1 = functions.firestore
-  .document('Notification/{notifId}')
-  .onCreate(event => {
-    console.log('TEST')
-    console.log(event)
-    return 0
-  });*/
-
-exports.test2 = functions.firestore
-  .document('Users/{notifId}')
-  .onCreate(event => {
-    console.log('TEST')
-    console.log(event)
-    return 0
-  });
-
