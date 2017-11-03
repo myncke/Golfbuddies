@@ -7,7 +7,7 @@ exports.sendNotification = functions.firestore
   .document('Notification/{notifId}')
   .onCreate(event => {
 
-    console.log('TEST')
+    console.log('Started Notifying')
 
     let newValue = event.data.data();
 
@@ -26,18 +26,12 @@ exports.sendNotification = functions.firestore
     let notifPromiseArray = []
 
     try {
-      console.log(newValue)
       for (let key of Object.keys(newValue.receivers)) {
-        console.log(key)
         let notPromise = admin.firestore().doc('Users/' + key + '/NotificationInfo/deviceGroups').get().then(
           documentSnapshot => {
             let data = documentSnapshot.data();
-            console.log(`Retrieved data: ${JSON.stringify(data)}`);
             for (let token of data.tokens) {
-              console.log(token)
-              let promise = admin.messaging().sendToDevice(token, payload).then(response => {
-                console.log(response)
-              });
+              let promise = admin.messaging().sendToDevice(token, payload)
               promiseArray.push(promise)
             }
           }
