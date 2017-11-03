@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="pa-0" grid-list-lg>
-    <group-search v-on:search-selected="(club) => { goToGroupDetails(club.key) }" style="width: 100%; padding: 10px;"></group-search>
+    <group-search class="hidden-sm-and-down" v-on:search-selected="(club) => { goToGroupDetails(club.key) }" style="width: 100%; padding: 10px;"></group-search>
     <v-layout row wrap>
       <v-flex xs12 v-for="club in clubModels" :key="club.key">
 

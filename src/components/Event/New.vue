@@ -17,6 +17,11 @@
             <v-form  v-model="valid" :value="false" ref="form">
               <v-layout row wrap>
                 <v-flex md6 xs12 class="input-field">
+                  <v-text-field label="Event Title" v-model="model.title" prepend-icon="short_text" required
+
+                  ></v-text-field>
+                </v-flex>
+                <v-flex md6 xs12 class="input-field">
                   <v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
                                 :rules="rules.dateRules"
                   ></v-text-field>
@@ -91,11 +96,12 @@
         <golf-new v-if="sportType === 'Golf'" ref="subModelComponent"></golf-new>
       </v-stepper-content>
       <v-stepper-content step="3">
-        <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+        <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
+        <user-selection :model="model"></user-selection>
       </v-stepper-content>
     </v-stepper>
     <v-layout row style="height: auto">
-      <v-btn color="primary" :disabled="page < 3" @click.native="page = Math.max(1,page-1)">Back</v-btn>
+      <v-btn color="primary" :disabled="page === 1 || loading" @click.native="page = Math.max(1,page-1)">Back</v-btn>
       <v-spacer style="height: 1px"></v-spacer>
       <v-btn color="primary" :disabled="!valid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
     </v-layout>
@@ -108,6 +114,7 @@
   import DateUtils from '../../utils/DateUtils'
   import UserModel from '../../models/UserModel'
   import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
+  import UserSelectionView from './components/UserSelectionView'
 
   export default {
     data: () => ({
@@ -166,7 +173,7 @@
       },
       submit: async function () {
         let subModel = this.$refs.subModelComponent.getModel()
-        await this.getLocation()
+        // await this.getLocation()
 
         // Fix some fields
         this.model.competition = this.model.competition || false
@@ -183,15 +190,19 @@
         // Save both models
         await this.model.save()
         await subModel.save()
+        await this.model.sendInviteNotification()
       },
-      getAddressData (data) {
-        console.log(data)
-        return
+      getAddressData (addressData, placeResultData) {
+        // console.log(addressData)
+        // console.log(placeResultData)
+        this.model.location = {latitude: addressData.latitude, longitude: addressData.longitude}
+        this.model.locationString = placeResultData.formatted_address
       }
     },
     components: {
       'golf-new': GolfGameNew,
-      'vuetify-google-autocomplete': VuetifyGoogleAutocomplete
+      'vuetify-google-autocomplete': VuetifyGoogleAutocomplete,
+      'user-selection': UserSelectionView
     }
   }
 </script>

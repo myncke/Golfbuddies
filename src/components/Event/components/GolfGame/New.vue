@@ -7,14 +7,14 @@
       <v-form  v-model="valid" :value="false" ref="form">
         <v-layout row wrap>
           <v-flex lg4 sm6 xs12 class="input-field">
-            <v-checkbox label="Buggie"
+            <v-checkbox label="Buggie Possible?"
                         v-model="model.buggie"
                         color="primary"
                         required>
             </v-checkbox>
           </v-flex>
           <v-flex lg4 sm6 xs12 class="input-field">
-            <v-checkbox label="Overnight"
+            <v-checkbox label="Overnight Possible?"
                         v-model="model.overnight"
                         color="primary"
                         required>

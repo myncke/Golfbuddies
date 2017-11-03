@@ -1,7 +1,7 @@
 <template>
   <v-menu v-model="menuOpen" offset-y>
     <p class="red--text" v-if="error != ''">{{error}}</p>
-    <v-text-field slot="activator" solo prepend-icon="search" placeholder="Search Club" class="hidden-sm-and-down" v-on:keyup.enter="search()" @input="val => input = val"></v-text-field>
+    <v-text-field slot="activator" :solo="toolbar" prepend-icon="search" placeholder="Search Club" v-on:keyup.enter="search()" @input="val => input = val"></v-text-field>
     <v-list>
       <v-list-tile v-for="item in items" :key="item.key" @click="emitSelect(item)">
         <v-list-tile-title>{{capitalize(item.name)}}</v-list-tile-title>
@@ -35,6 +35,12 @@
       },
       capitalize: function (c) {
         return StringUtils.capitalize(c)
+      }
+    },
+    props: {
+      toolbar: {
+        type: Boolean,
+        default: true
       }
     }
   }
