@@ -12,8 +12,10 @@ import dateUtils from './utils/DateUtils'
 import VueChatScroll from 'vue-chat-scroll'
 import VueResource from 'vue-resource'
 import MessagingHandler from './utils/MessagingHandler'
+import FullCalendar from 'vue-full-calendar'
 
 require('firebase/firestore')
+window.jQuery = window.$ = require('jquery')
 
 const config = {
   apiKey: 'AIzaSyC21Ih6lJtA89S3CPca0FkkPiALPPB-XJw',
@@ -29,6 +31,7 @@ Vue.use(Vuex)
 Vue.use(VueChatScroll)
 Vue.use(VueResource)
 Vue.use(require('vue-moment'))
+Vue.use(FullCalendar)
 
 Vue.config.productionTip = false
 

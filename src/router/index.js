@@ -14,6 +14,10 @@ import Group from '../components/Group/Show'
 import GroupIndex from '../components/Group/Index'
 import GroupNew from '../components/Group/New'
 
+// LocationBroadcast
+import LocationBroadcast from '../components/LocationBroadcast/Show'
+import LocationBroadcastNew from '../components/LocationBroadcast/New'
+
 // Setting
 import SettingIndex from '../components/Setting/Index'
 
@@ -24,6 +28,9 @@ import Help from '../components/Static/Help'
 // User
 import Profile from '../components/User/Show'
 import Feed from '../components/Main/Feed'
+
+// Main
+import GeneralCalendarView from '../components/Main/GeneralCalendarView'
 
 Vue.use(Router)
 
@@ -60,6 +67,16 @@ export default new Router({
       component: Group
     },
     {
+      path: '/locationBroadcast/new',
+      name: 'newLocationBroadcast',
+      component: LocationBroadcastNew
+    },
+    {
+      path: '/locationBroadcast/:id',
+      name: 'locationBroadcast',
+      component: LocationBroadcast
+    },
+    {
       path: '/contacts',
       name: 'contacts',
       component: ContactIndex
@@ -88,6 +105,11 @@ export default new Router({
       path: '/feed',
       name: 'feed',
       component: Feed
+    },
+    {
+      path: '/calendar',
+      name: 'calendar',
+      component: GeneralCalendarView
     },
     {
       path: '/',

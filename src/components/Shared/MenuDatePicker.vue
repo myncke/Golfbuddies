@@ -12,7 +12,7 @@
   >
     <v-text-field
       slot="activator"
-      label="Picker in menu"
+      :label="label"
       v-model="date"
       prepend-icon="event"
       readonly
@@ -45,7 +45,11 @@ export default {
   methods: {
   },
   props: {
-    allowedFunction: Function
+    allowedFunction: Function,
+    label: {
+      default: 'Picker in menu',
+      type: String
+    }
   }
 }
 </script>

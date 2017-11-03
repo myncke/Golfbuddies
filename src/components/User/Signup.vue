@@ -2,73 +2,100 @@
   <v-card>
     <v-card-text>
       <v-container>
-        <form @submit.prevent="onSignup">
+        <p class="title red--text">{{error}}</p>
+        <v-stepper v-model="page">
+          <v-stepper-header>
+            <v-stepper-step step="1" :complete="page > 1">Log In Information</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step step="2" :complete="page > 2">General Information</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step step="3" :complete="page > 3">Specific Information</v-stepper-step>
+          </v-stepper-header>
+          <v-stepper-content step="1">
+            <v-form v-model="valid">
 
-          <v-layout row>
-            <v-flex xs-12>
-              <v-text-field
-                name="email"
-                label="Mail"
-                id="email"
-                v-model="email"
-                type="email"
-                required
-              ></v-text-field>
-            </v-flex>
-          </v-layout>
+              <v-layout row>
+                <v-flex xs-12>
+                  <v-text-field
+                    name="email"
+                    label="Mail"
+                    id="email"
+                    v-model="email"
+                    type="email"
+                    required
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
 
-          <v-layout row>
-            <v-flex xs-12>
-              <v-text-field
-                name="password"
-                label="Password"
-                id="password"
-                v-model="password"
-                type="password"
-                required
-              ></v-text-field>
-            </v-flex>
-          </v-layout>
+              <v-layout row>
+                <v-flex xs-12>
+                  <v-text-field
+                    name="password"
+                    label="Password"
+                    id="password"
+                    v-model="password"
+                    type="password"
+                    required
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
 
-          <v-layout row>
-            <v-flex xs-12>
-              <v-text-field
-                name="confirmPassword"
-                label="Confirm Password"
-                id="confirmPassword"
-                v-model="confirmPassword"
-                type="confirmPassword"
-                :rules="[comparePasswords]"
-              ></v-text-field>
-            </v-flex>
-          </v-layout>
+              <v-layout row>
+                <v-flex xs-12>
+                  <v-text-field
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    id="confirmPassword"
+                    v-model="confirmPassword"
+                    type="password"
+                    :rules="passwordRules"
+                  ></v-text-field>
+                </v-flex>
+              </v-layout>
 
-          <v-layout row>
-            <v-flex xs-12>
-              <v-btn type="submit" block color="primary">
-                Sign up
-              </v-btn>
-            </v-flex>
-          </v-layout>
+            </v-form>
+          </v-stepper-content>
+          <v-stepper-content step="2">
+            <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
+            <user-card ref="user"></user-card>
+          </v-stepper-content>
+          <v-stepper-content step="3">
+            <v-card>
+              <golf-card :editMode="true" ref="golf"></golf-card>
+            </v-card>
+          </v-stepper-content>
+        </v-stepper>
+        <v-layout row style="height: auto">
+          <v-btn color="primary" :disabled="page > 3 || page <= 1" @click.native="page = Math.max(1,page-1)">Back</v-btn>
+          <v-spacer style="height: 1px"></v-spacer>
+          <v-btn color="primary" :disabled="!valid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
+        </v-layout>
 
-        </form>
       </v-container>
     </v-card-text>
   </v-card>
 </template>
 <script>
+import firebase from 'firebase'
+import GolfuserProfileCard from './components/GolfuserProfileCard'
+import UserProfileCard from './components/UserProfileCard'
 export default {
   data () {
     return {
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      error: '',
+      model: undefined,
+      page: 1,
+      valid: true,
+      loading: false,
+      passwordRules: [
+        (v) => (!!v && v === this.password) || 'Passwords do not match'
+      ]
     }
   },
   computed: {
-    comparePasswords () {
-      return this.password !== this.confirmPassword ? 'Passwords no not match' : ''
-    },
     user () {
       return this.$store.getters.user
     }
@@ -81,9 +108,53 @@ export default {
     }
   },
   methods: {
-    onSignup () {
-      this.$store.dispatch('signUserUp', { email: this.email, password: this.password })
+    async onSignup () {
+      if (this.valid) {
+        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        this.model.userKey = firebase.auth().currentUser.uid
+        this.model.save()
+      }
+      // this.$store.dispatch('signUserUp', { email: this.email, password: this.password })
+    },
+    nextPage: async function () {
+      if (!this.valid) return
+      if (this.page < 3) {
+        this.page += 1
+      } else {
+        this.submit()
+        // this.$router.push({name: 'event', params: {id: this.model.key}})
+      }
+    },
+    submit: async function () {
+      this.loading = true
+
+      let golf = this.$refs.golf
+      let user = this.$refs.user
+
+      if (!(this.valid && golf.isValid() && user.isValid())) {
+        this.error = 'There was missing information! Please make sure you filled in everything correctly.'
+        this.loading = false
+        return
+      }
+
+      await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
+      let uid = firebase.auth().currentUser.uid
+      let userModel = user.getModel()
+      userModel.key = uid
+
+      let golfModel = golf.getModel()
+      golfModel.key = uid
+      golfModel.userKey = userModel._getDocRef()
+
+      userModel.save()
+      golfModel.save()
+
+      this.loading = false
     }
+  },
+  components: {
+    'golf-card': GolfuserProfileCard,
+    'user-card': UserProfileCard
   }
 }
 </script>
