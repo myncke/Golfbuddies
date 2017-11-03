@@ -1,9 +1,8 @@
 import FirebaseModel from './FirebaseModel'
 
-export default class LocationBroadcastModel  extends FirebaseModel{
+export default class LocationBroadcastModel extends FirebaseModel {
 
-
-  static async getBroadcastsFromUserOrdered(userRef, onFailure) {
+  static async getBroadcastsFromUserOrdered (userRef, onFailure) {
     return await this.getAllFromRef(this.getNormalRef(LocationBroadcastModel).where('userKey', '==', userRef).orderBy('start'), LocationBroadcastModel, onFailure)
   }
 
