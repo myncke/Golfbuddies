@@ -33,17 +33,65 @@
       <v-divider class="mb-3"></v-divider>
 
       <v-flex class="mb-3">
-        <v-card class=" pa-3">
-          <v-layout row>
+        <!-- <v-card class=" pa-3"> -->
+          <v-layout row class="pa-3">
             <div>{{ model.date | moment("calendar") }}</div>
             <v-spacer></v-spacer>
             <div>{{model.locationString}}</div>
           </v-layout>
-        </v-card>
+        <!-- </v-card> -->
+      </v-flex>
+      
+      <v-flex class="mb-3">
+        <v-toolbar>
+          <v-btn small flat value="going" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="caption">check</v-icon> Going
+          </v-btn>
+          <v-btn small flat value="maybe" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe 
+          </v-btn>
+          <v-btn small flat value="ignore" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="caption">clear</v-icon>Ignore
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn small flat value="ignore" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="caption">share</v-icon>Share
+          </v-btn>
+        </v-toolbar>
       </v-flex>
 
+      <v-flex>
+        <div>
+          <v-tabs dark v-model="active">
+            <v-tabs-bar class="cyan">
+              <v-tabs-item
+                v-for="tab in tabs"
+                :key="tab"
+                :href="'#' + tab"
+                ripple
+              >
+                Item {{ tab.slice(-1) }}
+              </v-tabs-item>
+              <v-tabs-slider color="yellow"></v-tabs-slider>
+            </v-tabs-bar>
+            <v-tabs-items>
+              <v-tabs-content
+                v-for="tab in tabs"
+                :key="tab"
+                :id="tab"
+              >
+                <v-card flat>
+                  <v-card-text>{{ text }}</v-card-text>
+                </v-card>
+              </v-tabs-content>
+            </v-tabs-items>
+          </v-tabs>
 
-
+          <div class="text-xs-center mt-3">
+            <v-btn @click.native="next">next tab</v-btn>
+          </div>
+        </div>
+      </v-flex> 
 
       <v-flex class="mb-1">
         <v-card>
@@ -148,7 +196,10 @@ export default {
     model: undefined,
     subModel: {},
     messages: [],
-    error: ''
+    error: '',
+    tabs: ['tab-1', 'tab-2', 'tab-3'],
+    active: null,
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   }),
   created: function () {
     this.initModel(this.$route.params.id)

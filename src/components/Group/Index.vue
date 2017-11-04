@@ -1,20 +1,26 @@
 <template>
   <v-container fluid class="pa-0" grid-list-lg>
-    <group-search class="hidden-sm-and-down" v-on:search-selected="(club) => { goToGroupDetails(club.key) }" style="width: 100%; padding: 10px;"></group-search>
+    <group-search class="hidden-sm-and-down" v-on:search-selected="(club) => { goToGroupDetails(club.key) }" style="width: 100%;"></group-search>
     <v-layout row wrap>
       <v-flex xs12 v-for="club in clubModels" :key="club.key">
 
-        <v-card color="blue-grey darken-1" class="white--text">
-          <v-card-title primary-title>
+        <v-card class="white--text cover"
+          :style="{ backgroundImage: 'url('+ club.headerPic + ')' }">
+          <v-card-title primary-title class="cover">
             <v-flex column>
               <div class="headline">{{getStringUtils().capitalize(club.name)}}</div>
               <div>{{club.information}}</div>
             </v-flex>
           </v-card-title>
-          <v-card-actions>
+          <v-card-actions class="cover">
             <v-btn flat dark @click="goToGroupDetails(club.key)">View</v-btn>
           </v-card-actions>
         </v-card>
+
+        <div>
+          <!-- {{console.log(club)}} -->
+        </div>
+
 
       </v-flex>
     </v-layout>
@@ -51,13 +57,9 @@
         this.type = this.$route.params.type || 'open'
         this.clubModels = []
         let list = (await typeMap[this.type](error => { this.error = error }))
-        list.push(...list)
-        list.push(...list)
-        list.push(...list)
         this.clubModels = list
       },
       goToGroupDetails: function (key) {
-        console.log('Redirecting')
         this.$router.push({
           name: 'group', params: { id: key }
         })
@@ -71,3 +73,10 @@
     }
   }
 </script>
+
+<style scoped>
+  .cover {
+     background: linear-gradient(to left,rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.8));
+  }
+</style>
+

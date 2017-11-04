@@ -1,50 +1,36 @@
 <template>
-  <v-container fluid class="mobile-margin">
-    <v-layout>
-      <v-flex>
-        <v-card v-if="model !== undefined && model.game !== undefined">
-          <v-card-media height="250px" v-if="model.game.location">
-            <location-view :location="model.game.location"></location-view>
-          </v-card-media>
-          <v-card-text primary-title>
-            <div>
-              <span class="grey--text">{{model.game.date.toDateString()}}</span><br>
-              <h3 class="headline mb-0">Mats Myncke</h3>
-              <div>Located two hours south of Sydney in the <br>Southern Highlands of New South Wales, ...</div>
-              <!-- <game-card-info> </game-card-info> -->
-            </div>
-          </v-card-text>
-          <!-- <v-card-actions>
-            <v-btn flat v-if="model.buggie"><v-icon>child_friendly</v-icon></v-btn>
-            <v-btn flat v-if="model.game.international"><v-icon>public</v-icon></v-btn>
-            <v-btn flat v-if="model.game.competition"><v-icon >error_outline</v-icon></v-btn>
-            <v-btn flat v-if="model.overnight"><v-icon>airline_seat_individual_suite</v-icon></v-btn>
-          </v-card-actions> -->
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-btn flat color="green">Join</v-btn>
-            <v-btn flat color="orange">Explore</v-btn>
-          </v-card-actions>
-        </v-card>
+  <v-card class="mobile-margin pa-1 mt-1">
+    <v-layout row>
+      <v-flex column sm2 class="pl-0 pr-3 pt-3 pb-3">
+        <div class="title text-sm-right">{{ model.game.date | moment("D MMM.") }}</div>
+        <div class="text-sm-right">{{ model.game.date | moment("dddd") }}</div>
+      </v-flex>
+
+      <v-flex column sm10>
+        <v-btn flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(model.game.key)">{{model.game.title}}</v-btn>
+        <p class="pl-3 ma-0">{{ model.game.date | moment("hh:mm a") }} &#9679; {{model.game.locationString}} </p>
+        <div>
+          <v-btn small flat value="going" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="caption">check</v-icon> Going
+          </v-btn>
+          <v-btn small flat value="maybe" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe 
+          </v-btn>
+          <v-btn small flat value="ignore" color="blue-grey" class="caption">
+            <v-icon left dark color="" class="caption">clear</v-icon>Ignore
+          </v-btn>
+        </div>
       </v-flex>
     </v-layout>
-  </v-container>
+  </v-card>
 </template>
 
 <script>
   import GameModel, { CollectionGameMap } from '../../../models/GameModel'
-  import LocationView from '../../../components/Shared/LocationView'
-  import UserModel from '../../../models/UserModel'
-  import ImageUtils from '../../../utils/ImageUtils'
-
-  import GameCardInfo from './GameCardInfo'
 
   export default {
     data: () => ({
-      model: undefined,
-      showLocation: false,
-      showMembers: false,
-      checked: true
+      model: undefined
     }),
     props: {
       game: Object
@@ -62,65 +48,25 @@
           let game = await GameModel.getFromRef(this.model.gameKey, GameModel, error => { this.error = error.message })
           model = this.model
           model.game = game
-          model.participants = (await this.initParticipants(game)) || []
+          // model.participants = (await this.initParticipants(game)) || []
           this.model = undefined
           this.model = model
-          console.log(this.model)
         } else if (this.model.subGame !== undefined) {
           let game = this.game
           let modelClass = CollectionGameMap[this.model.subGame.path.split('/')[0]]
           model = await modelClass.getFromRef(this.model.subGame, modelClass, error => { throw error })
           model.game = game
-          model.participants = (await this.initParticipants(model.game)) || []
+          // model.participants = (await this.initParticipants(model.game)) || []
           this.model = undefined
           this.model = model
-          console.log('MODELERONI')
-          console.log(this.model)
         }
       },
-      initParticipants: async function (game) {
-        try {
-          let subCol = await game.initSubcollection('GameUsers', error => { this.error = error.message })
-          for (let doc of subCol) {
-            doc.user = await UserModel.getFromRef(UserModel.getNormalRef(UserModel).doc(doc.key), UserModel, error => { this.error = error.message })
-          }
-          return subCol
-        } catch (error) {
-          console.log(error)
-          return []
-        }
-      },
-      makeInitialsImage: function (user) {
-        return ImageUtils.makeInitialsImage(user)
+      goToEvent: function (key) {
+        this.$router.push({
+          name: 'event', params: { id: key }
+        })
       }
-    },
-    components: {
-      'location-view': LocationView,
-      'game-card-info': GameCardInfo
     }
   }
 
 </script>
-
-<style scoped>
-  .initials-img {
-    width: 40px;
-    height: 40px;
-    display: inline;
-  }
-
-  .member {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
-    margin-left: 5px;
-  }
-
-  @media screen and (max-width: 480px) {
-    .mobile-margin {
-      margin-left: 0px;
-      margin-right: 0px;
-      padding: 3px 3px 8px 3px;
-  }
-}
-</style>

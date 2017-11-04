@@ -28,7 +28,7 @@
           <v-container fluid fill-height class="pa-0">
             <v-layout row>
               <v-flex sm3>
-                <user-aside></user-aside>
+                <aside-left></aside-left>
               </v-flex>
 
               <v-flex sm6>
@@ -38,7 +38,7 @@
               </v-flex>
 
               <v-flex sm3>
-                <user-events> </user-events>
+                <aside-right> </aside-right>
               </v-flex>
 
 
@@ -65,8 +65,8 @@
   import UserSelection from './components/Shared/Search/UserSearch.vue'
   import Notifications from './components/Main/Notifications.vue'
 
-  import MainAside from './components/Main/Aside'
-  import MainEvents from './components/Main/Events'
+  import AsideLeft from './components/Main/AsideLeft'
+  import AsideRight from './components/Main/AsideRight'
 
   export default {
     name: 'app',
@@ -85,8 +85,8 @@
       'sidebar': sidebar,
       'landing': landing,
       'user-search': UserSelection,
-      'user-aside': MainAside,
-      'user-events': MainEvents,
+      'aside-left': AsideLeft,
+      'aside-right': AsideRight,
       'notifications': Notifications
     },
     methods: {

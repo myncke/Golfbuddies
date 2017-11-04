@@ -8,6 +8,7 @@ import ContactIndex from '../components/Contact/Index'
 import Event from '../components/Event/Show'
 import EventIndex from '../components/Event/Index'
 import EventNew from '../components/Event/New'
+import EventHistory from '../components/Event/History'
 
 // Group
 import Group from '../components/Group/Show'
@@ -50,6 +51,11 @@ export default new Router({
       path: '/events',
       name: 'events',
       component: EventIndex
+    },
+    {
+      path: '/history',
+      name: 'history',
+      component: EventHistory
     },
     {
       path: '/groups/:type?',

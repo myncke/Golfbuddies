@@ -8,7 +8,7 @@
 
           <template v-for="item in events" >
             <div :key="item.id">
-              <v-container>
+              <v-container class="pa-1">
                 <v-layout row>
                   <v-flex column sm2 class="pl-0 pr-3 pt-3 pb-3">
                     <div class="title text-sm-right">{{ item.date | moment("D MMM.") }}</div>

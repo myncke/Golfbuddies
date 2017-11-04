@@ -3,25 +3,25 @@
     <v-layout column>
       <v-flex>
         <v-card>
-          <v-card-media :src="club.headerPic" height="300px">
+          <v-card-media :src="club.headerPic" height="200px">
             <v-container class="ma-0 container-text-gradient" fluid>
               <v-layout column align-left justify-end>
                 <h1 class="white--text display-2">{{club.name}}</h1>
-                <h2 class="white--text subheading">{{club.information}}</h2>
+                <h2 class="white--text subheading">{{club.closed ? 'Public' : 'Private' }} &#9679; {{club.information}}</h2>
               </v-layout>
             </v-container>
           </v-card-media>
         </v-card>
       </v-flex>
 
-      <v-tabs fixed icons centered>
+      <v-tabs class="elevation-1 mt-3" scrollable grow>
         <v-tabs-bar class="white">
           <v-tabs-slider class="yellow"></v-tabs-slider>
           <v-tabs-item
-            v-for="i in items"
+            v-for="i in tabs"
             :key="i"
             :href="'#tab-' + i"
-          > <v-icon>phone</v-icon>
+          >
             {{ i }}
           </v-tabs-item>
         </v-tabs-bar>
@@ -29,18 +29,32 @@
 
         <v-tabs-items>
           <v-tabs-content
-            v-for="i in items"
+            v-for="i in tabs"
             :key="i"
             :id="'tab-' + i"
           >
             <v-card flat>
-              <v-card-text>{{ text }}</v-card-text>
+              <v-layout row wrap v-if="i == 'Events'">
+                <events-tab :events="games"></events-tab>
+              </v-layout>
+
+              <v-layout row wrap v-if="i == 'Members'">
+                <members-tab :members="members"></members-tab>
+              </v-layout>
+
+              <v-layout row wrap v-if="i == 'Pictures'">
+                <pictures-tab></pictures-tab>
+              </v-layout>
+
+              <v-layout row wrap v-if="i == 'Details'">
+                <details-tab></details-tab>
+              </v-layout>
             </v-card>
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
 
-      <v-card>
+      <!-- <v-card>
         <v-card-actions>
           <v-btn icon @click.native="showMembers = !showMembers; showLocation = false">
             <v-icon>{{ showMembers ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
@@ -64,13 +78,8 @@
             </div>
           </v-card-text>
         </v-slide-y-transition>
-      </v-card>
-      <p class="title text-xs-center" style="margin: 10px;">Games</p>
-      <div style="width: 100%">
-        <ul v-for="game in games" :key="game.key">
-          <game-card :game="game"></game-card>
-        </ul>
-      </div>
+      </v-card> -->
+      <!-- <p class="title text-xs-center" style="margin: 10px;">Games</p> -->
     </v-layout>
   </v-container>
 </template>
@@ -78,20 +87,20 @@
 <script>
   import SportClubModel from '../../models/SportClubModel'
   import UserModel from '../../models/UserModel'
-  import ImageUtils from '../../utils/ImageUtils'
   import GolfGameModel from '../../models/GolfGameModel'
-  import GameCard from '../Event/components/GameCard.vue'
   import LocationView from '../Shared/LocationView'
+
+  import Events from './Show/Events'
+  import Members from './Show/Members'
+  import Pictures from './Show/Pictures'
+  import Details from './Show/Details'
 
   export default {
     data: () => ({
       club: undefined,
       members: [],
       games: [],
-      showLocation: false,
-      showMembers: false,
-      items: ['Messages', 'Events', 'Members', 'Pictures', 'Location'],
-      text: 't d.'
+      tabs: ['Events', 'Members', 'Pictures', 'Details']
     }),
     created: function () {
       this.initClub()
@@ -113,7 +122,7 @@
       },
       initMembers: async function (club) {
         for (let member of Object.keys(club.members)) {
-          console.log(member)
+          // TODO: THIS IS UGLY
           console.log(new UserModel(member, false, model => { this.members.push(model) }, error => { this.error = error.message }))
         }
       },
@@ -128,28 +137,22 @@
             throw error
           }))
         }
-      },
-      makeInitialsImage: function (user) {
-        return ImageUtils.makeInitialsImage(user)
       }
     },
     components: {
-      'game-card': GameCard,
-      'location-view': LocationView
+      'location-view': LocationView,
+      'events-tab': Events,
+      'members-tab': Members,
+      'pictures-tab': Pictures,
+      'details-tab': Details
+
     }
   }
 </script>
 
 <style scoped>
-
   .container-text-gradient {
-    background: linear-gradient(rgba(0,0,0,0.0) 70%, rgba(0,0,0,0.8));
-  }
-
-  @media screen and (max-width: 480px) {
-    .resize-parallax {
-      height: 200px;
-    }
+    background: linear-gradient(rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.8));
   }
 
   .member {
