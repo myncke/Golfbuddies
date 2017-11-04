@@ -32,7 +32,7 @@
 export default {
   data: () => ({
     items: [
-      { name: 'Upcomming', icon: 'update', path: '/feed' },
+      { name: 'Upcoming', icon: 'update', path: '/feed' },
       { name: 'Calendar', icon: 'events', path: '/calendar' },
       { name: 'Discover', icon: 'search', path: '/events' },
       { name: 'Past', icon: 'history', path: '/history' }

@@ -10,7 +10,8 @@
       </v-flex>
 
       <v-flex>
-        <v-layout row>
+        <v-card>
+          <v-layout row>
           <v-flex column sm3 class="pl-0 pr-5 pt-3 pb-3">
             <div class="title text-sm-right">{{ model.date | moment("D MMM.") }}</div>
             <div class="text-sm-right">{{ model.date | moment("dddd") }}</div>
@@ -22,27 +23,18 @@
             </v-flex>
             <v-flex>
               <p class="caption ma-0" color="grey--after lighten-1">
-                {{model.inviteOnly ? 'Public' : 'Private' }} &#9679; Hosted by
+                {{model.inviteOnly ? 'Public' : 'Private' }} 
+                &#9679; Hosted by
                 <a href="">{{ model.creator.name || 'Unkown' }}</a>
               </p>
+              <v-divider class="mt-2"></v-divider>
+              <p class="caption ma-0 pt-2"> <v-icon :style="{ fontSize: 15+ 'px' }">location_on</v-icon> {{model.locationString}}</p>
             </v-flex>
           </v-layout>
         </v-layout>
-      </v-flex>
 
-      <v-divider class="mb-3"></v-divider>
+        <v-divider></v-divider>
 
-      <v-flex class="mb-3">
-        <!-- <v-card class=" pa-3"> -->
-          <v-layout row class="pa-3">
-            <div>{{ model.date | moment("calendar") }}</div>
-            <v-spacer></v-spacer>
-            <div>{{model.locationString}}</div>
-          </v-layout>
-        <!-- </v-card> -->
-      </v-flex>
-      
-      <v-flex class="mb-3">
         <v-toolbar>
           <v-btn small flat value="going" color="blue-grey" class="caption">
             <v-icon left dark color="" class="caption">check</v-icon> Going
@@ -58,22 +50,23 @@
             <v-icon left dark color="" class="caption">share</v-icon>Share
           </v-btn>
         </v-toolbar>
+        </v-card>
       </v-flex>
 
-      <v-flex>
-        <div>
-          <v-tabs dark v-model="active">
-            <v-tabs-bar class="cyan">
+      <v-flex class="mt-3">
+        <v-card>
+          <v-tabs grow>
+            <v-tabs-bar class="white">
               <v-tabs-item
                 v-for="tab in tabs"
                 :key="tab"
                 :href="'#' + tab"
                 ripple
-              >
-                Item {{ tab.slice(-1) }}
+              > {{ tab }}
               </v-tabs-item>
               <v-tabs-slider color="yellow"></v-tabs-slider>
             </v-tabs-bar>
+            <v-divider></v-divider>
             <v-tabs-items>
               <v-tabs-content
                 v-for="tab in tabs"
@@ -86,12 +79,8 @@
               </v-tabs-content>
             </v-tabs-items>
           </v-tabs>
-
-          <div class="text-xs-center mt-3">
-            <v-btn @click.native="next">next tab</v-btn>
-          </div>
-        </div>
-      </v-flex> 
+        </v-card>
+      </v-flex>
 
       <v-flex class="mb-1">
         <v-card>
@@ -197,7 +186,7 @@ export default {
     subModel: {},
     messages: [],
     error: '',
-    tabs: ['tab-1', 'tab-2', 'tab-3'],
+    tabs: ['Details', 'Location', 'Pictures'],
     active: null,
     text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   }),

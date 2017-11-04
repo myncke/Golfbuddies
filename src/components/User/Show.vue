@@ -158,6 +158,9 @@
     watch: {
       editMode: function (val) {
         this.setEditMode(val)
+      },
+      $route: function (newVal) {
+        this.initUserModel()
       }
     },
     components: {
