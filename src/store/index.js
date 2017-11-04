@@ -18,9 +18,7 @@ export const store = new Vuex.Store({
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            const newUser = {
-              id: user.uid
-            }
+            const newUser = new UserModel(user.uid, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
             commit('setUser', newUser)
           }
         )
@@ -35,9 +33,7 @@ export const store = new Vuex.Store({
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            const newUser = {
-              id: user.uid
-            }
+            const newUser = new UserModel(user.uid, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
             commit('setUser', newUser);
             (new UserModel()).addDeviceToken()
           }
@@ -65,7 +61,7 @@ export const store = new Vuex.Store({
     initUser ({commit}) {
       firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-          commit('setUser', { id: user.uid })
+          commit('setUser', new UserModel(user.uid, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message }))
         }
       })
     }
