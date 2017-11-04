@@ -163,15 +163,13 @@
           console.log(list)
           this.friendUserModels = []
           list.forEach(model => {
-            let key
-            this.getCurrentUser().uid === model.userKey1 ? key = model.userKey2 : key = model.userKey1
-            let uModel = new UserModel(key, false, user => {
-              this.friendUserModels.push({user: user, friendship: model})
-              this.loading = false
-            }, error => {
-              this.error = error.message
-            })
-            console.log(uModel)
+            model.getFriend(error => { this.error = error.message }).then(
+              uModel => {
+                this.friendUserModels.push({user: uModel, friendship: model})
+                this.loading = false
+                console.log(uModel)
+              }
+            )
           })
         } catch (error) {
           this.error = error.message

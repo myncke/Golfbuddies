@@ -4,8 +4,7 @@ import UserModel from './UserModel'
 export default class FriendshipModel extends FirebaseModel {
 
   static _firestoreFields = [
-    'userKey1',
-    'userKey2',
+    'friends',
     'closeFriend',
     'conversationRef'
   ]
@@ -13,15 +12,13 @@ export default class FriendshipModel extends FirebaseModel {
   static collectionName = 'Friendship'
 
   static async getFriendsOfCurrentUser (onFailure) {
-    let ref = FriendshipModel.getNormalRef(FriendshipModel)
-    let ref2 = ref
-    ref = ref.where('userKey1', '==', (new UserModel())._getDocRef())
-    ref2 = ref2.where('userKey2', '==', (new UserModel())._getDocRef())
-    let list = await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
-    list.push(...(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure)))
-    console.log(await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure))
-    console.log(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure))
-    return list
+    let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', true)
+    return await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
+  }
+
+  static async getFriendRequests (onFailure) {
+    let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', false)
+    return await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
   }
 
   async getFriend (onFailure) {
@@ -29,27 +26,51 @@ export default class FriendshipModel extends FirebaseModel {
   }
 
   getFriendRef () {
-    if (this.userKey1 === (new UserModel()).key) {
-      return this.userKey2
-    } else {
-      return this.userKey1
+    for (let key of Object.keys(this.friends)) {
+      if (key !== (new UserModel()).key) {
+        return (new UserModel(key))._getDocRef()
+      }
     }
+  }
+
+  isMutualFriend () {
+    for (let key of Object.keys(this.friends)) {
+      if (this.friends[key] === false) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * Sends a friendRequest to the specified user (with key === userKey)
+   * @param userKey String
+   * @param closeFriend Boolean
+   * @param onFailure
+   * @return {Promise.<void>}
+   */
+  static async sendRequest (userKey, closeFriend, onFailure) {
+    let myKey = (new UserModel()).key
+    let friendship = new FriendshipModel()
+    friendship.friends = {}
+    friendship.friends[myKey] = true
+    friendship.friends[userKey] = false
+    friendship.closeFriend = closeFriend
+    // TODO: this should be inited or not?
+    friendship.conversationRef = undefined
+    await friendship.save()
   }
 
   // Booleans
   closeFriend
 
-  // Strings
-  userKey1
-  userKey2
+  // Object
 
-  getUser1 () {
-    return this.makeDoc('Users', this.userKey1)
-  }
-
-  getUser2 () {
-    return this.makeDoc('Users', this.userKey2)
-  }
+  /**
+   * This is an object with keys: UserModel Keys
+   * and values: true == is friend or sent the request || false == received the request, but didn't accept yet.
+   */
+  friends
 
   // References
   conversationRef
