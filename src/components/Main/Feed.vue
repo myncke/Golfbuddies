@@ -18,17 +18,15 @@
                   <v-flex column sm10>
                     <v-btn flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(item.key)">{{item.title}}</v-btn>
                     <p class="pl-3 ma-0">{{ item.date | moment("hh:mm a") }} &#9679; {{item.locationString}} </p>
-                    <div>
-                      <v-btn small flat value="going" color="blue-grey" class="caption">
-                        <v-icon left dark color="" class="caption">check</v-icon> Going
-                      </v-btn>
+                    <v-layout row>
+                      <join-event :gameModel="item"></join-event>
                       <v-btn small flat value="maybe" color="blue-grey" class="caption">
                         <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe 
                       </v-btn>
                       <v-btn small flat value="ignore" color="blue-grey" class="caption">
                         <v-icon left dark color="" class="caption">clear</v-icon>Ignore
                       </v-btn>
-                    </div>
+                    </v-layout>
                   </v-flex>
 
                 </v-layout>
@@ -87,7 +85,7 @@
           </template>
         <v-card-actions >
           <v-btn v-if="travels.length > 0" flat block small color="primary" :to="'/calendar'" class="mb-1">See all upcomming events</v-btn>
-          <v-btn else flat block small color="primary" :to="'/calendar'" class="mb-1">Plan in your travels</v-btn>
+          <v-btn else flat block small color="primary" :to="'/locationBroadcast/new'" class="mb-1">Plan in your travels</v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -96,6 +94,7 @@
 
 <script>
   import GameModel from '../../models/GameModel'
+  import Join from '../Event/Join'
 
   export default {
     data: () => ({
@@ -126,6 +125,9 @@
         this.events = await GameModel.getAllOpenGames(console.log('ERROR'))
         console.log(this.events)
       }
+    },
+    components: {
+      'join-event': Join
     }
   }
 </script>

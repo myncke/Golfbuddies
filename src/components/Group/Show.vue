@@ -47,39 +47,12 @@
               </v-layout>
 
               <v-layout row wrap v-if="i == 'Details'">
-                <details-tab></details-tab>
+                <details-tab :location="club.location" :owner="club.admin"></details-tab>
               </v-layout>
             </v-card>
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
-
-      <!-- <v-card>
-        <v-card-actions>
-          <v-btn icon @click.native="showMembers = !showMembers; showLocation = false">
-            <v-icon>{{ showMembers ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-          </v-btn>
-          <p>Members</p>
-          <v-spacer></v-spacer>
-          <p>Location</p>
-          <v-btn icon @click.native="showLocation = !showLocation; showMembers = false">
-            <v-icon>{{ showLocation ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
-          </v-btn>
-        </v-card-actions>
-        <v-slide-y-transition>
-          <v-card-text v-show="showLocation">
-            <location-view v-if="club.location !== undefined" :location="club.location"></location-view>
-          </v-card-text>
-        </v-slide-y-transition>
-        <v-slide-y-transition>
-          <v-card-text v-show="showMembers">
-            <div v-for="member in members">
-              <img :src="makeInitialsImage(member)" class="initials-img" /><p class="member subheading">{{member.firstName}} {{member.lastName}} - {{member.nickname}}</p>
-            </div>
-          </v-card-text>
-        </v-slide-y-transition>
-      </v-card> -->
-      <!-- <p class="title text-xs-center" style="margin: 10px;">Games</p> -->
     </v-layout>
   </v-container>
 </template>
@@ -88,7 +61,6 @@
   import SportClubModel from '../../models/SportClubModel'
   import UserModel from '../../models/UserModel'
   import GolfGameModel from '../../models/GolfGameModel'
-  import LocationView from '../Shared/LocationView'
 
   import Events from './Show/Events'
   import Members from './Show/Members'
@@ -140,12 +112,10 @@
       }
     },
     components: {
-      'location-view': LocationView,
       'events-tab': Events,
       'members-tab': Members,
       'pictures-tab': Pictures,
       'details-tab': Details
-
     }
   }
 </script>

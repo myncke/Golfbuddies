@@ -37,12 +37,12 @@
       },
       seenNotifications: function () {
         for (let model of this.models) {
-          model.receivers[this.$store.getters.user.id].seen = true
+          model.receivers[this.$store.getters.user.key].seen = true
           model.save()
         }
       },
       countUnseenNotifications: function () {
-        return this.models.filter(model => !model.receivers[this.$store.getters.user.id].seen).length
+        return this.models.filter(model => !model.receivers[this.$store.getters.user.key].seen).length
       }
     }
   }

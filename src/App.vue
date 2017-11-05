@@ -10,7 +10,7 @@
             Golfbuddies
           </v-btn>
         </v-toolbar-title>
-        <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile"></user-search>
+        <!-- <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile"></user-search> -->
         <v-spacer></v-spacer>
         <v-btn flat :to="'/contacts'">
           <v-icon left>contacts</v-icon>

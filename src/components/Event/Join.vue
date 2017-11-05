@@ -1,9 +1,12 @@
 <template>
-  <v-layout>
+  <div>
+    <v-btn small flat value="going" color="blue-grey" class="caption"  @click="openDialog">
+      <v-icon left dark color="" class="caption">check</v-icon> Going
+    </v-btn>
     <v-dialog v-model="openMe">
       <v-card v-if="gameModel !== undefined">
         <v-card-title>
-          <p class="title"> Join Game </p>
+          <p class="title"> {{gameModel.title}} </p>
         </v-card-title>
         <v-card-text>
           <v-text-field
@@ -19,7 +22,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-layout>
+  </div>
 </template>
 
 <script>
@@ -47,8 +50,8 @@
         this.openMe = false
       },
       initGameUser: function () {
-        console.log('CURRENT USER: ' + this.$store.getters.user.id)
-        let gameUser = new GameUser(this.$store.getters.user.id)
+        console.log('CURRENT USER: ' + this.$store.getters.user.key)
+        let gameUser = new GameUser(this.$store.getters.user.key)
         gameUser.specialWishes = ''
         this.gameUser = gameUser
       }

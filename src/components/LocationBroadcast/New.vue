@@ -49,7 +49,7 @@
     }),
     created: function () {
       this.model = new LocationBroadcastModel()
-      this.model.userKey = this.$store.getters.user.id
+      this.model.userKey = this.$store.getters.user.key
     },
     methods: {
       saveModel: function () {

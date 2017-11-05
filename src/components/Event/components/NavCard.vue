@@ -19,6 +19,7 @@
         </v-list>
         <v-card-actions>
           <v-btn flat outline block color="green" :to="'/event/new'">Create new event</v-btn>
+          <v-btn flat outline color="green" :to="'/locationBroadcast/new'">Travel</v-btn>
         </v-card-actions>
       </v-card>
       <v-layout column>
@@ -32,7 +33,7 @@
 export default {
   data: () => ({
     items: [
-      { name: 'Upcomming', icon: 'update', path: '/feed' },
+      { name: 'Upcoming', icon: 'update', path: '/feed' },
       { name: 'Calendar', icon: 'events', path: '/calendar' },
       { name: 'Discover', icon: 'search', path: '/events' },
       { name: 'Past', icon: 'history', path: '/history' }
