@@ -4,6 +4,7 @@ import GolfGameModel from './GolfGameModel'
 import MessageModel from './MessageModel'
 import NotificationModel, { NotificationMessages } from './NotificationModel'
 import UserModel from './UserModel'
+import FriendshipModel from './FriendshipModel'
 
 let PrefGameSex = ['Men Only', 'Women Only', 'Mixed']
 export {PrefGameSex}
@@ -49,8 +50,51 @@ export default class GameModel extends FirebaseSubColModel {
     await notification.save()
   }
 
-  static async getAllOpenGames (onFailure) {
-    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).orderBy('date', 'asc'), GameModel, onFailure)
+  static getDefaultRange () {
+    let date = new Date()
+    let inTwoMonths = new Date()
+    inTwoMonths.setMonth(inTwoMonths.getMonth() + 2)
+    return {
+      start: date,
+      end: inTwoMonths
+    }
+  }
+
+  static async getAllUpcomingGames (onFailure) {
+    let result = []
+    result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
+    result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
+    return result
+  }
+
+  static async getAllUpcomingOpenGames (onFailure) {
+    let range = GameModel.getDefaultRange()
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc'), GameModel, onFailure)
+  }
+
+  static async getAllMyInvitedUpcomingGames (onFailure) {
+    let range = GameModel.getDefaultRange()
+    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
+    list = list.filter(obj => obj.date >= range.start && obj.date < range.end)
+    console.log(list)
+    list.sort((a, b) => b.date - a.date)
+    console.log(list)
+    return list
+  }
+
+  static async getAllUpcomingFriendlyGames (onFailure) {
+    let friends = await FriendshipModel.getFriendsOfCurrentUser(onFailure)
+    console.log(friends)
+    let result = []
+    for (let friend of friends) {
+      result.push(...(await GameModel.getAllUpcomingGamesByUser(friend.getFriendRef(), onFailure)))
+    }
+    return result
+  }
+
+  static async getAllUpcomingGamesByUser (userRef, onFailure) {
+    let range = GameModel.getDefaultRange()
+    return (await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).where('creator', '==', userRef).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc'), GameModel, onFailure))
   }
 
   static async getAllGamesWithFilter (filterObject, onFailure) {
