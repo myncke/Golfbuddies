@@ -52,9 +52,25 @@
       </v-layout>
     </v-container>
 
+    <!-- <v-container>
+      pictures
+    </v-container> -->
+
     <v-container>
-      <!-- pictures -->
+      <v-layout>
+        <v-flex class="mb-4">
+          <v-card>
+            <v-list two-line>
+              <template v-for="item in tips">
+                <v-subheader v-if="item.header" v-text="item.header"></v-subheader>
+              </template>
+              <div class="placeholder">Coming Soon!</div>
+            </v-list>
+          </v-card>
+        </v-flex>
+      </v-layout>
     </v-container>
+
   </v-flex>
 </template>
 
@@ -72,6 +88,9 @@ export default {
   },
   data: () => ({
     clubModels: [],
+    tips: [
+      { header: 'Tips' }
+    ],
     error: ''
   }),
   created: function () {
@@ -96,3 +115,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.placeholder {
+  margin: 1em;
+  padding: 1em;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

@@ -19,6 +19,7 @@
         </v-list>
         <v-card-actions>
           <v-btn flat outline block color="green" :to="'/event/new'">Create new event</v-btn>
+          <v-btn flat outline color="green" :to="'/locationBroadcast/new'">Travel</v-btn>
         </v-card-actions>
       </v-card>
       <v-layout column>

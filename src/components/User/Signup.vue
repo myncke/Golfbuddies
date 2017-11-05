@@ -1,78 +1,73 @@
 <template>
   <v-card>
-    <v-card-text>
-      <v-container>
-        <p class="title red--text">{{error}}</p>
-        <v-stepper v-model="page">
-          <v-stepper-header>
-            <v-stepper-step step="1" :complete="page > 1">Log In Information</v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="2" :complete="page > 2">General Information</v-stepper-step>
-            <v-divider></v-divider>
-            <v-stepper-step step="3" :complete="page > 3">Specific Information</v-stepper-step>
-          </v-stepper-header>
-          <v-stepper-content step="1">
-            <v-form v-model="valid">
+      <p class="title red--text">{{error}}</p>
+      <v-stepper v-model="page">
+        <v-stepper-header>
+          <v-stepper-step step="1" :complete="page > 1">Account</v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="2" :complete="page > 2">General</v-stepper-step>
+          <v-divider></v-divider>
+          <v-stepper-step step="3" :complete="page > 3">Golf</v-stepper-step>
+        </v-stepper-header>
+        <v-stepper-content step="1">
+          <v-form v-model="valid">
 
-              <v-layout row>
-                <v-flex xs-12>
-                  <v-text-field
-                    name="email"
-                    label="Mail"
-                    id="email"
-                    v-model="email"
-                    type="email"
-                    required
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
+            <v-layout row>
+              <v-flex xs-12>
+                <v-text-field
+                  name="email"
+                  label="Mail"
+                  id="email"
+                  v-model="email"
+                  type="email"
+                  required
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
 
-              <v-layout row>
-                <v-flex xs-12>
-                  <v-text-field
-                    name="password"
-                    label="Password"
-                    id="password"
-                    v-model="password"
-                    type="password"
-                    required
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
+            <v-layout row>
+              <v-flex xs-12>
+                <v-text-field
+                  name="password"
+                  label="Password"
+                  id="password"
+                  v-model="password"
+                  type="password"
+                  required
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
 
-              <v-layout row>
-                <v-flex xs-12>
-                  <v-text-field
-                    name="confirmPassword"
-                    label="Confirm Password"
-                    id="confirmPassword"
-                    v-model="confirmPassword"
-                    type="password"
-                    :rules="passwordRules"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
+            <v-layout row>
+              <v-flex xs-12>
+                <v-text-field
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  id="confirmPassword"
+                  v-model="confirmPassword"
+                  type="password"
+                  :rules="passwordRules"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
 
-            </v-form>
-          </v-stepper-content>
-          <v-stepper-content step="2">
-            <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
-            <user-card ref="user"></user-card>
-          </v-stepper-content>
-          <v-stepper-content step="3">
-            <v-card>
-              <golf-card :editMode="true" ref="golf"></golf-card>
-            </v-card>
-          </v-stepper-content>
-        </v-stepper>
-        <v-layout row style="height: auto">
-          <v-btn color="primary" :disabled="page > 3 || page <= 1" @click.native="page = Math.max(1,page-1)">Back</v-btn>
-          <v-spacer style="height: 1px"></v-spacer>
-          <v-btn color="primary" :disabled="!valid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
-        </v-layout>
-
-      </v-container>
-    </v-card-text>
+          </v-form>
+        </v-stepper-content>
+        <v-stepper-content step="2">
+          <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
+          <user-card ref="user"></user-card>
+        </v-stepper-content>
+        <v-stepper-content step="3">
+          <v-card>
+            <golf-card :editMode="true" ref="golf"></golf-card>
+          </v-card>
+        </v-stepper-content>
+      </v-stepper>
+      <v-layout row style="height: auto">
+        <v-btn color="primary" :disabled="page > 3 || page <= 1" @click.native="page = Math.max(1,page-1)">Back</v-btn>
+        <v-spacer style="height: 1px"></v-spacer>
+        <v-btn color="primary" :disabled="!valid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
+      </v-layout>
   </v-card>
 </template>
 <script>

@@ -8,7 +8,7 @@
 
       <!-- CONTACTS PANE -->
 
-      <v-layout row fill-height wrap style="width: 100vw; min-height: 100vh">
+      <v-layout row fill-height wrap style=" min-height: 100vh">
         <v-flex sm4 xs12 fill-height>
           <v-list two-line dark style="height: 100vh; overflow:scroll;">
             <v-list-tile>
@@ -31,7 +31,7 @@
               <v-divider v-bind:inset="true"></v-divider>
             </template>
             <v-list-tile>
-              <v-subheader v-text="'Conversation Groups'"></v-subheader>
+              <!-- <v-subheader v-text="'Conversation Groups'"></v-subheader> -->
             </v-list-tile>
             <template v-for="group in conversationModels">
               <v-list-tile avatar v-bind:key="group.key" @click="openConversation(group)">
