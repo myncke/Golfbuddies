@@ -4,19 +4,18 @@
       <v-progress-circular style="display: inline-block;" indeterminate v-bind:size="100" color="green darken-1"></v-progress-circular>
     </div>
 
-    <!-- TODO: this needs a lot of work xD -->
     <div v-if="!loading">
 
       <!-- CONTACTS PANE -->
 
-      <v-layout row fill-height wrap style="width: 100vw; min-height: 100vh">
+      <v-layout row fill-height wrap style=" min-height: 100vh">
         <v-flex sm4 xs12 fill-height>
           <v-list two-line dark style="height: 100vh; overflow:scroll;">
             <v-list-tile>
               <v-subheader v-text="'Friends'"></v-subheader>
             </v-list-tile>
             <template v-for="model in friendUserModels">
-              <v-list-tile avatar v-bind:key="model.user.key" @click="console.log('TODO, not sure what to do here :/')">
+              <v-list-tile avatar v-bind:key="model.user.key" @click="openConversationFriend(model)">
                 <v-list-tile-avatar>
                   <img v-bind:src="'https://ui-avatars.com/api/?name=' + model.user.firstName + '+' + model.user.lastName + '&rounded=true'"/>
                 </v-list-tile-avatar>
@@ -32,7 +31,7 @@
               <v-divider v-bind:inset="true"></v-divider>
             </template>
             <v-list-tile>
-              <v-subheader v-text="'Conversation Groups'"></v-subheader>
+              <!-- <v-subheader v-text="'Conversation Groups'"></v-subheader> -->
             </v-list-tile>
             <template v-for="group in conversationModels">
               <v-list-tile avatar v-bind:key="group.key" @click="openConversation(group)">
@@ -132,6 +131,7 @@
   import UserModel from '../../models/UserModel'
   import ConversationGroupModel, { MessageModel } from '../../models/ConversationGroupModel'
   import dateUtils from '../../utils/DateUtils'
+  import ImageUtils from '../../utils/ImageUtils'
 
   export default {
     data () {
@@ -163,15 +163,13 @@
           console.log(list)
           this.friendUserModels = []
           list.forEach(model => {
-            let key
-            this.getCurrentUser().uid === model.userKey1 ? key = model.userKey2 : key = model.userKey1
-            let uModel = new UserModel(key, false, user => {
-              this.friendUserModels.push({user: user, friendship: model})
-              this.loading = false
-            }, error => {
-              this.error = error.message
-            })
-            console.log(uModel)
+            model.getFriend(error => { this.error = error.message }).then(
+              uModel => {
+                this.friendUserModels.push({user: uModel, friendship: model})
+                this.loading = false
+                console.log(uModel)
+              }
+            )
           })
         } catch (error) {
           this.error = error.message
@@ -187,7 +185,7 @@
         }
       },
       makeInitialsImage: function (user) {
-        return 'https://ui-avatars.com/api/?name=' + user.firstName + '+' + user.lastName + '&rounded=true'
+        return ImageUtils.makeInitialsImage(user)
       },
       openConversation: async function (conversationModel) {
         try {
@@ -206,15 +204,14 @@
           throw error
         }
       },
+      openConversationFriend: async function (model) {
+        this.openConversation(await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, error => { throw error }))
+      },
       getCurrentUser: function () {
         return firebase.auth().currentUser
       },
       dateToString: function (date) {
         return dateUtils.dateToString(date)
-      },
-      scrollChatBottom: function () {
-        let container = document.getElementById('chatcontainer')
-        container.scrollTop = container.scrollHeight
       },
       sendMessage: async function () {
         let message = this.text

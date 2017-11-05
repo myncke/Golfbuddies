@@ -1,5 +1,10 @@
 import firebase from 'firebase'
 import FirebaseModel from './FirebaseModel'
+import StringUtils from '../utils/StringUtils'
+import MessageHandler from '../utils/MessagingHandler'
+
+let sexes = ['Male', 'Female']
+export {sexes}
 
 export default class UserModel extends FirebaseModel {
 
@@ -12,6 +17,33 @@ export default class UserModel extends FirebaseModel {
             error => onFailure(error)
           )
       }, error => onFailure(error))
+  }
+
+  static async searchUser (input, onFailure) {
+    return await this.getAllFromRef(this.getNormalRef(UserModel).where('nickname', '>=', input.toLowerCase()).where('nickname', '<', StringUtils.makeLexiNext(input).toLowerCase()), UserModel, onFailure)
+  }
+
+  async addDeviceToken () {
+    let ref = this._getDocRef().collection('NotificationInfo').doc('deviceGroups')
+    let object = await ref.get()
+    let array = object.data().tokens
+    console.log(MessageHandler.token)
+    array = array.filter(obj => obj !== MessageHandler.token)
+    array.push(MessageHandler.token)
+    await ref.set({
+      tokens: array
+    })
+  }
+
+  async deleteDeviceToken () {
+    let ref = this._getDocRef().collection('NotificationInfo').doc('deviceGroups')
+    let object = await ref.get()
+    let array = object.data().tokens
+    console.log(MessageHandler.token)
+    array = array.filter(obj => obj !== MessageHandler.token)
+    await ref.set({
+      tokens: array
+    })
   }
 
   static _firestoreFields = [

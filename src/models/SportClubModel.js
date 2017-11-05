@@ -1,6 +1,7 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
 import firebase from 'firebase'
+import StringUtils from '../utils/StringUtils'
 
 /**
  * Class that only holds a key which is the name of this sportType
@@ -8,6 +9,8 @@ import firebase from 'firebase'
  */
 export class SportTypeModel extends FirebaseModel {
   static _firestoreFields = []
+
+  static collectionName = 'SportTypes'
 
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key, SportTypeModel._firestoreFields, SportTypeModel, keepListening, onSuccess, onFailure)
@@ -48,6 +51,16 @@ export default class SportClubModel extends FirebaseSubColModel {
     return await SportClubModel.getAllFromRef(SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true), SportClubModel, onFailure)
   }
 
+  /**
+   * Search a club by prefix
+   * @param input {String} (the prefix to search for)
+   * @param onFailure
+   * @return {Promise.<Array>}
+   */
+  static async searchClub (input, onFailure) {
+    return await this.getAllFromRef(this.getNormalRef(SportClubModel).where('name', '>=', input.toLowerCase()).where('name', '<', StringUtils.makeLexiNext(input).toLowerCase()), SportClubModel, onFailure)
+  }
+
   static _firestoreFields = [
     'admin',
     'information',
@@ -55,7 +68,8 @@ export default class SportClubModel extends FirebaseSubColModel {
     'name',
     'closed',
     'sportType',
-    'members'
+    'members',
+    'headerPic'
   ]
 
   static _subCollections = {
@@ -70,6 +84,7 @@ export default class SportClubModel extends FirebaseSubColModel {
   // Strings
   information
   name
+  headerPic
 
   // References
   admin // Reference to Users

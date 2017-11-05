@@ -10,7 +10,12 @@ import Vuex from 'vuex'
 import { store } from './store'
 import dateUtils from './utils/DateUtils'
 import VueChatScroll from 'vue-chat-scroll'
+import VueResource from 'vue-resource'
+import MessagingHandler from './utils/MessagingHandler'
+import FullCalendar from 'vue-full-calendar'
+
 require('firebase/firestore')
+window.jQuery = window.$ = require('jquery')
 
 const config = {
   apiKey: 'AIzaSyC21Ih6lJtA89S3CPca0FkkPiALPPB-XJw',
@@ -24,6 +29,9 @@ const config = {
 Vue.use(Vuetify)
 Vue.use(Vuex)
 Vue.use(VueChatScroll)
+Vue.use(VueResource)
+Vue.use(require('vue-moment'))
+Vue.use(FullCalendar)
 
 Vue.config.productionTip = false
 
@@ -36,8 +44,24 @@ new Vue({
   components: { App },
   created () {
     firebase.initializeApp(config)
-    firebase.firestore().enablePersistence()
+    try {
+      firebase.firestore().enablePersistence()
+    } catch (error) {
+      console.log('PERSISTENCE FAILED:')
+      console.log(error.message)
+    }
+    this.$store.dispatch('initUser')
+    this.initMessaging()
+  },
+  methods: {
+    initMessaging: async function () {
+      await MessagingHandler.init()
+    }
   }
 })
 
 Vue.filter('formatDate', dateUtils.dateToString)
+
+Vue.prototype.$last = function (item, list) {
+  return item === list[list.length - 1]
+}

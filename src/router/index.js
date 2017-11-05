@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 
 // Contact
 import ContactIndex from '../components/Contact/Index'
@@ -8,8 +7,17 @@ import ContactIndex from '../components/Contact/Index'
 // Event
 import Event from '../components/Event/Show'
 import EventIndex from '../components/Event/Index'
+import EventNew from '../components/Event/New'
+import EventHistory from '../components/Event/History'
 
 // Group
+import Group from '../components/Group/Show'
+import GroupIndex from '../components/Group/Index'
+import GroupNew from '../components/Group/New'
+
+// LocationBroadcast
+import LocationBroadcast from '../components/LocationBroadcast/Show'
+import LocationBroadcastNew from '../components/LocationBroadcast/New'
 
 // Setting
 import SettingIndex from '../components/Setting/Index'
@@ -19,19 +27,23 @@ import Feedback from '../components/Static/Feedback'
 import Help from '../components/Static/Help'
 
 // User
-import Signup from '../components/User/Signup'
+import Profile from '../components/User/Show'
+import Feed from '../components/Main/Feed'
+
+// Main
+import GeneralCalendarView from '../components/Main/GeneralCalendarView'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Hello',
-      component: Hello
+      path: '/event/new',
+      name: 'newEvent',
+      component: EventNew
     },
     {
-      path: '/events/:id',
+      path: '/event/:id',
       name: 'event',
       component: Event
     },
@@ -39,6 +51,36 @@ export default new Router({
       path: '/events',
       name: 'events',
       component: EventIndex
+    },
+    {
+      path: '/history',
+      name: 'history',
+      component: EventHistory
+    },
+    {
+      path: '/groups/:type?',
+      name: 'groups',
+      component: GroupIndex
+    },
+    {
+      path: '/group/new',
+      name: 'newGroup',
+      component: GroupNew
+    },
+    {
+      path: '/group/:id',
+      name: 'group',
+      component: Group
+    },
+    {
+      path: '/locationBroadcast/new',
+      name: 'newLocationBroadcast',
+      component: LocationBroadcastNew
+    },
+    {
+      path: '/locationBroadcast/:id',
+      name: 'locationBroadcast',
+      component: LocationBroadcast
     },
     {
       path: '/contacts',
@@ -61,9 +103,24 @@ export default new Router({
       component: Help
     },
     {
-      path: '/signup',
-      name: 'signup',
-      component: Signup
+      path: '/profile/:id?',
+      name: 'profile',
+      component: Profile
+    },
+    {
+      path: '/feed',
+      name: 'feed',
+      component: Feed
+    },
+    {
+      path: '/calendar',
+      name: 'calendar',
+      component: GeneralCalendarView
+    },
+    {
+      path: '/',
+      name: 'root',
+      component: Feed
     }
   ]
 })

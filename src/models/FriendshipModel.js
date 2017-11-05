@@ -1,44 +1,104 @@
 import FirebaseModel from './FirebaseModel'
-import firebase from 'firebase'
+import UserModel from './UserModel'
+import ConversationGroupModel from './ConversationGroupModel'
 
 export default class FriendshipModel extends FirebaseModel {
 
   static _firestoreFields = [
-    'userKey1',
-    'userKey2',
-    'closeFriend'
+    'friends',
+    'closeFriend',
+    'conversationRef'
   ]
 
   static collectionName = 'Friendship'
 
+  async initConversationModel (onFailure) {
+    let conversationModel = new ConversationGroupModel()
+    let name = ''
+    conversationModel.participants = {}
+    for (let friend of Object.keys(this.friends)) {
+      conversationModel.participants[friend] = true
+      let friendModel = await UserModel.getFromRef((new UserModel(friend))._getDocRef(), UserModel, onFailure)
+      name += friendModel.nickname + ' - '
+    }
+    name = name.substr(0, name.length - 3)
+    conversationModel.name = name
+    await conversationModel.save()
+    this.conversationRef = conversationModel._getDocRef()
+  }
+
   static async getFriendsOfCurrentUser (onFailure) {
-    let ref = FriendshipModel.getNormalRef(FriendshipModel)
-    let ref2 = ref
-    ref = ref.where('userKey1', '==', firebase.auth().currentUser.uid)
-    ref2 = ref2.where('userKey2', '==', firebase.auth().currentUser.uid)
-    let list = await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
-    list.push(...(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure)))
-    console.log(await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure))
-    console.log(await FriendshipModel.getAllFromRef(ref2, FriendshipModel, onFailure))
-    return list
+    let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', true)
+    return await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
+  }
+
+  static async getFriendRequests (onFailure) {
+    let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', false)
+    return await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
+  }
+
+  async getFriend (onFailure) {
+    return await UserModel.getFromRef(this.getFriendRef(), UserModel, onFailure)
+  }
+
+  static async getFriendship (user1, user2, onFailure) {
+    return (await FriendshipModel.getAllFromRef(FriendshipModel.getNormalRef(FriendshipModel)
+      .where('friends.' + user1, '==', true)
+      .where('friends.' + user2, '==', true), FriendshipModel, onFailure))[0]
+  }
+
+  getFriendRef () {
+    for (let key of Object.keys(this.friends)) {
+      if (key !== (new UserModel()).key) {
+        return (new UserModel(key))._getDocRef()
+      }
+    }
+  }
+
+  isMutualFriend () {
+    for (let key of Object.keys(this.friends)) {
+      if (this.friends[key] === false) {
+        return false
+      }
+    }
+    return true
+  }
+
+  /**
+   * Sends a friendRequest to the specified user (with key === userKey)
+   * @param userKey String
+   * @param closeFriend Boolean
+   * @param onFailure
+   * @return {Promise.<FriendshipModel>}
+   */
+  static async sendRequest (userKey, closeFriend, onFailure) {
+    let myKey = (new UserModel()).key
+    let friendship = new FriendshipModel()
+    friendship.friends = {}
+    friendship.friends[myKey] = true
+    friendship.friends[userKey] = false
+    friendship.closeFriend = closeFriend || false
+    await friendship.initConversationModel(onFailure)
+    await friendship.save()
+    console.log(friendship)
+    return friendship
   }
 
   // Booleans
   closeFriend
 
-  // Strings
-  userKey1
-  userKey2
+  // Object
 
-  getUser1 () {
-    return this.makeDoc('Users', this.userKey1)
-  }
+  /**
+   * This is an object with keys: UserModel Keys
+   * and values: true == is friend or sent the request || false == received the request, but didn't accept yet.
+   */
+  friends
 
-  getUser2 () {
-    return this.makeDoc('Users', this.userKey2)
-  }
+  // References
+  conversationRef
 
   constructor (key, keepListening, onSuccess, onFailure) {
-    super(key, FriendshipModel._subCollections, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)
+    super(key, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)
   }
 }
