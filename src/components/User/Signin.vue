@@ -21,8 +21,8 @@
         <br>
         <hr class="divider">
         <br>
-        <v-btn block color="blue darken-4" @click="signIn()" disabled>Facebook</v-btn>
-        <v-btn block color="red darken-2" @click="signIn()" disabled>Google</v-btn>
+        <v-btn block color="blue darken-4" dark @click="signInWithFacebook()">Facebook</v-btn>
+        <v-btn block color="grey lighten-2" @click="signInWithGoogle()">Google</v-btn>
       </v-form>
     </v-card-text>
   </v-card>
@@ -30,6 +30,7 @@
 
 <script>
   import firebase from 'firebase'
+  import LoginUtils from '../../utils/LoginUtils'
 
   export default {
     data: () => ({
@@ -51,6 +52,18 @@
             this.$store.dispatch('signUserIn', this.user)
           }
         })
+      },
+      signInWithFacebook: async function () {
+        let filledModel = await LoginUtils.logInWithFacebook(error => { this.error = error.message })
+        if (filledModel !== undefined && filledModel.nickname === undefined) {
+          this.$router.push({name: 'landing', query: {page: 2, model: filledModel}})
+        }
+      },
+      signInWithGoogle: async function () {
+        let filledModel = await LoginUtils.logInWithGoogle(error => { this.error = error.message })
+        if (filledModel !== undefined && filledModel.nickname === undefined) {
+          this.$router.push({name: 'landing', query: {page: 2, model: filledModel}})
+        }
       }
     }
   }

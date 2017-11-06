@@ -8,7 +8,7 @@
             <v-card class="section-def__card">
               <v-card-text class="pa-0">
                 <v-container class="pa-0">
-                  <v-tabs light fixed centered >
+                  <v-tabs light fixed centered v-model="activeTab" >
 
                     <v-tabs-bar dark class="white">
                       <v-tabs-slider class="yellow"></v-tabs-slider>
@@ -54,9 +54,30 @@
       'sign-in': Signin,
       'sign-up': Signup
     },
+    onCreate () {
+      this.init()
+    },
+    watch: {
+      $route: function (newVal) {
+        this.init()
+      }
+    },
     data: () => ({
-      items: [ 'Sign In', 'Sign Up' ]
-    })
+      items: [ 'Sign In', 'Sign Up' ],
+      activeTab: 'tab-Sign In'
+    }),
+    methods: {
+      init () {
+        console.log('INITING LANDING!')
+        console.log(this.$route.query)
+        this.$store.dispatch('signUserOut')
+        if (this.$route.query !== undefined) {
+          if (this.$route.query.isSignUp) {
+            this.activeTab = 'tab-Sign Up'
+          }
+        }
+      }
+    }
   }
 </script>
 

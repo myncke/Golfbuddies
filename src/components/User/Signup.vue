@@ -100,9 +100,23 @@ export default {
       if (value !== null && value !== undefined) {
         this.$router.push('/')
       }
+    },
+    $route: function () {
+      this.init()
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
+    init: function () {
+      if (this.$route.params !== undefined) {
+        this.page = Math.min(Math.max(this.$route.params.page || 1, 1), 3)
+        if (this.$route.params.model) {
+          this.model = this.$route.params.model
+        }
+      }
+    },
     async onSignup () {
       if (this.valid) {
         await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)

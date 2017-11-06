@@ -50,7 +50,13 @@ new Vue({
       console.log('PERSISTENCE FAILED:')
       console.log(error.message)
     }
-    this.$store.dispatch('initUser')
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function () {
+        this.$store.dispatch('initUser')
+      }.bind(this))
+      .catch(function (error) {
+        console.log(error)
+      })
     this.initMessaging()
   },
   methods: {
