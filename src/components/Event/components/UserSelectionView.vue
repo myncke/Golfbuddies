@@ -57,7 +57,6 @@
 <script>
   import UserSearch from '../../Shared/Search/UserSearch'
   import GroupSearch from '../../Shared/Search/GroupSearch'
-  import GameModel from '../../../models/GameModel'
   export default {
     data: () => ({
       invitedUsers: [],
@@ -66,7 +65,7 @@
       showGroups: false
     }),
     props: {
-      model: GameModel
+      model: Object
     },
     watch: {
       model: function (newVal) {

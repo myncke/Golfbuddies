@@ -23,9 +23,9 @@
             </v-flex>
             <v-flex>
               <p class="caption ma-0" color="grey--after lighten-1">
-                {{model.inviteOnly ? 'Public' : 'Private' }} 
+                {{model.inviteOnly ? 'Public' : 'Private' }}
                 &#9679; Hosted by
-                <a href="">{{ model.creator.name || 'Unkown' }}</a>
+                <a href="">{{ creator.firstName || 'Unkown' }} {{ creator.lastName || ''}}</a>
               </p>
               <v-divider class="mt-2"></v-divider>
               <p class="caption ma-0 pt-2"> <v-icon :style="{ fontSize: 15+ 'px' }">location_on</v-icon> {{model.locationString}}</p>
@@ -57,6 +57,15 @@
         <participants-card></participants-card>
       </v-flex>
 
+      <v-flex v-if="isMyGame" class="mt-3">
+        <v-btn color="primary" block @click="inviting = true">Invite User</v-btn>
+        <v-dialog v-model="inviting" persistent>
+          <v-card>
+            <selection-view :model="invitees"></selection-view>
+            <v-btn block color="primary" @click="addPeople">Add People</v-btn>
+          </v-card>
+        </v-dialog>
+      </v-flex>
 
       <v-flex class="mt-3">
         <v-card>
@@ -111,6 +120,8 @@ import Location from './Show/Location'
 import Pictures from './Show/Pictures'
 import Details from './Show/Details'
 import Participants from './Show/Participants'
+import UserSelectionView from './components/UserSelectionView'
+import UserModel from '../../models/UserModel'
 
 export default {
   data: () => ({
@@ -118,11 +129,18 @@ export default {
     subModel: {},
     messages: [],
     error: '',
-    tabs: ['Details', 'Location', 'Pictures']
+    tabs: ['Details', 'Location', 'Pictures'],
+    creator: {},
+    invitees: {invites: {}},
+    inviting: false
   }),
+  computed: {
+    isMyGame: function () {
+      return this.model.getCreator() === this.$store.getters.user.key
+    }
+  },
   created: function () {
     this.initModel(this.$route.params.id)
-    console
   },
   methods: {
     initModel: async function (gameId) {
@@ -131,9 +149,22 @@ export default {
       this.subModel = await GameModel.getFromRef(this.model.subGame, subClass, this.onFailure)
       // this.messages = await this.model.getFirstXMessages(0, 100, error => { this.error = error.message })
       this.messages = await this.model.initSubcollection('Messages', this.onFailure)
+      this.initCreator()
+    },
+    initCreator: async function () {
+      this.creator = await UserModel.getFromRef(this.model.creator, UserModel, this.onFailure)
     },
     onFailure: function (error) {
       this.error = error.message
+    },
+    addPeople: function () {
+      let invitees = this.invitees
+      this.invitees = {invites: {}}
+      for (let invites of Object.keys(invitees.invites)) {
+        this.model.invites[invites] = invitees.invites[invites]
+      }
+      this.inviting = false
+      this.model.save()
     }
   },
   components: {
@@ -141,7 +172,8 @@ export default {
     'location-tab': Location,
     'pictures-tab': Pictures,
     'details-tab': Details,
-    'participants-card': Participants
+    'participants-card': Participants,
+    'selection-view': UserSelectionView
   }
 }
 </script>

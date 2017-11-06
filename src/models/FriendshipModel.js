@@ -1,5 +1,6 @@
 import FirebaseModel from './FirebaseModel'
 import UserModel from './UserModel'
+import ConversationGroupModel from './ConversationGroupModel'
 
 export default class FriendshipModel extends FirebaseModel {
 
@@ -10,6 +11,21 @@ export default class FriendshipModel extends FirebaseModel {
   ]
 
   static collectionName = 'Friendship'
+
+  async initConversationModel (onFailure) {
+    let conversationModel = new ConversationGroupModel()
+    let name = ''
+    conversationModel.participants = {}
+    for (let friend of Object.keys(this.friends)) {
+      conversationModel.participants[friend] = true
+      let friendModel = await UserModel.getFromRef((new UserModel(friend))._getDocRef(), UserModel, onFailure)
+      name += friendModel.nickname + ' - '
+    }
+    name = name.substr(0, name.length - 3)
+    conversationModel.name = name
+    await conversationModel.save()
+    this.conversationRef = conversationModel._getDocRef()
+  }
 
   static async getFriendsOfCurrentUser (onFailure) {
     let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', true)
@@ -23,6 +39,12 @@ export default class FriendshipModel extends FirebaseModel {
 
   async getFriend (onFailure) {
     return await UserModel.getFromRef(this.getFriendRef(), UserModel, onFailure)
+  }
+
+  static async getFriendship (user1, user2, onFailure) {
+    return (await FriendshipModel.getAllFromRef(FriendshipModel.getNormalRef(FriendshipModel)
+      .where('friends.' + user1, '==', true)
+      .where('friends.' + user2, '==', true), FriendshipModel, onFailure))[0]
   }
 
   getFriendRef () {
@@ -47,7 +69,7 @@ export default class FriendshipModel extends FirebaseModel {
    * @param userKey String
    * @param closeFriend Boolean
    * @param onFailure
-   * @return {Promise.<void>}
+   * @return {Promise.<FriendshipModel>}
    */
   static async sendRequest (userKey, closeFriend, onFailure) {
     let myKey = (new UserModel()).key
@@ -55,10 +77,11 @@ export default class FriendshipModel extends FirebaseModel {
     friendship.friends = {}
     friendship.friends[myKey] = true
     friendship.friends[userKey] = false
-    friendship.closeFriend = closeFriend
-    // TODO: this should be inited or not?
-    friendship.conversationRef = undefined
+    friendship.closeFriend = closeFriend || false
+    await friendship.initConversationModel(onFailure)
     await friendship.save()
+    console.log(friendship)
+    return friendship
   }
 
   // Booleans
@@ -76,6 +99,6 @@ export default class FriendshipModel extends FirebaseModel {
   conversationRef
 
   constructor (key, keepListening, onSuccess, onFailure) {
-    super(key, FriendshipModel._subCollections, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)
+    super(key, FriendshipModel._firestoreFields, FriendshipModel, keepListening, onSuccess, onFailure)
   }
 }

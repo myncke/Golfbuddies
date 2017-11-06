@@ -14,6 +14,16 @@
         </v-card>
       </v-flex>
 
+      <v-btn color="primary" @click="inviting = true" block v-if="isMyGroup">Add Members</v-btn>
+      <v-dialog v-if="isMyGroup" v-model="inviting" persistent>
+        <v-card>
+          <selection-view :model="invitees"></selection-view>
+          <v-btn block color="primary" @click="addPeople">Add People</v-btn>
+        </v-card>
+      </v-dialog>
+
+      <v-btn color="primary" @click="joinGroup" block v-if="canJoin">Join Group</v-btn>
+
       <v-tabs class="elevation-1 mt-3" scrollable grow>
         <v-tabs-bar class="white">
           <v-tabs-slider class="yellow"></v-tabs-slider>
@@ -66,13 +76,16 @@
   import Members from './Show/Members'
   import Pictures from './Show/Pictures'
   import Details from './Show/Details'
+  import UserSelectionView from '../Event/components/UserSelectionView'
 
   export default {
     data: () => ({
       club: undefined,
       members: [],
       games: [],
-      tabs: ['Events', 'Members', 'Pictures', 'Details']
+      inviting: false,
+      tabs: ['Events', 'Members', 'Pictures', 'Details'],
+      invitees: {invites: []}
     }),
     created: function () {
       this.initClub()
@@ -82,8 +95,17 @@
         this.initClub()
       }
     },
+    computed: {
+      isMyGroup: function () {
+        return this.club.getAdmin() === this.$store.getters.user.key
+      },
+      canJoin: function () {
+        return (!this.club.closed && this.club.members[this.$store.getters.user.key] !== true && !this.isMyGroup)
+      }
+    },
     methods: {
       initClub: function () {
+        this.members = []
         this.games = []
         let groupId = this.$route.params.id
         console.log(new SportClubModel(groupId, false, (model) => {
@@ -94,7 +116,6 @@
       },
       initMembers: async function (club) {
         for (let member of Object.keys(club.members)) {
-          // TODO: THIS IS UGLY
           console.log(new UserModel(member, false, model => { this.members.push(model) }, error => { this.error = error.message }))
         }
       },
@@ -109,13 +130,31 @@
             throw error
           }))
         }
+      },
+      addPeople: function () {
+        let invitees = this.invitees
+        this.invitees = {invites: []}
+        for (let invites of Object.keys(invitees.invites)) {
+          this.club.members[invites] = true
+        }
+        this.inviting = false
+        this.club.save()
+        this.members = []
+        this.initMembers(this.club)
+      },
+      joinGroup: function () {
+        let user = this.$store.getters.user
+        this.members.push(user)
+        this.club.members[user.key] = true
+        this.club.save()
       }
     },
     components: {
       'events-tab': Events,
       'members-tab': Members,
       'pictures-tab': Pictures,
-      'details-tab': Details
+      'details-tab': Details,
+      'selection-view': UserSelectionView
     }
   }
 </script>
