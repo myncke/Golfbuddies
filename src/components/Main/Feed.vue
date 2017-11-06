@@ -21,7 +21,7 @@
                     <v-layout row>
                       <join-event :gameModel="item"></join-event>
                       <v-btn small flat value="maybe" color="blue-grey" class="caption">
-                        <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe 
+                        <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
                       </v-btn>
                       <v-btn small flat value="ignore" color="blue-grey" class="caption">
                         <v-icon left dark color="" class="caption">clear</v-icon>Ignore
@@ -122,7 +122,7 @@
         })
       },
       initFeed: async function () {
-        this.events = await GameModel.getAllOpenGames(console.log('ERROR'))
+        this.events = await GameModel.getAllUpcomingGames(error => console.log(error))
         console.log(this.events)
       }
     },

@@ -41,6 +41,7 @@ class FirebaseModel {
    * @returns {firebase.firestore.DocumentReference}
    */
   _getDocRef () {
+    console.log(this.modelClass.collectionName)
     return firebase.firestore().collection(this.modelClass.collectionName).doc(this.key)
   }
 

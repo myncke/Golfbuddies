@@ -6,6 +6,10 @@
           <p class="title">Profile</p>
           <v-spacer></v-spacer>
           <v-switch label="Edit Mode" v-model="editMode" v-if="isMyProfile"></v-switch>
+          <v-btn @click="addFriendRequest" icon v-else>
+            <v-icon v-if="isAFriend">favorite</v-icon>
+            <v-icon v-else>favorite_border</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text v-if="model !== undefined">
 
@@ -103,6 +107,7 @@
   import UserModel, {sexes} from '../../models/UserModel'
   import LocationUtils from '../../utils/LocationUtils'
   import GolfuserProfileCard from './components/GolfuserProfileCard'
+  import FriendshipModel from '../../models/FriendshipModel'
 
   let refs = ['golf']
 
@@ -113,30 +118,47 @@
       countries: [],
       sexes: [],
       snackbar: false,
-      loading: false
+      loading: false,
+      isFriend: undefined
     }),
     computed: {
       isMyProfile: function () {
-        return this.model.key === this.$store.getters.currentUser
+        return this.model.key === this.$store.getters.user.key
+      },
+      isAFriend: function () {
+        console.log(this.isFriend)
+        return (this.isFriend !== undefined && this.isFriend.friends[this.$store.getters.user.key] === true)
       }
     },
     created: function () {
-      let pId = this.$route.params.id
-      if (pId === undefined) {
-        if (this.$store.getters.currentUser === null) {
-          pId = this.$store.getters.currentUser.id
-        } else {
-          this.$router.push('/')
-        }
-      }
-
-      this.countries = LocationUtils.countries
-      this.sexes = sexes
-      this.initUserModel(pId)
+      this.init()
     },
     methods: {
+      init: function () {
+        let pId = this.$route.params.id
+        if (pId === undefined) {
+          if (this.$store.getters.currentUser === null) {
+            pId = this.$store.getters.currentUser.id
+          } else {
+            this.$router.push('/')
+          }
+        }
+
+        this.countries = LocationUtils.countries
+        this.sexes = sexes
+        this.initUserModel(pId)
+      },
       initUserModel: async function (pId) {
-        this.model = new UserModel(pId, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
+        this.model = new UserModel(pId, false, model => {
+          this.model = undefined
+          this.model = model
+          if (!this.isMyProfile) {
+            this.initIsFriend()
+          }
+        }, error => { this.error = error.message })
+      },
+      initIsFriend: async function () {
+        this.isFriend = (await FriendshipModel.getFriendship(this.model.key, this.$store.getters.user.key, error => console.log(error)))
       },
       setEditMode: function (mode) {
         for (let ref of refs) {
@@ -153,6 +175,20 @@
         this.loading = false
         this.editMode = false
         this.snackbar = true
+      },
+      addFriendRequest: async function () {
+        if (this.isFriend === undefined) {
+          this.isFriend = await FriendshipModel.sendRequest(this.model.key, false, error => console.log(error))
+        } else {
+          let isFriend = this.isFriend.friends[this.$store.getters.user.key]
+          if (isFriend) {
+            await this.isFriend.deleteObject() // TODO: rethink this
+            this.isFriend = undefined
+          } else {
+            this.isFriend.friends[this.$store.getters.user.key] = true
+            await this.isFriend.save()
+          }
+        }
       }
     },
     watch: {

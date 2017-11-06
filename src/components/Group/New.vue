@@ -64,7 +64,6 @@
 
 <script>
   import SportClubModel, { SportTypeModel } from '../../models/SportClubModel'
-  import UserModel from '../../models/UserModel'
   import LocationUtils from '../../utils/LocationUtils'
 
   export default {
@@ -88,8 +87,10 @@
         this.model.closed = this.model.closed || false
         await this.getLocation()
         // TODO: We have to find a way to init the members
+        let user = this.$store.getters.user
         this.model.members = {}
-        this.model.admin = (new UserModel())._getDocRef()
+        this.model.members[user.key] = true
+        this.model.admin = user._getDocRef()
         await this.model.save()
         this.$router.push({
           name: 'group', params: { clubId: this.model.key }

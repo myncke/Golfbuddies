@@ -136,6 +136,9 @@ export default {
       let uid = firebase.auth().currentUser.uid
       let userModel = user.getModel()
       userModel.key = uid
+      userModel.nickname = userModel.nickname.toLowerCase()
+      userModel.firstName = userModel.firstName.toLowerCase()
+      userModel.lastName = userModel.lastName.toLowerCase()
 
       let golfModel = golf.getModel()
       golfModel.key = uid
