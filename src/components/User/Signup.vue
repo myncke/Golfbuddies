@@ -86,7 +86,7 @@ export default {
       valid: true,
       loading: false,
       passwordRules: [
-        (v) => (!!v && v === this.password) || 'Passwords do not match'
+        (v) => ((!!v && v === this.password) || this.model.isSocial) || 'Passwords do not match'
       ]
     }
   },
@@ -103,6 +103,11 @@ export default {
     },
     $route: function () {
       this.init()
+    },
+    model: function (newVal) {
+      if (this.model.isSocial) {
+        this.valid = true
+      }
     }
   },
   created () {
@@ -110,12 +115,6 @@ export default {
   },
   methods: {
     init: function () {
-      if (this.$route.params !== undefined) {
-        this.page = Math.min(Math.max(this.$route.params.page || 1, 1), 3)
-        if (this.$route.params.model) {
-          this.model = this.$route.params.model
-        }
-      }
     },
     async onSignup () {
       if (this.valid) {
@@ -146,19 +145,33 @@ export default {
         return
       }
 
-      await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
-      let uid = firebase.auth().currentUser.uid
       let userModel = user.getModel()
-      userModel.key = uid
-
       let golfModel = golf.getModel()
-      golfModel.key = uid
+
+      if (!this.model.isSocial) {
+        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
+        let uid = firebase.auth().currentUser.uid
+        userModel.key = uid
+        golfModel.key = uid
+      } else {
+        this.$store.commit('setUser', userModel)
+      }
+
       golfModel.userKey = userModel._getDocRef()
 
+      console.log('SAVING')
+      console.log(firebase.auth().currentUser)
       userModel.save()
       golfModel.save()
 
       this.loading = false
+    },
+    makeSocialUser: function (filledModel) {
+      this.model = filledModel
+      console.log(filledModel)
+      this.$refs.user.setModel(filledModel)
+      this.page = 2
+      console.log('MAKING SOCIAL USER')
     }
   },
   components: {

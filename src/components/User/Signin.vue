@@ -56,13 +56,13 @@
       signInWithFacebook: async function () {
         let filledModel = await LoginUtils.logInWithFacebook(error => { this.error = error.message })
         if (filledModel !== undefined && filledModel.nickname === undefined) {
-          this.$router.push({name: 'landing', query: {page: 2, model: filledModel}})
+          this.$emit('social-user', filledModel)
         }
       },
       signInWithGoogle: async function () {
         let filledModel = await LoginUtils.logInWithGoogle(error => { this.error = error.message })
         if (filledModel !== undefined && filledModel.nickname === undefined) {
-          this.$router.push({name: 'landing', query: {page: 2, model: filledModel}})
+          this.$emit('social-user', filledModel)
         }
       }
     }

@@ -25,7 +25,6 @@ import SettingIndex from '../components/Setting/Index'
 // Static
 import Feedback from '../components/Static/Feedback'
 import Help from '../components/Static/Help'
-import LandingView from '../components/Static/Landing'
 
 // User
 import Profile from '../components/User/Show'
@@ -122,11 +121,6 @@ export default new Router({
       path: '/',
       name: 'root',
       component: Feed
-    },
-    {
-      path: '/landing',
-      name: 'landing',
-      component: LandingView
     }
   ]
 })

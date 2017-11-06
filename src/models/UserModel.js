@@ -63,7 +63,7 @@ export default class UserModel extends FirebaseModel {
    * Only used for signing up/in with social logins
    * @type {boolean}
    */
-  isInited = false
+  isSocial = false
 
   // Strings
   firstName

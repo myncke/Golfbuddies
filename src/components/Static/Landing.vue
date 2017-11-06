@@ -29,8 +29,8 @@
                         :id="'tab-' + i"
                       >
 
-                        <sign-in v-if="i == 'Sign In'"> </sign-in>
-                        <sign-up v-else> </sign-up>
+                        <sign-in v-on:social-user="socialUser" v-if="i == 'Sign In'"> </sign-in>
+                        <sign-up ref="signup" v-else> </sign-up>
 
                       </v-tabs-content>
                     </v-tabs-items>
@@ -68,14 +68,13 @@
     }),
     methods: {
       init () {
+      },
+      socialUser (filledModel) {
         console.log('INITING LANDING!')
-        console.log(this.$route.query)
-        this.$store.dispatch('signUserOut')
-        if (this.$route.query !== undefined) {
-          if (this.$route.query.isSignUp) {
-            this.activeTab = 'tab-Sign Up'
-          }
-        }
+        console.log(filledModel)
+        // console.log(this.$refs)
+        this.activeTab = 'tab-Sign Up'
+        this.$refs.signup[0].makeSocialUser(filledModel)
       }
     }
   }
