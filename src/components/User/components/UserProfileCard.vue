@@ -104,6 +104,9 @@
       },
       isValid () {
         return this.valid
+      },
+      setModel (model) {
+        this.model = model
       }
     },
     components: {

@@ -8,7 +8,7 @@
             <v-card class="section-def__card">
               <v-card-text class="pa-0">
                 <v-container class="pa-0">
-                  <v-tabs light fixed centered >
+                  <v-tabs light fixed centered v-model="activeTab" >
 
                     <v-tabs-bar dark class="white">
                       <v-tabs-slider class="yellow"></v-tabs-slider>
@@ -29,8 +29,8 @@
                         :id="'tab-' + i"
                       >
 
-                        <sign-in v-if="i == 'Sign In'"> </sign-in>
-                        <sign-up v-else> </sign-up>
+                        <sign-in v-on:social-user="socialUser" v-if="i == 'Sign In'"> </sign-in>
+                        <sign-up ref="signup" v-else> </sign-up>
 
                       </v-tabs-content>
                     </v-tabs-items>
@@ -54,9 +54,29 @@
       'sign-in': Signin,
       'sign-up': Signup
     },
+    onCreate () {
+      this.init()
+    },
+    watch: {
+      $route: function (newVal) {
+        this.init()
+      }
+    },
     data: () => ({
-      items: [ 'Sign In', 'Sign Up' ]
-    })
+      items: [ 'Sign In', 'Sign Up' ],
+      activeTab: 'tab-Sign In'
+    }),
+    methods: {
+      init () {
+      },
+      socialUser (filledModel) {
+        console.log('INITING LANDING!')
+        console.log(filledModel)
+        // console.log(this.$refs)
+        this.activeTab = 'tab-Sign Up'
+        this.$refs.signup[0].makeSocialUser(filledModel)
+      }
+    }
   }
 </script>
 

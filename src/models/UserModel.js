@@ -59,6 +59,11 @@ export default class UserModel extends FirebaseModel {
   static collectionName = 'Users'
 
   // Booleans
+  /**
+   * Only used for signing up/in with social logins
+   * @type {boolean}
+   */
+  isSocial = false
 
   // Strings
   firstName

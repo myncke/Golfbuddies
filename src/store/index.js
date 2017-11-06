@@ -18,7 +18,14 @@ export const store = new Vuex.Store({
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            const newUser = new UserModel(user.uid, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
+            const newUser = new UserModel(user.uid, false, model => {
+              if (model.nickname !== undefined) {
+                (new UserModel()).addDeviceToken()
+                commit('setUser', newUser)
+              } else {
+                commit('setUser', null)
+              }
+            }, error => { this.error = error.message })
             commit('setUser', newUser)
           }
         )
@@ -29,13 +36,17 @@ export const store = new Vuex.Store({
         )
     },
     signUserIn ({commit}, payload) {
-      // TODO: add new usermodel to the central state
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            const newUser = new UserModel(user.uid, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message })
-            commit('setUser', newUser);
-            (new UserModel()).addDeviceToken()
+            const newUser = new UserModel(user.uid, false, model => {
+              if (model.nickname !== undefined) {
+                (new UserModel()).addDeviceToken()
+                commit('setUser', newUser)
+              } else {
+                commit('setUser', null)
+              }
+            }, error => { this.error = error.message })
           }
         )
         .catch(
@@ -59,9 +70,25 @@ export const store = new Vuex.Store({
         )
     },
     initUser ({commit}) {
+      let makeUser = function (key) {
+        let userModel = new UserModel(key, false, model => {
+          if (model.nickname !== undefined) {
+            commit('setUser', userModel)
+          } else {
+            commit('setUser', null)
+          }
+        }, error => { this.error = error.message })
+      }
+
+      const currentUser = firebase.auth().currentUser
+      if (currentUser !== null) {
+        makeUser(currentUser.uid)
+        return
+      }
+
       firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-          commit('setUser', new UserModel(user.uid, false, model => { this.model = undefined; this.model = model }, error => { this.error = error.message }))
+          makeUser(user.uid)
         }
       })
     }

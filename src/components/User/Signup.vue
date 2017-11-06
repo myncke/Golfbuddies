@@ -86,7 +86,7 @@ export default {
       valid: true,
       loading: false,
       passwordRules: [
-        (v) => (!!v && v === this.password) || 'Passwords do not match'
+        (v) => ((!!v && v === this.password) || this.model.isSocial) || 'Passwords do not match'
       ]
     }
   },
@@ -100,9 +100,22 @@ export default {
       if (value !== null && value !== undefined) {
         this.$router.push('/')
       }
+    },
+    $route: function () {
+      this.init()
+    },
+    model: function (newVal) {
+      if (this.model.isSocial) {
+        this.valid = true
+      }
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
+    init: function () {
+    },
     async onSignup () {
       if (this.valid) {
         await firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
@@ -132,8 +145,6 @@ export default {
         return
       }
 
-      await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
-      let uid = firebase.auth().currentUser.uid
       let userModel = user.getModel()
       userModel.key = uid
       userModel.nickname = userModel.nickname.toLowerCase()
@@ -141,13 +152,31 @@ export default {
       userModel.lastName = userModel.lastName.toLowerCase()
 
       let golfModel = golf.getModel()
-      golfModel.key = uid
+
+      if (!this.model.isSocial) {
+        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
+        let uid = firebase.auth().currentUser.uid
+        userModel.key = uid
+        golfModel.key = uid
+      } else {
+        this.$store.commit('setUser', userModel)
+      }
+
       golfModel.userKey = userModel._getDocRef()
 
+      console.log('SAVING')
+      console.log(firebase.auth().currentUser)
       userModel.save()
       golfModel.save()
 
       this.loading = false
+    },
+    makeSocialUser: function (filledModel) {
+      this.model = filledModel
+      console.log(filledModel)
+      this.$refs.user.setModel(filledModel)
+      this.page = 2
+      console.log('MAKING SOCIAL USER')
     }
   },
   components: {
