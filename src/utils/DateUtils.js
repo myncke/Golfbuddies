@@ -22,5 +22,9 @@ export default {
     console.log(result.toUTCString())
 
     return result
+  },
+  addDays (amount, date) {
+    date.setDate(date.getDate() + amount)
+    return date
   }
 }
