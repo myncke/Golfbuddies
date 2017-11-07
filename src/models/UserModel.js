@@ -65,6 +65,8 @@ export default class UserModel extends FirebaseModel {
    */
   isSocial = false
 
+  isAdmin = false
+
   // Strings
   firstName
   lastName
@@ -92,5 +94,29 @@ export default class UserModel extends FirebaseModel {
    */
   constructor (key, keepListening, onSuccess, onFailure) {
     super(key || firebase.auth().currentUser.uid, UserModel._firestoreFields, UserModel, keepListening, onSuccess, onFailure)
+
+    if (key !== undefined) {
+      this.initAdmin()
+    }
+  }
+
+  async initAdmin () {
+    this.isAdmin = await AdminModel.isAdmin(this.key)
+  }
+}
+
+class AdminModel extends FirebaseModel {
+
+  static async isAdmin (userKey) {
+    let result = (await AdminModel.getFromRef(AdminModel.getNormalRef(AdminModel).doc(userKey), AdminModel, (error) => console.log(error)))
+    return result !== undefined
+  }
+
+  static _firestoreFields = []
+
+  static collectionName = 'Admin'
+
+  constructor (key, keepListening, onSuccess, onFailure) {
+    super(key, AdminModel._firestoreFields, AdminModel, keepListening, onSuccess, onFailure)
   }
 }
