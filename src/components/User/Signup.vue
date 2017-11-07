@@ -146,7 +146,6 @@ export default {
       }
 
       let userModel = user.getModel()
-      userModel.key = uid
       userModel.nickname = userModel.nickname.toLowerCase()
       userModel.firstName = userModel.firstName.toLowerCase()
       userModel.lastName = userModel.lastName.toLowerCase()
