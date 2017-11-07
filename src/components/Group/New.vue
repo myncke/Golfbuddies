@@ -9,25 +9,25 @@
         <v-layout row wrap>
           <v-flex md6 xs12 class="input-field">
             <v-text-field
-              name="Club Name"
-              label="Club Name"
+              name="Group Name"
+              label="Group Name"
               v-model="model.name"
               required
             ></v-text-field>
           </v-flex>
           <v-flex md6 xs12 class="input-field">
             <v-text-field
-              name="Club Location"
-              label="Club Location"
-              v-model="model.location"
+              name="Group Location"
+              label="Group Location"
+              v-model="model.textLocation"
               required
               prepend-icon="location_on"
             ></v-text-field>
           </v-flex>
           <v-flex xs12 class="input-field">
             <v-text-field
-              name="Club Information"
-              label="Club Information"
+              name="Group Information"
+              label="Group Information"
               v-model="model.information"
               required
               multiLine
@@ -85,15 +85,15 @@
       createClub: async function () {
         this.model.sportType = this.sportTypeMap[this.model.sportType]
         this.model.closed = this.model.closed || false
+        this.model.name = this.model.name.toLowerCase()
         await this.getLocation()
-        // TODO: We have to find a way to init the members
         let user = this.$store.getters.user
         this.model.members = {}
         this.model.members[user.key] = true
         this.model.admin = user._getDocRef()
         await this.model.save()
         this.$router.push({
-          name: 'group', params: { clubId: this.model.key }
+          name: 'group', params: { id: this.model.key }
         })
       },
       getLocation: async function () {

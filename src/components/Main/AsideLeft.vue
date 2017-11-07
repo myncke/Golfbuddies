@@ -98,7 +98,9 @@ export default {
   },
   methods: {
     initModels: async function () {
-      let list = (await SportClubModel.getPublicClubs(error => { this.error = error }))
+      this.clubModels = []
+      let list = (await SportClubModel.getMyClubs(error => { this.error = error }))
+      // list.push(...(await SportClubModel.getMyClubs(error => { this.error = error })))
       this.clubModels = list
     },
     goToGroupDetails: function (key) {

@@ -30,8 +30,9 @@
                   <vuetify-google-autocomplete
                     id="map"
                     append-icon="search"
+                    prepend-icon="location_on"
                     classname="form-control"
-                    placeholder="Start typing"
+                    placeholder="Event Location"
                     v-on:placechanged="getAddressData"
                     types="address"
                   >

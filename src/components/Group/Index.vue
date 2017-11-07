@@ -32,11 +32,11 @@
   import GroupSearch from '../Shared/Search/GroupSearch'
   import StringUtils from '../../utils/StringUtils'
 
-  // TODO: Use this to make a my clubs page aswell, easiest is to wrap this in a bigger GroupIndex and then pass the prop by checking the route params
+  /* Maybe later
   let typeMap = {
     'open': SportClubModel.getPublicClubs,
     'my': SportClubModel.getMyClubs
-  }
+  } */
 
   export default {
     data: () => ({
@@ -54,10 +54,17 @@
     },
     methods: {
       initModels: async function () {
-        this.type = this.$route.params.type || 'open'
+        // this.type = this.$route.params.type || 'open'
+        // let list = (await typeMap[this.type](error => { this.error = error }))
+
         this.clubModels = []
-        let list = (await typeMap[this.type](error => { this.error = error }))
-        this.clubModels = list
+        let result = {}
+        let list = await SportClubModel.getPublicClubs(error => { this.error = error.message })
+        list.forEach((element) => { result[element.key] = element })
+        list = await SportClubModel.getMyClubs(error => { this.error = error.message })
+        list.forEach((element) => { result[element.key] = element })
+        console.log(Object.values(result))
+        this.clubModels = Object.values(result)
       },
       goToGroupDetails: function (key) {
         this.$router.push({
