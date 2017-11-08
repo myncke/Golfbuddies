@@ -43,6 +43,11 @@ export default new Router({
       component: EventNew
     },
     {
+      path: '/event/edit/:id',
+      name: 'editEvent',
+      component: EventNew
+    },
+    {
       path: '/event/:id',
       name: 'event',
       component: Event

@@ -21,6 +21,9 @@
 
                   ></v-text-field>
                 </v-flex>
+
+                <!-- TODO: this needs to be filled in, no idea how though -->
+
                 <v-flex md6 xs12 class="input-field">
                   <v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
                                 :rules="rules.dateRules"
@@ -33,6 +36,7 @@
                     classname="form-control"
                     placeholder="Start typing"
                     v-on:placechanged="getAddressData"
+                    :placeholder="model.locationString"
                     types="address"
                   >
                   </vuetify-google-autocomplete>
@@ -147,11 +151,20 @@
       loading: false
     }),
     created: function () {
-      this.model = new GameModel()
-      this.sexes = PrefGameSex
-      this.sportTypes = Object.keys(GameTypeNames)
+      this.init()
     },
     methods: {
+      init: function () {
+        let id = this.$route.params.id
+        console.log(id)
+        if (id !== undefined) {
+          this.model = new GameModel(id, false, model => { this.model = undefined; this.model = model; console.log(model) }, error => console.log(error))
+        } else {
+          this.model = new GameModel()
+        }
+        this.sexes = PrefGameSex
+        this.sportTypes = Object.keys(GameTypeNames)
+      },
       nextPage: async function () {
         if (!this.valid) return
         if (this.page < 3) {
