@@ -97,7 +97,7 @@
       </v-stepper-content>
       <v-stepper-content step="3">
         <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
-        <user-selection :model="model"></user-selection>
+        <user-selection email :model="model"></user-selection>
       </v-stepper-content>
     </v-stepper>
     <v-layout row style="height: auto">

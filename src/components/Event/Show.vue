@@ -59,9 +59,9 @@
 
       <v-flex v-if="isMyGame" class="mt-3">
         <v-btn color="primary" block @click="inviting = true">Invite User</v-btn>
-        <v-dialog v-model="inviting" persistent>
+        <v-dialog max-width="500" v-model="inviting" persistent>
           <v-card>
-            <selection-view :model="invitees"></selection-view>
+            <selection-view email :model="invitees"></selection-view>
             <v-btn block color="primary" @click="addPeople">Add People</v-btn>
           </v-card>
         </v-dialog>
@@ -160,6 +160,7 @@ export default {
     addPeople: function () {
       let invitees = this.invitees
       this.invitees = {invites: {}}
+      console.log(this.invitees)
       for (let invites of Object.keys(invitees.invites)) {
         this.model.invites[invites] = invitees.invites[invites]
       }

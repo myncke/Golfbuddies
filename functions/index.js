@@ -70,24 +70,38 @@ const mailTransport = nodemailer.createTransport({
 
 const APP_NAME = 'GolfBuddies';
 
-exports.sendWelcomeEmail = functions.firestore
-  .document('Notification/{notifId}')
-  .onCreate(event => {
+exports.sendInviteEmail = functions.firestore
+  .document('Game/{eventId}')
+  .onWrite(event => {
     const prevData = event.data.previous.data()
-    const newDate = event.data.data()
-    const user = event.data;
+    const newData = event.data.data()
+    console.log(prevData)
+    console.log(newData)
 
-    const email = user.email;
-    const displayName = user.displayName;
+    const newInvites = newData.invites
+    const oldInvites = prevData.invites
 
-    return sendWelcomeEmail(email);
+    let promises = []
+    let emails = Object.keys(newInvites)
+    emails = emails.filter((element) => oldInvites[element] === undefined && isEmail(element))
+
+    for (let email of emails) {
+      promises.push(sendInviteEmail(email, event.params.eventId))
+    }
+
+    return Promise.all(promises).then(
+      () => console.log('Sent all emails to', emails)
+    )
 });
 
 function sendInviteEmail (email, gameKey) {
   const mailOptions = {
-    from: '${APP_NAME} <noreply@firebase.com>',
+    from: `${APP_NAME}`,
     to: email
   };
+
+  console.log(email)
+  console.log(gameKey)
 
   mailOptions.subject = `Welcome to ${APP_NAME}!`;
   mailOptions.text = `Hey there! Someone invited you to their game, log in and see what's going on! \n ${hosting + '#/event/' + gameKey}`;
@@ -96,3 +110,11 @@ function sendInviteEmail (email, gameKey) {
   }).catch(error => console.log(error));
 }
 
+function isEmail(email) {
+  if (typeof email !== 'string') {
+    return false;
+  }
+  // There must at least one character before the @ symbol and another after.
+  let re = /^[^@]+@[^@]+$/;
+  return re.test(email);
+}

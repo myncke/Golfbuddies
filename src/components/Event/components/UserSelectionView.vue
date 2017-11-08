@@ -4,10 +4,26 @@
       <p class="title">Invite Users</p>
     </v-card-title>
     <v-card-text>
+      <p class="red--text">{{error}}</p>
       <p class="caption search-info">User search:</p>
       <user-search :toolbar="false" v-on:search-selected="addUser"></user-search>
       <p class="caption search-info">Group search:</p>
       <group-search :toolbar="false" v-on:search-selected="addGroup"></group-search>
+
+      <v-layout row v-if="email">
+        <v-flex xs12>
+          <p class="caption search-info">Add emails:</p>
+        </v-flex>
+        <v-flex sm9 xs12>
+          <v-text-field
+            ref="emailfield"
+            label="Invite by Email" v-model="emailString"
+          ></v-text-field>
+        </v-flex>
+        <v-flex sm3 xs12>
+          <v-btn color="primary" @click="addEmail(email)">Add Email</v-btn>
+        </v-flex>
+      </v-layout>
     </v-card-text>
     <v-card-actions>
       <v-btn flat @click.native="showGroups = !showGroups">
@@ -25,9 +41,12 @@
         <v-list subheader>
           <v-subheader>Invited Users</v-subheader>
           <v-list-tile avatar v-for="user in invitedUsers" v-bind:key="user.key" @click="">
-            <v-list-tile-content>
+            <v-list-tile-content v-if="user.firstName !== undefined">
               <v-list-tile-title v-html="user.nickname"></v-list-tile-title>
               <p class="caption">{{user.firstName}} {{user.lastName}}</p>
+            </v-list-tile-content>
+            <v-list-tile-content v-else>
+              <v-list-tile-title>{{user.key}}</v-list-tile-title>
             </v-list-tile-content>
             <v-list-tile-action>
               <v-icon color="teal" @click="removeUser(user)">clear</v-icon>
@@ -57,15 +76,22 @@
 <script>
   import UserSearch from '../../Shared/Search/UserSearch'
   import GroupSearch from '../../Shared/Search/GroupSearch'
+  import StringUtils from '../../../utils/StringUtils'
   export default {
     data: () => ({
       invitedUsers: [],
       invitedGroups: [],
       showUsers: false,
-      showGroups: false
+      showGroups: false,
+      emailString: '',
+      error: ''
     }),
     props: {
-      model: Object
+      model: Object,
+      email: {
+        type: Boolean,
+        default: false
+      }
     },
     watch: {
       model: function (newVal) {
@@ -81,6 +107,15 @@
         if (this.invitedUsers.indexOf(user) < 0) {
           this.invitedUsers.push(user)
           this.addUserToInvites(user.key)
+        }
+      },
+      addEmail: function () {
+        console.log(this.emailString)
+        if (StringUtils.isEmail(this.emailString)) {
+          this.addUser({key: this.emailString})
+          this.emailString = ''
+        } else {
+          this.error = 'Incorrect email!'
         }
       },
       removeGroup: function (group) {
