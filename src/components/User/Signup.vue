@@ -86,7 +86,7 @@ export default {
       valid: true,
       loading: false,
       passwordRules: [
-        (v) => ((!!v && v === this.password) || this.model.isSocial) || 'Passwords do not match'
+        (v) => ((!!v && v === this.password) || (this.model && this.model.isSocial)) || 'Passwords do not match'
       ]
     }
   },
@@ -105,7 +105,7 @@ export default {
       this.init()
     },
     model: function (newVal) {
-      if (this.model.isSocial) {
+      if (this.model && this.model.isSocial) {
         this.valid = true
       }
     }
@@ -146,14 +146,13 @@ export default {
       }
 
       let userModel = user.getModel()
-      userModel.key = uid
       userModel.nickname = userModel.nickname.toLowerCase()
       userModel.firstName = userModel.firstName.toLowerCase()
       userModel.lastName = userModel.lastName.toLowerCase()
 
       let golfModel = golf.getModel()
 
-      if (!this.model.isSocial) {
+      if (this.model && !this.model.isSocial) {
         await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
         let uid = firebase.auth().currentUser.uid
         userModel.key = uid
