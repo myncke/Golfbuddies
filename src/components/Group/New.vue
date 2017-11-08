@@ -52,9 +52,10 @@
             </v-checkbox>
           </v-flex>
           <v-flex sm6 xs12 class="input-field">
-            <v-radio-group v-model="model.sportType" required>
+            <!-- TODO: add this when multiple sports are made. -->
+            <!--<v-radio-group v-model="model.sportType" required>
               <v-radio label="Golf" value="golf"></v-radio>
-            </v-radio-group>
+            </v-radio-group>-->
           </v-flex>
           <!-- TODO: make it possible to upload a picture to Firebase Storage -->
           <v-flex sm6 xs12 class="input-field">
