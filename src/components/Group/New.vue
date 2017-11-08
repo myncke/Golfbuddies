@@ -67,7 +67,8 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <v-btn color="primary" :loading="loading" block @click="createClub()">Create Club</v-btn>
+        <v-btn v-if="isEdit" color="primary" :loading="loading" block @click="createClub()">Edit Club</v-btn>
+        <v-btn v-else color="primary" :loading="loading" block @click="createClub()">Create Club</v-btn>
       </v-form>
     </v-card-text>
   </v-card>
@@ -85,7 +86,8 @@
       rules: {
 
       },
-      loading: false
+      loading: false,
+      isEdit: false
     }),
     watch: {
       $route: function (newVal) {
@@ -104,6 +106,7 @@
         if (id !== undefined) {
           this.model = undefined
           console.log(new SportClubModel(id, false, model => { this.model = model; this.model.sportType = 'golf' }, error => console.log(error)))
+          this.isEdit = true
         } else {
           this.model = new SportClubModel()
         }
