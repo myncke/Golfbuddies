@@ -152,7 +152,8 @@ export default {
 
       let golfModel = golf.getModel()
 
-      if (this.model && !this.model.isSocial) {
+      if (userModel && !userModel.isSocial) {
+        console.log('MAKING ACCOUNT!')
         await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message })
         let uid = firebase.auth().currentUser.uid
         userModel.key = uid
