@@ -7,7 +7,7 @@
       <p class="subheading red--text">{{error}}</p>
       <v-form>
         <v-layout row wrap>
-          <v-flex md6 xs12 class="input-field">
+          <v-flex xs12 class="input-field">
             <v-text-field
               name="Club Name"
               label="Club Name"
@@ -15,7 +15,7 @@
               required
             ></v-text-field>
           </v-flex>
-          <v-flex md6 xs12 class="input-field">
+          <v-flex xs12 class="input-field">
             <v-text-field
               name="Club Location"
               label="Club Location"
@@ -56,7 +56,7 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        <v-btn color="primary" block @click="createClub()">Create Club</v-btn>
+        <v-btn color="primary" :loading="loading" block @click="createClub()">Create Club</v-btn>
       </v-form>
     </v-card-text>
   </v-card>
@@ -72,7 +72,8 @@
       sportTypeMap: {},
       rules: {
 
-      }
+      },
+      loading: false
     }),
     created: function () {
       this.model = new SportClubModel()
@@ -83,6 +84,7 @@
     },
     methods: {
       createClub: async function () {
+        this.loading = true
         this.model.sportType = this.sportTypeMap[this.model.sportType]
         this.model.closed = this.model.closed || false
         await this.getLocation()
@@ -91,7 +93,9 @@
         this.model.members = {}
         this.model.members[user.key] = true
         this.model.admin = user._getDocRef()
+        await this.model.initConversationGroup()
         await this.model.save()
+        this.loading = false
         this.$router.push({
           name: 'group', params: { clubId: this.model.key }
         })

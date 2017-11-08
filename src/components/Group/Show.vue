@@ -77,6 +77,7 @@
   import Pictures from './Show/Pictures'
   import Details from './Show/Details'
   import UserSelectionView from '../Event/components/UserSelectionView'
+  import ConversationGroupModel from '../../models/ConversationGroupModel'
 
   export default {
     data: () => ({
@@ -115,6 +116,7 @@
         }, error => { this.error = error.message }))
       },
       initMembers: async function (club) {
+        this.members = []
         for (let member of Object.keys(club.members)) {
           console.log(new UserModel(member, false, model => { this.members.push(model) }, error => { this.error = error.message }))
         }
@@ -131,7 +133,7 @@
           }))
         }
       },
-      addPeople: function () {
+      addPeople: async function () {
         let invitees = this.invitees
         this.invitees = {invites: []}
         for (let invites of Object.keys(invitees.invites)) {
@@ -141,12 +143,19 @@
         this.club.save()
         this.members = []
         this.initMembers(this.club)
+        await this.updateConversation()
       },
-      joinGroup: function () {
+      updateConversation: async function () {
+        let conversation = await ConversationGroupModel.getFromRef(this.club.conversationKey, ConversationGroupModel, error => { this.error = error.message })
+        conversation.members = this.club.members
+        await conversation.save()
+      },
+      joinGroup: async function () {
         let user = this.$store.getters.user
         this.members.push(user)
         this.club.members[user.key] = true
-        this.club.save()
+        await this.club.save()
+        await this.updateConversation()
       }
     },
     components: {

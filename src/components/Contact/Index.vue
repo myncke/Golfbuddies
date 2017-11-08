@@ -31,10 +31,10 @@
               <v-divider v-bind:inset="true"></v-divider>
             </template>
             <v-list-tile>
-              <!-- <v-subheader v-text="'Conversation Groups'"></v-subheader> -->
+              <v-subheader v-text="'Group Conversations'"></v-subheader>
             </v-list-tile>
             <template v-for="group in conversationModels">
-              <v-list-tile avatar v-bind:key="group.key" @click="openConversation(group)">
+              <v-list-tile avatar v-bind:key="group.key" @click="openConversationGroup(group)">
                 <v-list-tile-avatar>
                   <img v-bind:src="makeInitialsImage({ firsName: group.name, lastName: '' })"/>
                 </v-list-tile-avatar>
@@ -132,6 +132,7 @@
   import ConversationGroupModel, { MessageModel } from '../../models/ConversationGroupModel'
   import dateUtils from '../../utils/DateUtils'
   import ImageUtils from '../../utils/ImageUtils'
+  import SportClubModel from '../../models/SportClubModel'
 
   export default {
     data () {
@@ -177,9 +178,9 @@
       },
       initConversations: async function () {
         try {
-          let list = await ConversationGroupModel.getMyConversations(error => { this.error = error })
-          console.log(list)
-          this.conversationModels = list
+          let list = await SportClubModel.getMyClubs(error => { this.error = error.message })  // await ConversationGroupModel.getMyGroupConversations(error => { this.error = error })
+          list = list.filter(element => element.conversationKey !== undefined)
+          this.conversationModels = list || []
         } catch (error) {
           this.error = error.message
         }
@@ -189,6 +190,8 @@
       },
       openConversation: async function (conversationModel) {
         try {
+          console.log(this.conversationModels)
+          console.log(conversationModel)
           this.currentConversation = conversationModel
           this.groupName = conversationModel.name
           this.messages = []
@@ -205,7 +208,10 @@
         }
       },
       openConversationFriend: async function (model) {
-        this.openConversation(await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, error => { throw error }))
+        this.openConversation(await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, this.onFailure))
+      },
+      openConversationGroup: async function (model) {
+        this.openConversation(await ConversationGroupModel.getFromRef(model.conversationKey, ConversationGroupModel, this.onFailure))
       },
       getCurrentUser: function () {
         return firebase.auth().currentUser
@@ -221,7 +227,7 @@
         messageModel.setBy(this.getCurrentUser().uid)
         messageModel.message = message
         messageModel.timestamp = Date.now()
-        await this.currentConversation.addSubcollectionDoc('Messages', messageModel, error => { this.error = error })
+        await this.currentConversation.addSubcollectionDoc('Messages', messageModel, this.onFailure)
         console.log('SENT')
       },
       renameGroup: async function () {
@@ -231,6 +237,9 @@
         }
         group.name = this.groupName
         group.save()
+      },
+      onFailure: function (error) {
+        this.error = error
       }
     }
   }

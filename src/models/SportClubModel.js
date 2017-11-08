@@ -2,6 +2,7 @@ import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
 import firebase from 'firebase'
 import StringUtils from '../utils/StringUtils'
+import ConversationGroupModel from './ConversationGroupModel'
 
 /**
  * Class that only holds a key which is the name of this sportType
@@ -32,6 +33,14 @@ export class GameKey extends FirebaseModel {
  * Class that models a SportClub and all its subcollections
  */
 export default class SportClubModel extends FirebaseSubColModel {
+
+  async initConversationGroup () {
+    let conversationModel = new ConversationGroupModel()
+    conversationModel.participants = this.members
+    conversationModel.name = this.name
+    await conversationModel.save()
+    this.conversationKey = conversationModel._getDocRef()
+  }
 
   /**
    * Gets all the public clubs
@@ -69,7 +78,8 @@ export default class SportClubModel extends FirebaseSubColModel {
     'closed',
     'sportType',
     'members',
-    'headerPic'
+    'headerPic',
+    'conversationKey'
   ]
 
   static _subCollections = {
@@ -88,6 +98,7 @@ export default class SportClubModel extends FirebaseSubColModel {
 
   // References
   admin // Reference to Users
+  conversationKey // Reference to the ConversationGroup
 
   getAdmin () {
     return this.admin.path.substr('Users/'.length)
