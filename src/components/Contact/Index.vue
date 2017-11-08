@@ -117,7 +117,7 @@
             label="Group Name"
             v-model="groupName">
           </v-text-field>
-          <v-btn color="primary" dark @click="renameGroup(); settings = !settings">Save Name</v-btn>
+          <v-btn color="primary" :disabled="true" dark @click="renameGroup(); settings = !settings">Save Name</v-btn>
           <p class="subheading">Invite Friends</p>
           <p>TODO</p>
         </v-card-text>
