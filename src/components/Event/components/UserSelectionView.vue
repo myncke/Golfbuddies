@@ -112,7 +112,7 @@
       addEmail: function () {
         console.log(this.emailString)
         if (StringUtils.isEmail(this.emailString)) {
-          this.addUser({key: this.emailString})
+          this.addUser({key: StringUtils.reformEmail(this.emailString)})
           this.emailString = ''
         } else {
           this.error = 'Incorrect email!'

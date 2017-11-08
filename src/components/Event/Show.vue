@@ -157,7 +157,7 @@ export default {
     onFailure: function (error) {
       this.error = error.message
     },
-    addPeople: function () {
+    addPeople: async function () {
       let invitees = this.invitees
       this.invitees = {invites: {}}
       console.log(this.invitees)
@@ -165,7 +165,8 @@ export default {
         this.model.invites[invites] = invitees.invites[invites]
       }
       this.inviting = false
-      this.model.save()
+      await this.model.save()
+      await this.model.sendInviteNotification(Object.keys(invitees.invites))
     }
   },
   components: {

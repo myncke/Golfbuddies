@@ -86,7 +86,7 @@ exports.sendInviteEmail = functions.firestore
     emails = emails.filter((element) => oldInvites[element] === undefined && isEmail(element))
 
     for (let email of emails) {
-      promises.push(sendInviteEmail(email, event.params.eventId))
+      promises.push(sendInviteEmail(reformEmail(email), event.params.eventId))
     }
 
     return Promise.all(promises).then(
@@ -117,4 +117,8 @@ function isEmail(email) {
   // There must at least one character before the @ symbol and another after.
   let re = /^[^@]+@[^@]+$/;
   return re.test(email);
+}
+
+function reformEmail(email) {
+  return email.replace(/,/g , ".");
 }
