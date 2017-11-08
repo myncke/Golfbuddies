@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const nodemailer = require('nodemailer');
 
 admin.initializeApp(functions.config().firebase);
 
@@ -55,3 +56,43 @@ exports.sendNotification = functions.firestore
     }
 
   });
+
+const gmailEmail = functions.config().gmail.email;
+const gmailPassword = functions.config().gmail.password;
+const hosting = functions.config().hosting.root;
+const mailTransport = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: gmailEmail,
+    pass: gmailPassword
+  }
+});
+
+const APP_NAME = 'GolfBuddies';
+
+exports.sendWelcomeEmail = functions.firestore
+  .document('Notification/{notifId}')
+  .onCreate(event => {
+    const prevData = event.data.previous.data()
+    const newDate = event.data.data()
+    const user = event.data;
+
+    const email = user.email;
+    const displayName = user.displayName;
+
+    return sendWelcomeEmail(email);
+});
+
+function sendInviteEmail (email, gameKey) {
+  const mailOptions = {
+    from: '${APP_NAME} <noreply@firebase.com>',
+    to: email
+  };
+
+  mailOptions.subject = `Welcome to ${APP_NAME}!`;
+  mailOptions.text = `Hey there! Someone invited you to their game, log in and see what's going on! \n ${hosting + '#/event/' + gameKey}`;
+  return mailTransport.sendMail(mailOptions).then(() => {
+    console.log('New welcome email sent to:', email);
+  }).catch(error => console.log(error));
+}
+
