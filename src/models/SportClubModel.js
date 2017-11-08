@@ -74,6 +74,7 @@ export default class SportClubModel extends FirebaseSubColModel {
     'admin',
     'information',
     'location',
+    'locationString',
     'name',
     'closed',
     'sportType',
@@ -95,6 +96,7 @@ export default class SportClubModel extends FirebaseSubColModel {
   information
   name
   headerPic
+  locationString
 
   // References
   admin // Reference to Users

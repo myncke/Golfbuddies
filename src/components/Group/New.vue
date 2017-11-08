@@ -16,13 +16,24 @@
             ></v-text-field>
           </v-flex>
           <v-flex xs12 class="input-field">
-            <v-text-field
+            <vuetify-google-autocomplete
+              id="map"
+              append-icon="search"
+              classname="form-control"
+              placeholder="Start typing"
+              v-on:placechanged="getAddressData"
+              :placeholder="model.locationString"
+              types="address"
+            >
+            </vuetify-google-autocomplete>
+
+            <!--<v-text-field
               name="Club Location"
               label="Club Location"
               v-model="model.location"
               required
               prepend-icon="location_on"
-            ></v-text-field>
+            ></v-text-field>-->
           </v-flex>
           <v-flex xs12 class="input-field">
             <v-text-field
@@ -65,6 +76,7 @@
 <script>
   import SportClubModel, { SportTypeModel } from '../../models/SportClubModel'
   import LocationUtils from '../../utils/LocationUtils'
+  import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
 
   export default {
     data: () => ({
@@ -75,14 +87,28 @@
       },
       loading: false
     }),
-    created: function () {
-      this.model = new SportClubModel()
-      this.sportTypeMap = {
-        'golf': SportTypeModel.getNormalRef(SportTypeModel).doc('Golf')
+    watch: {
+      $route: function (newVal) {
+        this.init()
       }
-      this.model.sportType = 'golf'
+    },
+    created: function () {
+      this.init()
     },
     methods: {
+      init: function () {
+        this.sportTypeMap = {
+          'golf': SportTypeModel.getNormalRef(SportTypeModel).doc('Golf')
+        }
+        let id = this.$route.params.id
+        if (id !== undefined) {
+          this.model = undefined
+          console.log(new SportClubModel(id, false, model => { this.model = model; this.model.sportType = 'golf' }, error => console.log(error)))
+        } else {
+          this.model = new SportClubModel()
+        }
+        this.model.sportType = 'golf'
+      },
       createClub: async function () {
         this.loading = true
         this.model.sportType = this.sportTypeMap[this.model.sportType]
@@ -107,7 +133,14 @@
         } catch (error) {
           this.error = 'Invalid location, please try again with a more precise location.'
         }
+      },
+      getAddressData (addressData, placeResultData) {
+        this.model.location = {latitude: addressData.latitude, longitude: addressData.longitude}
+        this.model.locationString = placeResultData.formatted_address
       }
+    },
+    components: {
+      'vuetify-google-autocomplete': VuetifyGoogleAutocomplete
     }
   }
 </script>

@@ -73,6 +73,11 @@ export default new Router({
       component: GroupNew
     },
     {
+      path: '/group/edit/:id',
+      name: 'editGroup',
+      component: GroupNew
+    },
+    {
       path: '/group/:id',
       name: 'group',
       component: Group
