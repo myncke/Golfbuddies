@@ -76,7 +76,6 @@
 
 <script>
   import SportClubModel, { SportTypeModel } from '../../models/SportClubModel'
-  import LocationUtils from '../../utils/LocationUtils'
   import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
 
   export default {
@@ -116,8 +115,6 @@
         this.loading = true
         this.model.sportType = this.sportTypeMap[this.model.sportType]
         this.model.closed = this.model.closed || false
-        await this.getLocation()
-        // TODO: We have to find a way to init the members
         let user = this.$store.getters.user
         this.model.members = {}
         this.model.members[user.key] = true
@@ -130,12 +127,13 @@
         })
       },
       getLocation: async function () {
-        try {
+        /* try {
           let location = await LocationUtils.getLocation(this.model.location, this.$http)
           this.model.location = {latitude: location.lat, longitude: location.lng}
         } catch (error) {
           this.error = 'Invalid location, please try again with a more precise location.'
-        }
+        } */
+        // TODO: maybe delete later
       },
       getAddressData (addressData, placeResultData) {
         this.model.location = {latitude: addressData.latitude, longitude: addressData.longitude}
