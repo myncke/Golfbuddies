@@ -56,6 +56,7 @@
               label="Region/Province"
               v-model="model.region"
               :rules="requiredRule"
+              placeholder="Oost-Vlaanderen"
               required
             ></v-text-field>
           </v-flex>
