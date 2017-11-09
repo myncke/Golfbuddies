@@ -13,6 +13,7 @@ import VueChatScroll from 'vue-chat-scroll'
 import VueResource from 'vue-resource'
 import MessagingHandler from './utils/MessagingHandler'
 import FullCalendar from 'vue-full-calendar'
+import StringUtils from './utils/StringUtils'
 
 require('firebase/firestore')
 window.jQuery = window.$ = require('jquery')
@@ -70,4 +71,8 @@ Vue.filter('formatDate', dateUtils.dateToString)
 
 Vue.prototype.$last = function (item, list) {
   return item === list[list.length - 1]
+}
+
+Vue.prototype.$capitalize = function (item) {
+  return StringUtils.capitalize(item)
 }

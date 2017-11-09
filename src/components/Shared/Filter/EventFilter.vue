@@ -3,11 +3,13 @@
     <v-flex sx12 sm5>
       <menu-date-picker
         v-on:date-chosen="date => { createDate(date, 'start') }"
-        :allowedFunction="(date) => date >= (new Date())"
+        :allowedFunction="(date) => date >= addDays(-1, new Date())"
+        label="From Date"
       ></menu-date-picker>
       <menu-date-picker
         v-on:date-chosen="date => { createDate(date, 'end') }"
         :allowedFunction="(date) => date > (start || new Date())"
+        label="To Date"
       ></menu-date-picker>
 
       <v-layout wrap>
@@ -57,6 +59,7 @@
 <script>
   import { PrefGameSex } from '../../../models/GameModel'
   import MenuDatePicker from '../MenuDatePicker'
+  import DateUtils from '../../../utils/DateUtils'
 
   export default {
     data: () => ({
@@ -94,6 +97,9 @@
           this[key] = null
         }
         console.log(this[key])
+      },
+      addDays (amount, date) {
+        return DateUtils.addDays(amount, date)
       }
     },
     components: {
