@@ -54,7 +54,7 @@
       </v-flex>
 
       <v-flex class="mt-3">
-        <participants-card></participants-card>
+        <participants-card :model="model"></participants-card>
       </v-flex>
 
       <v-flex v-if="isMyGame" class="mt-3">
