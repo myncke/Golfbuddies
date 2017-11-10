@@ -24,6 +24,8 @@
                 <v-flex md6 xs12 class="input-field">
                   <v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
                                 :rules="rules.dateRules"
+                                placeholder="dd/mm/yyyy hh:mm"
+                                clearable
                   ></v-text-field>
                 </v-flex>
                 <v-flex md6 xs12 class="input-field">
