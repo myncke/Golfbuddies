@@ -3,25 +3,7 @@
     <group-search class="hidden-sm-and-down" v-on:search-selected="(club) => { goToGroupDetails(club.key) }" style="width: 100%;"></group-search>
     <v-layout row wrap>
       <v-flex xs12 v-for="club in clubModels" :key="club.key">
-
-        <v-card class="white--text cover"
-          :style="{ backgroundImage: 'url('+ club.headerPic + ')' }">
-          <v-card-title primary-title class="cover">
-            <v-flex column>
-              <div class="headline">{{getStringUtils().capitalize(club.name)}}</div>
-              <div>{{club.information}}</div>
-            </v-flex>
-          </v-card-title>
-          <v-card-actions class="cover">
-            <v-btn flat dark @click="goToGroupDetails(club.key)">View</v-btn>
-          </v-card-actions>
-        </v-card>
-
-        <div>
-          <!-- {{console.log(club)}} -->
-        </div>
-
-
+        <group-card :club="club"></group-card>
       </v-flex>
     </v-layout>
   </v-container>
@@ -31,12 +13,13 @@
   import SportClubModel from '../../models/SportClubModel'
   import GroupSearch from '../Shared/Search/GroupSearch'
   import StringUtils from '../../utils/StringUtils'
+  import GroupCard from './components/GroupCard'
 
-  // TODO: Use this to make a my clubs page aswell, easiest is to wrap this in a bigger GroupIndex and then pass the prop by checking the route params
+  /* Maybe later
   let typeMap = {
     'open': SportClubModel.getPublicClubs,
     'my': SportClubModel.getMyClubs
-  }
+  } */
 
   export default {
     data: () => ({
@@ -54,10 +37,17 @@
     },
     methods: {
       initModels: async function () {
-        this.type = this.$route.params.type || 'open'
+        // this.type = this.$route.params.type || 'open'
+        // let list = (await typeMap[this.type](error => { this.error = error }))
+
         this.clubModels = []
-        let list = (await typeMap[this.type](error => { this.error = error }))
-        this.clubModels = list
+        let result = {}
+        let list = await SportClubModel.getPublicClubs(error => { this.error = error.message })
+        list.forEach((element) => { result[element.key] = element })
+        list = await SportClubModel.getMyClubs(error => { this.error = error.message })
+        list.forEach((element) => { result[element.key] = element })
+        console.log(Object.values(result))
+        this.clubModels = Object.values(result)
       },
       goToGroupDetails: function (key) {
         this.$router.push({
@@ -69,14 +59,12 @@
       }
     },
     components: {
-      'group-search': GroupSearch
+      'group-search': GroupSearch,
+      'group-card': GroupCard
     }
   }
 </script>
 
 <style scoped>
-  .cover {
-     background: linear-gradient(to left,rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.8));
-  }
 </style>
 

@@ -1,7 +1,7 @@
 <template>
   <v-card style="width: 100%;">
     <v-card-title>
-      <p class="title"> New Club </p>
+      <p class="title"> New Group </p>
     </v-card-title>
     <v-card-text>
       <p class="subheading red--text">{{error}}</p>
@@ -9,12 +9,13 @@
         <v-layout row wrap>
           <v-flex xs12 class="input-field">
             <v-text-field
-              name="Club Name"
-              label="Club Name"
+              name="Group Name"
+              label="Group Name"
               v-model="model.name"
               required
             ></v-text-field>
           </v-flex>
+
           <v-flex xs12 class="input-field">
             <vuetify-google-autocomplete
               id="map"
@@ -22,7 +23,7 @@
               classname="form-control"
               placeholder="Start typing"
               v-on:placechanged="getAddressData"
-              :placeholder="model.locationString"
+              :placeholder="'Group Location'"
               types="address"
             >
             </vuetify-google-autocomplete>
@@ -37,8 +38,8 @@
           </v-flex>
           <v-flex xs12 class="input-field">
             <v-text-field
-              name="Club Information"
-              label="Club Information"
+              name="Group Information"
+              label="Group Information"
               v-model="model.information"
               required
               multiLine
@@ -116,6 +117,8 @@
         this.loading = true
         this.model.sportType = this.sportTypeMap[this.model.sportType]
         this.model.closed = this.model.closed || false
+        this.model.name = this.model.name.toLowerCase()
+        await this.getLocation()
         let user = this.$store.getters.user
         this.model.members = {}
         this.model.members[user.key] = true
@@ -124,7 +127,7 @@
         await this.model.save()
         this.loading = false
         this.$router.push({
-          name: 'group', params: { clubId: this.model.key }
+          name: 'group', params: { id: this.model.key }
         })
       },
       getLocation: async function () {

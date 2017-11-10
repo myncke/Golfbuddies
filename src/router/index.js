@@ -30,6 +30,9 @@ import Help from '../components/Static/Help'
 import Profile from '../components/User/Show'
 import Feed from '../components/Main/Feed'
 
+// Admin
+import PagedAdminPage from '../components/Admin/PagedAdminPage'
+
 // Main
 import GeneralCalendarView from '../components/Main/GeneralCalendarView'
 
@@ -126,6 +129,11 @@ export default new Router({
       path: '/calendar',
       name: 'calendar',
       component: GeneralCalendarView
+    },
+    {
+      path: '/admin/:type',
+      name: 'admin',
+      component: PagedAdminPage
     },
     {
       path: '/',

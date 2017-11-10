@@ -1,6 +1,6 @@
 <template>
   <v-card class="mobile-margin pa-1 mt-1">
-    <v-layout row>
+    <v-layout v-if="model !== undefined && model.game !== undefined" row>
       <v-flex column sm2 class="pl-0 pr-3 pt-3 pb-3">
         <div class="title text-sm-right">{{ model.game.date | moment("D MMM.") }}</div>
         <div class="text-sm-right">{{ model.game.date | moment("dddd") }}</div>
@@ -14,7 +14,7 @@
             <v-icon left dark color="" class="caption">check</v-icon> Going
           </v-btn>
           <v-btn small flat value="maybe" color="blue-grey" class="caption">
-            <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe 
+            <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
           </v-btn>
           <v-btn small flat value="ignore" color="blue-grey" class="caption">
             <v-icon left dark color="" class="caption">clear</v-icon>Ignore
