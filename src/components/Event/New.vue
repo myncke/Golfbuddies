@@ -4,9 +4,9 @@
       <v-stepper-header>
         <v-stepper-step step="1" :complete="page > 1">General Game Information</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="page > 2">Specific Game Information</v-stepper-step>
+        <v-stepper-step step="2" :complete="page > 2" v-if="maxPage > 1">Specific Game Information</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3" :complete="page > 3">Invite Users <small>Optional</small></v-stepper-step>
+        <v-stepper-step step="3" :complete="page > 3" v-if="maxPage > 2">Invite Users <small>Optional</small></v-stepper-step>
       </v-stepper-header>
       <v-stepper-content step="1">
         <v-card>
@@ -21,6 +21,9 @@
 
                   ></v-text-field>
                 </v-flex>
+
+                <!-- TODO: this needs to be filled in, no idea how though -->
+
                 <v-flex md6 xs12 class="input-field">
                   <v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
                                 :rules="rules.dateRules"
@@ -36,6 +39,7 @@
                     classname="form-control"
                     placeholder="Event Location"
                     v-on:placechanged="getAddressData"
+                    :placeholder="model.locationString"
                     types="address"
                   >
                   </vuetify-google-autocomplete>
@@ -95,12 +99,12 @@
           </v-card-text>
         </v-card>
       </v-stepper-content>
-      <v-stepper-content step="2">
-        <golf-new v-if="sportType === 'Golf'" ref="subModelComponent"></golf-new>
+      <v-stepper-content v-if="maxPage > 1" step="2">
+        <golf-new :model="subModel" v-if="sportType === 'Golf'" ref="subModelComponent"></golf-new>
       </v-stepper-content>
-      <v-stepper-content step="3">
+      <v-stepper-content v-if="maxPage > 2" step="3">
         <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
-        <user-selection :model="model"></user-selection>
+        <user-selection email :model="model"></user-selection>
       </v-stepper-content>
     </v-stepper>
     <v-layout row style="height: auto">
@@ -132,7 +136,7 @@
             if (typeof v === 'string') {
               return DateUtils.stringToDate(v) > new Date() || 'Date should be in the future'
             }
-            return v
+            return !!v
           }
         ],
         locationRules: [
@@ -147,17 +151,37 @@
       },
       sportType: 'Golf',
       sportTypes: [],
-      loading: false
+      loading: false,
+      maxPage: 3,
+      subModel: undefined,
+      isEdit: false
     }),
     created: function () {
-      this.model = new GameModel()
-      this.sexes = PrefGameSex
-      this.sportTypes = Object.keys(GameTypeNames)
+      this.init()
     },
     methods: {
+      initSubModel: async function () {
+        let modelClass = GameTypeNames[this.sportType]
+        this.subModel = await modelClass.getFromRef(this.model.subGame, modelClass, error => console.log(error))
+      },
+      init: function () {
+        this.sexes = PrefGameSex
+        this.sportTypes = Object.keys(GameTypeNames)
+
+        let id = this.$route.params.id
+        console.log(id)
+        if (id !== undefined) {
+          this.model = {}
+          this.maxPage = 2
+          this.isEdit = true
+          console.log(new GameModel(id, false, model => { this.model = model; console.log(model); this.initSubModel() }, error => console.log(error)))
+        } else {
+          this.model = new GameModel()
+        }
+      },
       nextPage: async function () {
         if (!this.valid) return
-        if (this.page < 3) {
+        if (this.page < this.maxPage) {
           this.page += 1
         } else {
           this.loading = true
@@ -183,7 +207,9 @@
         this.model.international = this.model.international || false
         this.model.inviteOnly = this.model.inviteOnly || false
         this.model.prefGroupSize = parseInt(this.model.prefGroupSize)
-        this.model.date = DateUtils.stringToDate(this.model.date)
+        if (typeof this.model.date === 'string') {
+          this.model.date = DateUtils.stringToDate(this.model.date)
+        }
         this.model.specialWishes = this.model.specialWishes || ''
         this.model.creator = UserModel.getNormalRef(UserModel).doc((new UserModel()).key)
         this.model.subGame = subModel._getDocRef()
@@ -193,11 +219,11 @@
         // Save both models
         await this.model.save()
         await subModel.save()
-        await this.model.sendInviteNotification()
+        if (!this.isEdit) {
+          await this.model.sendInviteNotification()
+        }
       },
       getAddressData (addressData, placeResultData) {
-        // console.log(addressData)
-        // console.log(placeResultData)
         this.model.location = {latitude: addressData.latitude, longitude: addressData.longitude}
         this.model.locationString = placeResultData.formatted_address
       }

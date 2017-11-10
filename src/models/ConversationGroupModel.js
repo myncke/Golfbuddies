@@ -1,6 +1,7 @@
 import FirebaseModel from './FirebaseModel'
 import FirebaseSubColModel from './FirebaseSubColModel'
 import firebase from 'firebase'
+import SportClubModel from './SportClubModel'
 
 export class MessageModel extends FirebaseModel {
 
@@ -46,6 +47,20 @@ export default class ConversationGroupModel extends FirebaseSubColModel {
   static async getMyConversations (onFailure) {
     let ref = ConversationGroupModel.getNormalRef(ConversationGroupModel).where('participants.' + firebase.auth().currentUser.uid, '==', true)
     return await ConversationGroupModel.getAllFromRef(ref, ConversationGroupModel, onFailure)
+  }
+
+  static async getMyGroupConversations (onFailure) {
+    let clubs = await SportClubModel.getMyClubs()
+    let result = []
+    let promises = []
+    for (let club of clubs) {
+      let promise = ConversationGroupModel.getFromRef(club.conversationKey, ConversationGroupModel, onFailure)
+      promises.push(promise)
+      result.push(await promise)
+    }
+    return Promise.all(promises).then(
+      () => { return result }
+    )
   }
 
   async getMessagesOrdered (startAt, limit, onFailure) {

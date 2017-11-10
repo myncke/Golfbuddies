@@ -41,7 +41,6 @@
 
   export default {
     data: () => ({
-      model: {},
       valid: false,
       rules: {
         roundPriceRules: [
@@ -54,7 +53,7 @@
       }
     }),
     created: function () {
-      this.model = new GolfGameModel()
+      this.model = this.model || new GolfGameModel()
     },
     methods: {
       getModel: function () {
@@ -69,6 +68,12 @@
         this.model.overnight = this.model.buggie || false
 
         return this.model
+      }
+    },
+    props: {
+      model: {
+        type: Object,
+        default: undefined
       }
     }
   }
