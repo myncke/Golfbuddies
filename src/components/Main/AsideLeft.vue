@@ -10,7 +10,7 @@
                   <img :src="makeInitialsImage(user)" class="initials-img" />
                 </v-list-tile-avatar>
                 <v-list-tile-content>
-                  <v-list-tile-title>{{user.firstName}} {{user.lastName}}</v-list-tile-title>
+                  <v-list-tile-title>{{$capitalize(user.firstName)}} {{$capitalize(user.lastName)}}</v-list-tile-title>
                   <v-list-tile-sub-title>{{user.region}}, {{user.nationality}} &#9679; {{ new Date | moment("Do MMM. YYYY")}}</v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
@@ -98,7 +98,9 @@ export default {
   },
   methods: {
     initModels: async function () {
-      let list = (await SportClubModel.getPublicClubs(error => { this.error = error }))
+      this.clubModels = []
+      let list = (await SportClubModel.getMyClubs(error => { this.error = error }))
+      // list.push(...(await SportClubModel.getMyClubs(error => { this.error = error })))
       this.clubModels = list
     },
     goToGroupDetails: function (key) {
