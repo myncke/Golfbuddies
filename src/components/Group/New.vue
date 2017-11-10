@@ -1,7 +1,7 @@
 <template>
   <v-card style="width: 100%;">
     <v-card-title>
-      <p class="title"> New Club </p>
+      <p class="title"> New Group </p>
     </v-card-title>
     <v-card-text>
       <p class="subheading red--text">{{error}}</p>
