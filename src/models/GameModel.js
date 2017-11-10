@@ -5,6 +5,8 @@ import MessageModel from './MessageModel'
 import NotificationModel, { NotificationMessages } from './NotificationModel'
 import UserModel from './UserModel'
 import FriendshipModel from './FriendshipModel'
+import firebase from 'firebase'
+import StringUtils from '../utils/StringUtils'
 
 let PrefGameSex = ['Men Only', 'Women Only', 'Mixed']
 export {PrefGameSex}
@@ -38,13 +40,13 @@ export default class GameModel extends FirebaseSubColModel {
     return '/event/' + this.key
   }
 
-  async sendInviteNotification () {
+  async sendInviteNotification (people) {
     let notification = new NotificationModel()
     notification.message = NotificationMessages.invited + this.title
     notification.seen = false
     notification.link = this.createShowLink()
     notification.receivers = {}
-    for (let invite of Object.keys(this.invites)) {
+    for (let invite of (people || Object.keys(this.invites))) {
       notification.receivers[invite] = {seen: false, received: true}
     }
     await notification.save()
@@ -155,6 +157,18 @@ export default class GameModel extends FirebaseSubColModel {
 
   async getFirstXMessages (start, limit, onFailure) {
     return await this._getAllFromSubCollectionOrdered('Messages', 'timestamp', 'desc', start, limit, onFailure)
+  }
+
+  static async swapEmailWithUID (onFailure) {
+    let email = StringUtils.reformEmail(firebase.auth().currentUser.email)
+    console.log(email)
+    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + email + '.invited', '==', true), GameModel, onFailure)
+    console.log(list)
+    for (let obj of list) {
+      obj.invites[firebase.auth().currentUser.uid] = obj.invites[email]
+      delete obj.invites[email]
+      obj.save()
+    }
   }
 
   static _firestoreFields = [

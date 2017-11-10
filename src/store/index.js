@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import * as firebase from 'firebase'
 import UserModel from '../models/UserModel'
+import GameModel from '../models/GameModel'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -74,6 +75,7 @@ export const store = new Vuex.Store({
         let userModel = new UserModel(key, false, model => {
           if (model.nickname !== undefined) {
             commit('setUser', userModel)
+            GameModel.swapEmailWithUID(error => console.log(error)).then(() => console.log('SWAPPED!'))
           } else {
             commit('setUser', null)
           }
