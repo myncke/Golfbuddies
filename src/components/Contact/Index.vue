@@ -9,7 +9,7 @@
       <!-- CONTACTS PANE -->
 
       <v-layout row fill-height wrap style=" min-height: 100vh">
-        <v-flex sm4 xs12 fill-height>
+        <!-- <v-flex sm4 xs12 fill-height>
           <v-list two-line dark style="height: 100vh; overflow:scroll;">
             <v-list-tile>
               <v-subheader v-text="'Friends'"></v-subheader>
@@ -45,11 +45,11 @@
               <v-divider v-bind:inset="true"></v-divider>
             </template>
           </v-list>
-        </v-flex>
+        </v-flex> -->
 
         <!-- CHAT PANE -->
 
-        <v-flex sm8 xs12 class="hidden-xs-only" >
+        <v-flex sm12 xs12 class="hidden-xs-only" >
           <div style="height: 70vh; overflow: scroll" v-chat-scroll>
             <p class="red--text">{{error}}</p>
             <div v-for="message in messages">

@@ -1,10 +1,10 @@
 <template>
   <v-menu full-width offset-y>
     <p class="red--text" v-if="error != ''">{{error}}</p>
-    <v-btn slot="activator" flat @click="seenNotifications()">
-      <v-badge overlay color="red" overlap left>
+    <v-btn slot="activator" flat @click="seenNotifications()" class="pa-0" style="min-width:50px;">
+      <v-badge overlay color="red" overlap>
         <span v-if="countUnseenNotifications() > 0" slot="badge">{{countUnseenNotifications()}}</span>
-        <v-icon left>notifications</v-icon>
+        <v-icon>notifications</v-icon>
       </v-badge>
       <p class="hidden-sm-and-down subheading mb-0"> NOTIFICATIONS</p>
     </v-btn>

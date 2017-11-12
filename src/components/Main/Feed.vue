@@ -10,7 +10,7 @@
             <div :key="item.id">
               <v-container class="pa-1">
                 <v-layout row>
-                  <v-flex column sm2 class="pl-0 pr-3 pt-3 pb-3">
+                  <v-flex column sm2 class="pl-1 pr-3 pt-3 pb-3">
                     <div class="title text-sm-right">{{ item.date | moment("D MMM.") }}</div>
                     <div class="text-sm-right">{{ item.date | moment("dddd") }}</div>
                   </v-flex>
@@ -20,12 +20,12 @@
                     <p class="pl-3 ma-0">{{ item.date | moment("hh:mm a") }} &#9679; {{item.locationString}} </p>
                     <v-layout row>
                       <join-event :gameModel="item"></join-event>
-                      <v-btn small flat value="maybe" color="blue-grey" class="caption">
+                      <!-- <v-btn small flat value="maybe" color="blue-grey" class="caption">
                         <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
                       </v-btn>
                       <v-btn small flat value="ignore" color="blue-grey" class="caption">
                         <v-icon left dark color="" class="caption">clear</v-icon>Ignore
-                      </v-btn>
+                      </v-btn> -->
                     </v-layout>
                   </v-flex>
 
@@ -47,7 +47,7 @@
         </v-list>
 
           <template v-if="travels.length == 0">
-            <div :key="travels">
+            <div>
               <v-container>
                 <v-layout column>
                   <v-flex class="ml-2">
@@ -60,7 +60,7 @@
           </template>
 
           <template v-else v-for="item in travels" >
-            <div :key="item">
+            <div :key="item.id">
               <v-container>
                 <v-layout row>
                   <v-flex column sm2 class="pa-3">

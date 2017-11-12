@@ -5,16 +5,21 @@
       <v-card>
         <v-list dense>
           <template v-for="(item, i) in items">
-            <v-list-tile @click="" :key="i" :to="item.path">
-              <v-list-tile-action>
-                <v-icon>{{item.icon}}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>
-                  {{item.name}}
-                </v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
+            <v-tooltip right>
+              <v-list-tile @click="" :key="i" :to="item.path" slot="activator">
+
+                <v-list-tile-action>
+                  <v-icon>{{item.icon}}</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>
+                    {{item.name}}
+                  </v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <span>{{item.info}}</span>
+            </v-tooltip>
           </template>
         </v-list>
         <v-card-actions>
@@ -33,10 +38,10 @@
 export default {
   data: () => ({
     items: [
-      { name: 'Upcoming', icon: 'update', path: '/feed' },
-      { name: 'Calendar', icon: 'events', path: '/calendar' },
-      { name: 'Discover', icon: 'search', path: '/events' },
-      { name: 'Past', icon: 'history', path: '/history' }
+      { name: 'Upcoming', icon: 'update', path: '/feed', info: 'All upcoming events you are invited to and are going to.' },
+      { name: 'Calendar', icon: 'events', path: '/calendar', info: 'Calendar of all upcoming events and travels.' },
+      { name: 'Discover', icon: 'search', path: '/events', info: 'Filter public events.' }
+      // { name: 'Past', icon: 'history', path: '/history', info: '' }
     ]
   })
 }

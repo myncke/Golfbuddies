@@ -6,10 +6,14 @@
           <p class="title">Profile</p>
           <v-spacer></v-spacer>
           <v-switch label="Edit Mode" v-model="editMode" v-if="isMyProfile"></v-switch>
-          <v-btn @click="addFriendRequest" icon v-else>
-            <v-icon v-if="isAFriend">favorite</v-icon>
-            <v-icon v-else>favorite_border</v-icon>
-          </v-btn>
+          <div v-else>
+            <v-btn v-if="isAFriend" @click="addFriendRequest" flat>
+              Remove Friend
+            </v-btn>
+            <v-btn v-else @click="addFriendRequest" flat>
+              Add Friend
+            </v-btn>
+          </div>
         </v-card-title>
         <v-card-text v-if="model !== undefined">
 

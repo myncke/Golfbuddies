@@ -10,15 +10,13 @@
         <v-btn flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(model.game.key)">{{model.game.title}}</v-btn>
         <p class="pl-3 ma-0">{{ model.game.date | moment("hh:mm a") }} &#9679; {{model.game.locationString}} </p>
         <div>
-          <v-btn small flat value="going" color="blue-grey" class="caption">
-            <v-icon left dark color="" class="caption">check</v-icon> Going
-          </v-btn>
-          <v-btn small flat value="maybe" color="blue-grey" class="caption">
+          <join-event :gameModel="model.game"></join-event>
+          <!-- <v-btn small flat value="maybe" color="blue-grey" class="caption">
             <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
           </v-btn>
           <v-btn small flat value="ignore" color="blue-grey" class="caption">
             <v-icon left dark color="" class="caption">clear</v-icon>Ignore
-          </v-btn>
+          </v-btn> -->
         </div>
       </v-flex>
     </v-layout>
@@ -27,6 +25,7 @@
 
 <script>
   import GameModel, { CollectionGameMap } from '../../../models/GameModel'
+  import Join from '../Join'
 
   export default {
     data: () => ({
@@ -66,6 +65,9 @@
           name: 'event', params: { id: key }
         })
       }
+    },
+    components: {
+      'join-event': Join
     }
   }
 

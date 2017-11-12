@@ -2,7 +2,7 @@
   <v-flex>
     <v-container>
       <v-layout>
-        <v-flex>
+        <v-flex sm12>
           <v-card>
             <v-list two-line>
               <v-list-tile avatar :to="`/profile/${user.key}`">
@@ -11,7 +11,7 @@
                 </v-list-tile-avatar>
                 <v-list-tile-content>
                   <v-list-tile-title>{{$capitalize(user.firstName)}} {{$capitalize(user.lastName)}}</v-list-tile-title>
-                  <v-list-tile-sub-title>{{user.region}}, {{user.nationality}} &#9679; {{ new Date | moment("Do MMM. YYYY")}}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>{{user.region}}, {{user.nationality}} </v-list-tile-sub-title>
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
@@ -26,7 +26,7 @@
 
     <v-container>
       <v-layout>
-        <v-flex>
+        <v-flex sm12>
           <v-card>
             <v-list>
               <v-layout row align-center>
@@ -56,9 +56,9 @@
       pictures
     </v-container> -->
 
-    <v-container>
+    <!-- <v-container>
       <v-layout>
-        <v-flex class="mb-4">
+        <v-flex sm12 class="mb-4">
           <v-card>
             <v-list two-line>
               <template v-for="item in tips">
@@ -69,7 +69,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>
+    </v-container> -->
 
   </v-flex>
 </template>

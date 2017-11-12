@@ -22,21 +22,8 @@
             </v-card>
           </v-flex>
 
-          <v-flex class="mb-4">
-            <v-expansion-panel expand>
-              <v-expansion-panel-content>
-                <div slot="header">Friends</div>
-                <v-card>
-                  <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
-                  <v-card-actions>
-                    <v-btn>Add friend</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-flex>
-
-          <v-flex class="mb-4">
+          <friend-list></friend-list>
+          <!-- <v-flex class="mb-4">
             <v-card>
               <v-list two-line>
                 <template v-for="item in support">
@@ -45,7 +32,7 @@
                 <div class="placeholder">Coming Soon!</div>
               </v-list>
             </v-card>
-          </v-flex>
+          </v-flex> -->
 
       </v-layout>
     </v-container>
@@ -53,6 +40,7 @@
 </template>
 
 <script>
+import FriendList from '../Contact/FriendList'
 export default {
   data: () => ({
     notifications: [
@@ -69,7 +57,10 @@ export default {
       { divider: true, inset: true },
       { avatar: `https://unsplash.it/100/100?image=${Math.floor(Math.random() * 100) + 1}`, title: 'Oui oui', subtitle: "<span class='grey--text text--darken-2'>Sandra Adams</span> — Do you have Paris recommendations? Have you ever been?" }
     ]
-  })
+  }),
+  components: {
+    'friend-list': FriendList
+  }
 }
 </script>
 

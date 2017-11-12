@@ -2,45 +2,43 @@
   <v-app id="app">
 
     <v-layout v-if="userIsAuthenticated">
-      <!-- <sidebar ref="drawer"></sidebar> -->
+      <sidebar class="hidden-sm-and-up" ref="drawer"></sidebar>
       <v-toolbar color="green darken-1" dark app clipped-left fixed dense style="z-index: 10000">
         <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-          <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
+          <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()" class="hidden-sm-and-up"></v-toolbar-side-icon>
           <v-btn :to="'/'" flat dark>
             Golfbuddies
           </v-btn>
         </v-toolbar-title>
-        <!-- <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile"></user-search> -->
+        
         <v-spacer></v-spacer>
-        <v-btn flat :to="'/contacts'">
-          <v-icon left>contacts</v-icon>
-          <p class="hidden-sm-and-down subheading mb-0">Contacts</p>
+        <v-btn flat :to="'/contacts'" class="hidden-sm-and-up" style="min-width:50px;">
+          <v-icon>contacts</v-icon>
         </v-btn>
-        <v-btn flat @click="$store.dispatch('signUserOut')">
+        <v-btn flat right @click="$store.dispatch('signUserOut')" class="hidden-xs-only">
           <v-icon left>lock_open</v-icon>
           <p class="hidden-sm-and-down subheading mb-0"> SIGN OUT</p>
         </v-btn>
-        <notifications></notifications>
+        <notifications class="hidden-sm-and-up"></notifications>
       </v-toolbar>
 
       <main>
         <v-content>
           <v-container fluid fill-height class="pa-0">
             <v-layout row>
-              <v-flex sm3>
-                <aside-left></aside-left>
+              <v-flex sm3 class="hidden-xs-only">
+                <aside-left ></aside-left>
               </v-flex>
 
-              <v-flex sm6>
+              <v-flex sm6 xs12>
                 <v-container>
                   <router-view transition="slide-x-transition"></router-view>
                 </v-container>
               </v-flex>
 
-              <v-flex sm3>
+              <v-flex sm3 class="hidden-xs-only">
                 <aside-right> </aside-right>
               </v-flex>
-
 
             </v-layout>
           </v-container>
@@ -104,5 +102,9 @@
 
   user-search {
     height: 20px;
+  }
+
+  main > div.content{
+    padding: 48px 0px !important;
   }
 </style>

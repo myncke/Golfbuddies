@@ -36,19 +36,17 @@
         <v-divider></v-divider>
 
         <v-toolbar>
-          <v-btn small flat value="going" color="blue-grey" class="caption">
-            <v-icon left dark color="" class="caption">check</v-icon> Going
-          </v-btn>
-          <v-btn small flat value="maybe" color="blue-grey" class="caption">
+          <join-event :gameModel="model"></join-event>
+          <!-- <v-btn small flat value="maybe" color="blue-grey" class="caption">
             <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
           </v-btn>
           <v-btn small flat value="ignore" color="blue-grey" class="caption">
             <v-icon left dark color="" class="caption">clear</v-icon>Ignore
-          </v-btn>
+          </v-btn> -->
           <v-spacer></v-spacer>
-          <v-btn small flat value="ignore" color="blue-grey" class="caption">
+          <!-- <v-btn small flat value="ignore" color="blue-grey" class="caption">
             <v-icon left dark color="" class="caption">share</v-icon>Share
-          </v-btn>
+          </v-btn> -->
         </v-toolbar>
         </v-card>
       </v-flex>
@@ -58,7 +56,7 @@
       </v-flex>
 
       <v-flex v-if="isMyGame" class="mt-3">
-        <v-btn color="primary" block @click="inviting = true">Invite User</v-btn>
+        <v-btn color="primary" block @click="inviting = true">Invite Friends</v-btn>
         <v-dialog max-width="500" v-model="inviting" persistent>
           <v-card>
             <selection-view email :model="invitees"></selection-view>
@@ -122,6 +120,7 @@ import Details from './Show/Details'
 import Participants from './Show/Participants'
 import UserSelectionView from './components/UserSelectionView'
 import UserModel from '../../models/UserModel'
+import Join from './Join'
 
 export default {
   data: () => ({
@@ -129,7 +128,7 @@ export default {
     subModel: {},
     messages: [],
     error: '',
-    tabs: ['Details', 'Location', 'Pictures'],
+    tabs: ['Details', 'Location'], // Pictures
     creator: {},
     invitees: {invites: {}},
     inviting: false
@@ -175,7 +174,8 @@ export default {
     'pictures-tab': Pictures,
     'details-tab': Details,
     'participants-card': Participants,
-    'selection-view': UserSelectionView
+    'selection-view': UserSelectionView,
+    'join-event': Join
   }
 }
 </script>

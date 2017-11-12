@@ -85,7 +85,7 @@
       members: [],
       games: [],
       inviting: false,
-      tabs: ['Events', 'Members', 'Pictures', 'Details'],
+      tabs: ['Events', 'Members', 'Details'], // 'Pictures',
       invitees: {invites: []}
     }),
     created: function () {

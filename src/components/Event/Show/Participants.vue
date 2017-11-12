@@ -3,7 +3,8 @@
     <v-container>
       <v-layout row wrap>
         <v-flex xs12>
-          <h6 class="caption"><strong>{{amountGoing}} going &#9679; 0 maybe</strong></h6>
+          <h6 class="caption"><strong>{{amountGoing}} going {{goingUsers}}</strong></h6>
+          <!--  &#9679; 0 maybe -->
         </v-flex>
 
 
@@ -23,10 +24,10 @@
 
       </v-layout>
     </v-container>
-    <v-divider></v-divider>
+    <!-- <v-divider></v-divider>
     <v-card-action>
       <v-btn flat>Invite Friends</v-btn>
-    </v-card-action>
+    </v-card-action> -->
   </v-card>
 </template>
 
@@ -49,9 +50,8 @@
     methods: {
       init () {
         let people = this.getGoingPeople()
-        this.goingUsers = []
         for (let person of people) {
-          console.log(new UserModel(person, false, model => { this.goingUsers.push(model) }, error => console.log(error)))
+          this.goingUsers.push(new UserModel(person, false, model => { this.goingUsers.push(model) }, error => console.log(error)))
         }
       },
       getGoingPeople: function () {

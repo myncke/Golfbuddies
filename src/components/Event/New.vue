@@ -90,7 +90,7 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex sm6 xs12 class="input-field">
-                  <v-radio-group v-model="sportType" required>
+                  <v-radio-group v-model="sportType" required style="opacity:0">
                     <v-radio label="Golf" value="Golf" selected></v-radio>
                   </v-radio-group>
                 </v-flex>
