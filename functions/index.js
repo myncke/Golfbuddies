@@ -73,14 +73,16 @@ const APP_NAME = 'GolfBuddies';
 exports.sendInviteEmail = functions.firestore
   .document('Game/{eventId}')
   .onWrite(event => {
-    console.log(event)
-    const prevData = event.data.previous.data()
     const newData = event.data.data()
-    console.log(prevData)
     console.log(newData)
-
     const newInvites = newData.invites
-    const oldInvites = prevData.invites
+
+    let oldInvites = {}
+    if(event.data.previous !== undefined && event.data.previous !== null){
+      const prevData = event.data.previous.data()
+      console.log(prevData)
+      oldInvites = prevData.invites
+    }
 
     let promises = []
     let emails = Object.keys(newInvites)
