@@ -73,6 +73,7 @@ const APP_NAME = 'GolfBuddies';
 exports.sendInviteEmail = functions.firestore
   .document('Game/{eventId}')
   .onWrite(event => {
+    console.log(event)
     const prevData = event.data.previous.data()
     const newData = event.data.data()
     console.log(prevData)

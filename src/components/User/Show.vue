@@ -7,7 +7,7 @@
           <v-spacer></v-spacer>
           <v-switch label="Edit Mode" v-model="editMode" v-if="isMyProfile"></v-switch>
           <div v-else>
-            <v-btn v-if="isAFriend" @click="addFriendRequest" flat>
+            <v-btn v-if="isAFriend" @click="removeFriend" flat>
               Remove Friend
             </v-btn>
             <v-btn v-else @click="addFriendRequest" flat>
@@ -193,6 +193,9 @@
             await this.isFriend.save()
           }
         }
+      },
+      removeFriend: async function () {
+        this.isFriend.deleteObject()
       }
     },
     watch: {

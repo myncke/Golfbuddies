@@ -24,8 +24,9 @@
               </template>
             </v-list>
           </v-card-text>
+          <v-divider></v-divider>
           <v-card-actions>
-            <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile" ></user-search>
+            <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile" style="width:100%" ></user-search>
           </v-card-actions>
         </v-card>
       </v-expansion-panel-content>
