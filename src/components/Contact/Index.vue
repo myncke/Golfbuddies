@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="chatBox">
     <div class="loader" v-if="loading">
       <v-progress-circular style="display: inline-block;" indeterminate v-bind:size="100" color="green darken-1"></v-progress-circular>
     </div>
@@ -154,6 +154,7 @@
           this.loading = false
         )
       )
+      this.openConversation(this.$store.getters.conversation)
     },
     methods: {
       initFriends: async function () {
@@ -161,14 +162,14 @@
           let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
             this.error = error.message
           })
-          console.log(list)
+          // console.log(list)
           this.friendUserModels = []
           list.forEach(model => {
             model.getFriend(error => { this.error = error.message }).then(
               uModel => {
                 this.friendUserModels.push({user: uModel, friendship: model})
                 this.loading = false
-                console.log(uModel)
+                // console.log(uModel)
               }
             )
           })
@@ -178,7 +179,7 @@
       },
       initConversations: async function () {
         try {
-          let list = await SportClubModel.getMyClubs(error => { this.error = error.message })  // await ConversationGroupModel.getMyGroupConversations(error => { this.error = error })
+          let list = await SportClubModel.getMyClubs(error => { this.error = error.message }) // await ConversationGroupModel.getMyGroupConversations(error => { this.error = error })
           list = list.filter(element => element.conversationKey !== undefined)
           this.conversationModels = list || []
         } catch (error) {
