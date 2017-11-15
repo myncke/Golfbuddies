@@ -15,11 +15,11 @@
         <v-btn flat :to="'/contacts'" class="hidden-sm-and-up" style="min-width:50px;">
           <v-icon>contacts</v-icon>
         </v-btn>
+        <notifications ></notifications>
         <v-btn flat right @click="$store.dispatch('signUserOut')" class="hidden-xs-only">
           <v-icon left>lock_open</v-icon>
           <p class="hidden-sm-and-down subheading mb-0"> SIGN OUT</p>
         </v-btn>
-        <notifications class="hidden-sm-and-up"></notifications>
       </v-toolbar>
 
       <main>

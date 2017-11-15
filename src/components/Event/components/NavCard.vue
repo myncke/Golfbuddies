@@ -38,7 +38,7 @@
 export default {
   data: () => ({
     items: [
-      { name: 'Upcoming', icon: 'update', path: '/feed', info: 'All upcoming events you are invited to and are going to.' },
+      { name: 'Upcoming', icon: 'update', path: '/feed', info: 'All upcoming events you are invited to or are going to.' },
       { name: 'Calendar', icon: 'events', path: '/calendar', info: 'Calendar of all upcoming events and travels.' },
       { name: 'Discover', icon: 'search', path: '/events', info: 'Filter public events.' }
       // { name: 'Past', icon: 'history', path: '/history', info: '' }
