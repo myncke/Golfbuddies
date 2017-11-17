@@ -15,6 +15,7 @@
                     <div class="text-sm-right">{{ item.date | moment("dddd") }}</div>
                   </v-flex>
 
+
                   <v-flex column sm10>
                     <v-btn flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(item.key)">{{item.title}}</v-btn>
                     <p class="pl-3 ma-0">{{ item.date | moment("hh:mm a") }} &#9679; {{item.locationString}} </p>

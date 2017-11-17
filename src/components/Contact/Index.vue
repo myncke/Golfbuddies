@@ -52,6 +52,8 @@
         <v-flex sm12 xs12 class="hidden-xs-only" >
           <div style="height: 70vh; overflow: scroll" v-chat-scroll>
             <p class="red--text">{{error}}</p>
+            <p>{{this.$store.getters.conversation}}</p>
+            <p>{{this.conversationPartner.name}}</p>
             <div v-for="message in messages">
               <v-layout row>
                 <v-flex v-if="message.by.path != 'Users/' + getCurrentUser().uid" sm6>
@@ -97,9 +99,9 @@
                 <v-btn class="primary" @click="sendMessage()">
                   Send Message <span style="margin-left: 5px"><v-icon>send</v-icon></span>
                 </v-btn>
-                <v-btn raised round @click="settings = !settings">
+                <!-- <v-btn raised round @click="settings = !settings">
                   Settings <span style="margin-left: 5px"><v-icon>settings</v-icon></span>
-                </v-btn>
+                </v-btn> -->
               </v-flex>
             </v-layout>
           </div>
@@ -145,7 +147,8 @@
         messages: [],
         text: '',
         groupName: '',
-        settings: false
+        settings: false,
+        conversationPartner: undefined
       }
     },
     created () {
@@ -155,6 +158,29 @@
         )
       )
       this.openConversation(this.$store.getters.conversation)
+
+      let partnerId = this.$store.getters.user.key
+      this.conversationPartner = new UserModel(partnerId, false, () => {}, () => {})
+    },
+    watch: {
+      $store: function () {
+        console.log(this.$store.getters.conversation)
+      }
+    },
+    computed: {
+      getMessages: async (store) => {
+        this.currentConversation = store.getters.conversation
+        this.groupName = this.currentConversation.name
+        this.messages = []
+        this.error = undefined
+        this.currentConversation.listenToMessagesOrdered(undefined, undefined, async function (list) {
+          for (let message of list) {
+            message.byModel = await UserModel.getFromRef(message.by, UserModel, error => { this.error = error.message; throw error })
+          }
+          this.messages = list
+        }.bind(this), error => { this.error = error; throw error })
+        return this.messages
+      }
     },
     methods: {
       initFriends: async function () {
