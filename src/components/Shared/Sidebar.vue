@@ -72,8 +72,11 @@ export default {
   data: () => ({
     open: false,
     items: [
-      { icon: 'events', text: 'Events', path: '/events' },
-      { icon: 'contacts', text: 'Contacts', path: '/contacts' },
+      { text: 'Upcoming', icon: 'update', path: '/feed', info: 'All upcoming events you are invited to or are going to.' },
+      { text: 'Calendar', icon: 'events', path: '/calendar', info: 'Calendar of all upcoming events and travels.' },
+      { text: 'Discover', icon: 'search', path: '/events', info: 'Filter public events.' },
+      { text: 'Create New Event', icon: 'add', path: '/event/new' },
+      { text: 'Travel', icon: 'add', path: '/locationBroadcast/new' },
       {
         icon: 'keyboard_arrow_up',
         'icon-alt': 'keyboard_arrow_down',
@@ -81,26 +84,29 @@ export default {
         model: true,
         children: [
           { icon: 'group_work', text: 'All Groups', path: '/groups/open' },
-          { icon: 'group_work', text: 'My Groups', path: '/groups/my' },
-          { icon: 'add', text: 'Create Group', path: '/group/new' }
+          { icon: 'group', text: 'My Groups', path: '/groups/my' },
+          { icon: 'group_add', text: 'Create Group', path: '/group/new' }
         ],
         path: '/'
-      },
-      { icon: 'person', text: 'Profile', path: '/profile' },
-      { icon: 'settings', text: 'Settings', path: '/settings' },
-      { icon: 'chat_bubble', text: 'Send feedback', path: '/feedback' },
-      { icon: 'help', text: 'Help', path: '/help' },
-      { icon: 'phonelink', text: 'Install App', path: '/install' }
+      }
     ]
   }),
+  created () {
+    let person = { icon: 'person', text: 'Profile', path: '/profile/' + this.$store.getters.user.key }
+    this.items.push(person)
+  },
   methods: {
     switchOpenState () {
       this.open = !this.open
       console.log(
         SportClubModel.getAllFromRef(
-          SportClubModel.getNormalRef(SportClubModel).where('members.' + this.$store.getters.user.uid, '==', true), SportClubModel, () => ({})
+          SportClubModel.getNormalRef(SportClubModel).where('members.' + this.$store.getters.user.key, '==', true), SportClubModel, () => ({})
         )
       )
+    },
+    goToProfile: function () {
+      // this.$router.push({name: 'profile', params: {id: this.$store.getters.key}})
+      return '/profile/' + this.$store.getters.user.key
     }
   }
 }
