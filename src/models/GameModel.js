@@ -81,7 +81,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   static async getAllMyInvitedUpcomingGames (onFailure) {
     let range = GameModel.getDefaultRange()
-    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
+    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel())._getDocRef() + '.invited', '==', true), GameModel, onFailure)
     list = list.filter(obj => obj.date >= range.start && obj.date < range.end)
     console.log(list)
     list.sort((a, b) => b.date - a.date)
