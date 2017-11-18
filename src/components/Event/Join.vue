@@ -1,6 +1,7 @@
 <template>
   <div>
-    <v-btn small flat value="going" color="blue-grey" class="caption"  @click="openDialog">
+
+    <v-btn small flat value="going" :color="invited ? 'green' : 'blue-grey'" class="caption" @click="openDialog">
       <v-icon left dark color="" class="caption">check</v-icon> Going
     </v-btn>
     <v-dialog v-model="openMe">
@@ -33,15 +34,29 @@
       openMe: false,
       specialWishes: '',
       loading: false,
-      gameUser: undefined
+      gameUser: undefined,
+      users: []
     }),
     created: function () {
       this.initGameUser()
+      this.initUsers()
+    },
+    computed: {
+      invited: function () {
+        return this.users.includes(this.$store.getters.user.key)
+      }
     },
     methods: {
+      initUsers: async function () {
+        let userlist = await this.gameModel.initSubcollection('GameUsers', error => { console.log(error) })
+        for (let i = 0; i < userlist.length; i++) {
+          this.users.push(userlist[i].key)
+        }
+      },
       openDialog: function () {
-        this.openMe = true
-        console.log(this.openMe)
+        if (!this.invited) {
+          this.openMe = true
+        }
       },
       join: async function () {
         this.loading = true

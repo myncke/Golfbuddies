@@ -23,9 +23,9 @@
             </v-flex>
             <v-flex>
               <p class="caption ma-0" color="grey--after lighten-1">
-                {{model.inviteOnly ? 'Public' : 'Private' }}
+                {{model.inviteOnly ? 'Private' : 'Public' }}
                 &#9679; Hosted by
-                <a href="">{{ creator.firstName || 'Unkown' }} {{ creator.lastName || ''}}</a>
+                <a @click="goToUser(creator.key)" class="capitalize">{{ creator.firstName || 'Unkown' }} {{ creator.lastName || ''}}</a>
               </p>
               <v-divider class="mt-2"></v-divider>
               <p class="caption ma-0 pt-2"> <v-icon :style="{ fontSize: 15+ 'px' }">location_on</v-icon> {{model.locationString}}</p>
@@ -159,13 +159,18 @@ export default {
     addPeople: async function () {
       let invitees = this.invitees
       this.invitees = {invites: {}}
-      console.log(this.invitees)
+      console.log('invites:' + this.invitees)
       for (let invites of Object.keys(invitees.invites)) {
         this.model.invites[invites] = invitees.invites[invites]
       }
       this.inviting = false
       await this.model.save()
       await this.model.sendInviteNotification(Object.keys(invitees.invites))
+    },
+    goToUser: function (key) {
+      this.$router.push({
+        name: 'profile', params: { id: key }
+      })
     }
   },
   components: {

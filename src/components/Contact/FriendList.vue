@@ -1,13 +1,13 @@
 <template>
   <v-flex class="mb-4">
     <v-expansion-panel expand>
-      <v-expansion-panel-content>
+      <v-expansion-panel-content v-model="open">
         <div slot="header">Friends</div>
         <v-card >
           <v-card-text class="grey lighten-3 pa-0">
             <v-list two-line style="height: 60vh; overflow:scroll;">
               <template v-for="model in friendUserModels">
-                <v-list-tile avatar v-bind:key="model.user.key" @click="openConversationFriend(model)" :to="'/contacts'">
+                <v-list-tile avatar v-bind:key="model.user.key" @click="openConversation(model)" :to="'/contacts'">
                   <v-list-tile-avatar>
                     <img v-bind:src="'https://ui-avatars.com/api/?name=' + model.user.firstName + '+' + model.user.lastName + '&rounded=true'"/>
                   </v-list-tile-avatar>
@@ -38,7 +38,7 @@
 <script>
   import firebase from 'firebase'
   import FriendshipModel from '../../models/FriendshipModel'
-  import UserModel from '../../models/UserModel'
+  // import UserModel from '../../models/UserModel'
   import ConversationGroupModel, { MessageModel } from '../../models/ConversationGroupModel'
   import dateUtils from '../../utils/DateUtils'
   import ImageUtils from '../../utils/ImageUtils'
@@ -56,7 +56,8 @@
         messages: [],
         text: '',
         groupName: '',
-        settings: false
+        settings: false,
+        open: true
       }
     },
     created () {
@@ -102,31 +103,6 @@
       makeInitialsImage: function (user) {
         return ImageUtils.makeInitialsImage(user)
       },
-      openConversation: async function (conversationModel) {
-        try {
-          console.log(this.conversationModels)
-          console.log(conversationModel)
-          this.currentConversation = conversationModel
-          this.groupName = conversationModel.name
-          this.messages = []
-          this.error = undefined
-          conversationModel.listenToMessagesOrdered(undefined, undefined, async function (list) {
-            for (let message of list) {
-              message.byModel = await UserModel.getFromRef(message.by, UserModel, error => { this.error = error.message; throw error })
-            }
-            this.messages = list
-          }.bind(this), error => { this.error = error; throw error })
-        } catch (error) {
-          this.error = error.message
-          throw error
-        }
-      },
-      openConversationFriend: async function (model) {
-        this.openConversation(await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, this.onFailure))
-      },
-      openConversationGroup: async function (model) {
-        this.openConversation(await ConversationGroupModel.getFromRef(model.conversationKey, ConversationGroupModel, this.onFailure))
-      },
       getCurrentUser: function () {
         return firebase.auth().currentUser
       },
@@ -154,6 +130,10 @@
       },
       onFailure: function (error) {
         this.error = error
+      },
+      openConversation: async function (model) {
+        var convo = (await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, this.onFailure))
+        this.$store.dispatch('changeConversation', convo)
       }
     },
     components: {

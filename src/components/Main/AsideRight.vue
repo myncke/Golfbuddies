@@ -1,27 +1,6 @@
 <template>
     <v-container>
       <v-layout column>
-
-          <v-flex class="mb-4">
-            <v-card>
-              <v-list two-line>
-                <template v-for="item in notifications">
-                  <v-subheader v-if="item.header" v-text="item.header"></v-subheader>
-                  <v-divider v-else-if="item.divider" v-bind:inset="item.inset"></v-divider>
-                  <v-list-tile avatar v-else v-bind:key="item.title" @click="">
-                    <v-list-tile-avatar>
-                      <!-- <img v-bind:src="item.avatar"> -->
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                      <!-- <v-list-tile-title v-html="item.title"></v-list-tile-title> -->
-                      <!-- <v-list-tile-sub-title >24 Okt. 2017</v-list-tile-sub-title> -->
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </template>
-              </v-list>
-            </v-card>
-          </v-flex>
-
           <friend-list></friend-list>
           <!-- <v-flex class="mb-4">
             <v-card>
@@ -41,6 +20,7 @@
 
 <script>
 import FriendList from '../Contact/FriendList'
+
 export default {
   data: () => ({
     notifications: [
