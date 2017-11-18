@@ -64,14 +64,18 @@ export default class GameModel extends FirebaseSubColModel {
 
   static async getAllUpcomingGames (onFailure) {
     let result = []
+    console.log('USER:', (new UserModel())._getDocRef())
     result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
     result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
     result.push(...(await GameModel.getAllMyAcceptedUpcomingGames(onFailure)))
-    result.push(...(await GameModel.getAllUpcomingGamesByUser(this.$store.getters.user._getDocRef(), onFailure)))
-    result = result.filter(function (item, pos) {
-      return result.indexOf(item) === pos
-    })
-    return result
+    result.push(...(await GameModel.getAllUpcomingGamesByUser((new UserModel())._getDocRef(), onFailure)))
+
+    let resultObject = {}
+    for (let obj of result) {
+      resultObject[obj.key] = obj
+    }
+
+    return Object.values(resultObject)
   }
 
   static async getAllUpcomingOpenGames (onFailure) {
@@ -81,7 +85,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   static async getAllMyInvitedUpcomingGames (onFailure) {
     let range = GameModel.getDefaultRange()
-    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel())._getDocRef() + '.invited', '==', true), GameModel, onFailure)
+    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
     list = list.filter(obj => obj.date >= range.start && obj.date < range.end)
     console.log(list)
     list.sort((a, b) => b.date - a.date)
