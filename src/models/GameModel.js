@@ -67,7 +67,7 @@ export default class GameModel extends FirebaseSubColModel {
     result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
     result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
     result.push(...(await GameModel.getAllMyAcceptedUpcomingGames(onFailure)))
-    result.push(...(await GameModel.getAllUpcomingGamesByUser((new UserModel()).key, onFailure)))
+    result.push(...(await GameModel.getAllUpcomingGamesByUser(this.$store.getters.user._getDocRef(), onFailure)))
     result = result.filter(function (item, pos) {
       return result.indexOf(item) === pos
     })
