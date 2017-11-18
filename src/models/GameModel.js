@@ -66,6 +66,10 @@ export default class GameModel extends FirebaseSubColModel {
     let result = []
     result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
     result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
+    result.push(...(await GameModel.getAllMyAcceptedUpcomingGames(onFailure)))
+    result = result.filter(function(item, pos) {
+      return result.indexOf(item) === pos;
+    })
     return result
   }
 
@@ -84,6 +88,14 @@ export default class GameModel extends FirebaseSubColModel {
     return list
   }
 
+  static async getAllMyAcceptedUpcomingGames (onFailure) {
+    let range = GameModel.getDefaultRange()
+    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.accepted', '==', true), GameModel, onFailure)
+    list = list.filter(obj => obj.date >= range.start && obj.date < range.end)
+    list.sort((a, b) => b.date - a.date)
+    return list
+  }
+
   static async getAllUpcomingFriendlyGames (onFailure) {
     let friends = await FriendshipModel.getFriendsOfCurrentUser(onFailure)
     console.log(friends)
@@ -96,7 +108,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   static async getAllUpcomingGamesByUser (userRef, onFailure) {
     let range = GameModel.getDefaultRange()
-    return (await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).where('creator', '==', userRef).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc'), GameModel, onFailure))
+    return (await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('creator', '==', userRef).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc'), GameModel, onFailure))
   }
 
   static async getAllGamesWithFilter (filterObject, onFailure) {
@@ -148,11 +160,11 @@ export default class GameModel extends FirebaseSubColModel {
   }
 
   static async getInvitedGames (onFailure) {
-    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
   }
 
   static async getJoinedGames (onFailure) {
-    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', true).where('invites.' + (new UserModel()).key + '.accepted', '==', true), GameModel, onFailure)
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.accepted', '==', true), GameModel, onFailure)
   }
 
   async getFirstXMessages (start, limit, onFailure) {
