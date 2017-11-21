@@ -61,8 +61,12 @@
       join: async function () {
         this.loading = true
         await this.gameModel.addSubcollectionDoc('GameUsers', this.gameUser, error => { this.error = error.message })
+        let key = this.$store.getters.user.key
+        this.gameModel.invites[key] = {invited: (this.gameModel.invites[key] || {invited: false}).invited, accepted: true}
+        await this.gameModel.save()
         this.loading = false
         this.openMe = false
+        this.$emit('user-joined', this.gameModel)
       },
       initGameUser: function () {
         console.log('CURRENT USER: ' + this.$store.getters.user.key)

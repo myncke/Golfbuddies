@@ -54,22 +54,46 @@
       this.initGoing()
       this.initInvites()
       console.log(this.model.invites)
-      console.log(this.model.invites)
-      console.log(this.model.invites)
       console.log(this.going)
     },
     methods: {
+      init: async function () {
+        this.invites = []
+        this.going = []
+        this.goingUsers = []
+        await this.initGoing()
+        await this.initInvites()
+      },
       initGoing: async function () {
         let userlist = await this.model.initSubcollection('GameUsers', error => { console.log(error) })
         for (let i = 0; i < userlist.length; i++) {
-          this.going.push(new UserModel(userlist[i].key, false, model => { this.goingUsers.push(model) }, error => console.log(error)))
+          this.going.push(new UserModel(userlist[i].key, false, model => { this.addModelToGoing(model) }, error => console.log(error)))
         }
       },
       initInvites: async function () {
         let people = Object.keys(this.model.invites)
         for (let person of people) {
-          this.invites.push(new UserModel(person, false, model => { this.goingUsers.push(model) }, error => console.log(error)))
+          if (this.model.invites[person].invited && !this.model.invites[person].accepted) {
+            this.invites.push(new UserModel(person, false, model => {
+              this.addModelToGoing(model)
+            }, error => console.log(error)))
+          }
         }
+        console.log(this.invites)
+        this.invites = this.invites.filter(model => {
+          let array = this.going.filter(model2 => model.key === model2.key)
+          console.log(array)
+          return array.length === 0
+        })
+        // console.log(this.invites)
+      },
+      addModelToGoing (model) {
+        this.goingUsers.push(model)
+        let object = {}
+        for (let obj of this.goingUsers) {
+          object[obj.key] = obj
+        }
+        this.goingUsers = Object.values(object)
       },
       makeInitialsImage: function (user) {
         return ImageUtils.makeInitialsImage(user)

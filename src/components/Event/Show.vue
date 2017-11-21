@@ -36,7 +36,7 @@
         <v-divider></v-divider>
 
         <v-toolbar>
-          <join-event :gameModel="model"></join-event>
+          <join-event v-on:user-joined="refreshModel" :gameModel="model"></join-event>
           <!-- <v-btn small flat value="maybe" color="blue-grey" class="caption">
             <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
           </v-btn>
@@ -52,7 +52,7 @@
       </v-flex>
 
       <v-flex class="mt-3">
-        <participants-card :model="model"></participants-card>
+        <participants-card ref="participants" :model="model"></participants-card>
       </v-flex>
 
       <v-flex v-if="isMyGame" class="mt-3">
@@ -171,6 +171,12 @@ export default {
       this.$router.push({
         name: 'profile', params: { id: key }
       })
+    },
+    refreshModel: function (model) {
+      console.log('MODEL REFRESHED!', model)
+      this.model = undefined
+      this.model = model
+      this.$refs.participants.init()
     }
   },
   components: {
