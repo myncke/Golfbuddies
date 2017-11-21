@@ -18,7 +18,6 @@
               <v-layout row wrap>
                 <v-flex md6 xs12 class="input-field">
                   <v-text-field label="Event Title" v-model="model.title" prepend-icon="short_text" required
-
                   ></v-text-field>
                 </v-flex>
 
@@ -31,7 +30,7 @@
                                 clearable
                   ></v-text-field>
                 </v-flex>
-                <v-flex md6 xs12 class="input-field">
+                <v-flex xs12 class="input-field">
                   <vuetify-google-autocomplete
                     id="map"
                     append-icon="search"
@@ -46,6 +45,9 @@
                   <!--<v-text-field label="Location" v-model="model.locationString" prepend-icon="location_on" required
                                 :rules="rules.locationRules"
                   ></v-text-field>-->
+                </v-flex>
+                <v-flex xs12 class="special-wishes">
+                  <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 class="input-field">
                   <v-text-field label="Special Wishes / Information" v-model="model.specialWishes" multiLine
@@ -239,5 +241,10 @@
 <style>
   .input-field {
     padding: 10px;
+  }
+
+  .special-wishes{
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
 </style>
