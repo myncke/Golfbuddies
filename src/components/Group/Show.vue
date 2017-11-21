@@ -49,7 +49,7 @@
               </v-layout>
 
               <v-layout row wrap v-if="i == 'Members'">
-                <members-tab :members="members"></members-tab>
+                <members-tab :iscreator="isMyGroup" :members="members" v-on:remove-user="removeUser"></members-tab>
               </v-layout>
 
               <v-layout row wrap v-if="i == 'Pictures' && hasFullPermission">
@@ -157,6 +157,13 @@
         this.members = []
         this.initMembers(this.club)
         await this.updateConversation()
+      },
+      async removeUser (user) {
+        if (user.key !== this.club.getAdmin()) {
+          delete this.club.members[user.key]
+          this.members = this.members.filter(model => model.key !== user.key)
+          await this.club.save()
+        }
       },
       updateConversation: async function () {
         let conversation = await ConversationGroupModel.getFromRef(this.club.conversationKey, ConversationGroupModel, error => { this.error = error.message })
