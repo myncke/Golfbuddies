@@ -1,8 +1,8 @@
 <template>
   <div>
-
-    <v-btn small flat value="going" :color="invited ? 'green' : 'blue-grey'" class="caption" @click="openDialog">
-      <v-icon left dark color="" class="caption">check</v-icon> Going
+    <p class="red--text caption" v-if="error">{{error}}</p>
+    <v-btn small flat value="going" :color="invited ? 'green' : hasPermission ? 'blue-grey' : 'red'" class="caption" @click="openDialog">
+      <v-icon left dark color="" class="caption">{{hasPermission ? 'check' : 'clear'}}</v-icon> Going
     </v-btn>
     <v-dialog v-model="openMe">
       <v-card v-if="gameModel !== undefined">
@@ -35,7 +35,8 @@
       specialWishes: '',
       loading: false,
       gameUser: undefined,
-      users: []
+      users: [],
+      error: ''
     }),
     created: function () {
       this.initGameUser()
@@ -44,6 +45,10 @@
     computed: {
       invited: function () {
         return this.users.includes(this.$store.getters.user.key)
+      },
+      hasPermission () {
+        console.log(!this.gameModel.inviteOnly)
+        return (this.gameModel.invites[this.gameUser.key] || {invited: false}).invited || !this.gameModel.inviteOnly
       }
     },
     methods: {
@@ -54,19 +59,23 @@
         }
       },
       openDialog: function () {
-        if (!this.invited) {
+        if (!this.invited && this.hasPermission) {
           this.openMe = true
         }
       },
       join: async function () {
-        this.loading = true
-        await this.gameModel.addSubcollectionDoc('GameUsers', this.gameUser, error => { this.error = error.message })
-        let key = this.$store.getters.user.key
-        this.gameModel.invites[key] = {invited: (this.gameModel.invites[key] || {invited: false}).invited, accepted: true}
-        await this.gameModel.save()
-        this.loading = false
-        this.openMe = false
-        this.$emit('user-joined', this.gameModel)
+        if (this.hasPermission) {
+          this.loading = true
+          await this.gameModel.addSubcollectionDoc('GameUsers', this.gameUser, error => { this.error = error.message })
+          let key = this.$store.getters.user.key
+          this.gameModel.invites[key] = {invited: (this.gameModel.invites[key] || {invited: false}).invited, accepted: true}
+          await this.gameModel.save()
+          this.loading = false
+          this.openMe = false
+          this.$emit('user-joined', this.gameModel)
+        } else {
+          this.error = 'You don\'t have the permission to join this game'
+        }
       },
       initGameUser: function () {
         console.log('CURRENT USER: ' + this.$store.getters.user.key)
