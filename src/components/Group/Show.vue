@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="club !== undefined" class="pa-0 ma-0" fluid>
+  <v-container v-if="club !== undefined && hasInformationPermission" class="pa-0 ma-0" fluid>
     <v-layout column>
       <v-flex>
         <v-card>
@@ -7,7 +7,7 @@
             <v-container class="ma-0 container-text-gradient" fluid>
               <v-layout column align-left justify-end>
                 <h1 class="white--text display-2">{{club.name}}</h1>
-                <h2 class="white--text subheading">{{club.closed ? 'Public' : 'Private' }} &#9679; {{club.information}}</h2>
+                <h2 class="white--text subheading">{{!club.closed ? 'Public' : 'Private' }} &#9679; {{club.information}}</h2>
               </v-layout>
             </v-container>
           </v-card-media>
@@ -32,7 +32,7 @@
             :key="i"
             :href="'#tab-' + i"
           >
-            {{ i }}
+            {{ i === 'Pictures' ? i : (hasFullPermission) ? i : 'No Permission'}}
           </v-tabs-item>
         </v-tabs-bar>
         <v-divider></v-divider>
@@ -52,7 +52,7 @@
                 <members-tab :members="members"></members-tab>
               </v-layout>
 
-              <v-layout row wrap v-if="i == 'Pictures'">
+              <v-layout row wrap v-if="i == 'Pictures' && hasFullPermission">
                 <pictures-tab></pictures-tab>
               </v-layout>
 
@@ -102,6 +102,19 @@
       },
       canJoin: function () {
         return (!this.club.closed && this.club.members[this.$store.getters.user.key] !== true && !this.isMyGroup)
+      },
+      hasFullPermission () {
+        let user = this.$store.getters.user
+        return this.club.members[user.key] === true || !this.club.closed
+      },
+      hasInformationPermission () {
+        let permission = !this.club.closed
+        if (!permission) {
+          this.$router.push('/')
+          return false
+        } else {
+          return true
+        }
       }
     },
     methods: {

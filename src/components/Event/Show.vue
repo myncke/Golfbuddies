@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-0">
-    <v-layout column v-if="model !== undefined">
+    <v-layout column v-if="model !== undefined && hasPermission">
       <v-flex>
         <v-card class="mb-3">
           <v-card-media
@@ -136,6 +136,16 @@ export default {
   computed: {
     isMyGame: function () {
       return this.model.getCreator() === this.$store.getters.user.key
+    },
+    hasPermission () {
+      let user = this.$store.getters.user
+      let permission = (this.model.invites[user.key] || {invited: false}).invited || !this.model.inviteOnly
+      if (!permission) {
+        this.$router.push('/')
+        return false
+      } else {
+        return true
+      }
     }
   },
   created: function () {
