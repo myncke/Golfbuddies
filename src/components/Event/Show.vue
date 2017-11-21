@@ -57,7 +57,7 @@
 
       <v-flex v-if="isMyGame" class="mt-3">
         <v-btn color="primary" block @click="inviting = true">Invite Friends</v-btn>
-        <v-dialog max-width="500" v-model="inviting" persistent>
+        <v-dialog max-width="500" v-model="inviting">
           <v-card>
             <selection-view email :model="invitees"></selection-view>
             <v-btn block color="primary" @click="addPeople">Add People</v-btn>
