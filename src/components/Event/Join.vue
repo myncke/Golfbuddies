@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="gameModel !== undefined && gameModel.invites !== undefined">
     <p class="red--text caption" v-if="error">{{error}}</p>
     <v-btn small flat value="going" :color="invited ? 'green' : hasPermission ? 'blue-grey' : 'red'" class="caption" @click="openDialog">
       <v-icon left dark color="" class="caption">{{hasPermission ? 'check' : 'clear'}}</v-icon> Going
