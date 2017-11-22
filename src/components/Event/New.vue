@@ -30,6 +30,13 @@
                                 clearable
                   ></v-text-field>
                 </v-flex>
+                <v-flex md6 xs12 class="input-field">
+                  <v-text-field label="End Date (Optional)" :mask="'date-with-time'" v-model="model.enddate" prepend-icon="date_range"
+                                :rules="rules.enddateRules"
+                                placeholder="dd/mm/yyyy hh:mm"
+                                clearable
+                  ></v-text-field>
+                </v-flex>
                 <v-flex xs12 class="input-field">
                   <vuetify-google-autocomplete
                     id="map"
@@ -39,6 +46,7 @@
                     placeholder="Event Location"
                     v-on:placechanged="getAddressData"
                     :placeholder="model.locationString"
+                    v-on:inputChange="(locationString) => { model.locationString = locationString.newVal }"
                     types="address"
                   >
                   </vuetify-google-autocomplete>
@@ -56,22 +64,31 @@
                 <v-flex lg4 sm6 xs12 class="input-field">
                   <v-checkbox label="Competition"
                               v-model="model.competition"
-                              color="primary"
-                              required>
+                              color="primary">
                   </v-checkbox>
                 </v-flex>
                 <v-flex lg4 sm6 xs12 class="input-field">
                   <v-checkbox label="International"
                               v-model="model.international"
-                              color="primary"
-                              required>
+                              color="primary">
+                  </v-checkbox>
+                </v-flex>
+                <v-flex lg4 sm6 xs12 class="input-field">
+                  <v-checkbox label="Dinner"
+                              v-model="model.dinner"
+                              color="primary">
+                  </v-checkbox>
+                </v-flex>
+                <v-flex lg4 sm6 xs12 class="input-field">
+                  <v-checkbox label="Carpool"
+                              v-model="model.carpool"
+                              color="primary">
                   </v-checkbox>
                 </v-flex>
                 <v-flex lg4 sm6 xs12 class="input-field">
                   <v-checkbox label="Invite Only"
                               v-model="model.inviteOnly"
-                              color="primary"
-                              required>
+                              color="primary">
                   </v-checkbox>
                 </v-flex>
                 <v-flex xs12></v-flex>
@@ -136,7 +153,16 @@
           (v) => !!v || 'Date is required',
           (v) => {
             if (typeof v === 'string') {
-              return DateUtils.stringToDate(v) > new Date() || 'Date should be in the future'
+              return DateUtils.stringToDate(v) >= new Date() || 'Date should be in the future'
+            }
+            return !!v
+          }
+        ],
+        enddateRules: [
+          (v) => {
+            if (typeof v === 'string') {
+              /* (((!this.model.date && DateUtils.stringToDate(v) >= new Date()) || (this.model.date && DateUtils.stringToDate(v) > DateUtils.stringToDate(this.model.date)))) */
+              return DateUtils.stringToDate(v) > new Date() || 'Date should be in the future and after the Start date'
             }
             return !!v
           }
@@ -195,7 +221,7 @@
       getLocation: async function () {
         try {
           let location = await LocationUtils.getLocation(this.model.locationString, this.$http)
-          this.model.location = {latitude: location.lat, longitude: location.lng}
+          return {latitude: location.lat, longitude: location.lng}
         } catch (error) {
           this.error = 'Invalid location, please try again with a more precise location.'
         }
@@ -208,16 +234,25 @@
         this.model.competition = this.model.competition || false
         this.model.international = this.model.international || false
         this.model.inviteOnly = this.model.inviteOnly || false
+        this.model.dinner = this.model.dinner || false
+        this.model.carpool = this.model.carpool || false
         this.model.prefGroupSize = parseInt(this.model.prefGroupSize)
         if (typeof this.model.date === 'string') {
           this.model.date = DateUtils.stringToDate(this.model.date)
         }
+        if (typeof this.model.enddate === 'string') {
+          this.model.enddate = DateUtils.stringToDate(this.model.enddate)
+        } else {
+          this.model.enddate = this.model.enddate || this.model.date
+        }
         this.model.specialWishes = this.model.specialWishes || ''
         this.model.creator = UserModel.getNormalRef(UserModel).doc((new UserModel()).key)
         this.model.subGame = subModel._getDocRef()
+        this.model.location = this.model.location || await this.getLocation() || {latitude: 0, longitude: 0}
+        console.log(this.model.location)
 
         subModel.gameKey = GameModel.getNormalRef(GameModel).doc(this.model.key)
-
+        console.log(this.model)
         // Save both models
         await this.model.save()
         await subModel.save()

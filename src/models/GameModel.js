@@ -201,7 +201,10 @@ export default class GameModel extends FirebaseSubColModel {
     'subGame',
     'locationString',
     'title',
-    'invites'
+    'invites',
+    'enddate',
+    'carpool',
+    'dinner'
   ]
 
   static _subCollections = {
@@ -215,6 +218,8 @@ export default class GameModel extends FirebaseSubColModel {
   competition
   international
   inviteOnly
+  carpool = false
+  dinner = false
 
   // Strings
   prefGameSex
@@ -249,6 +254,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   // Timestamps
   date
+  enddate
 
   // Geopoints
   location

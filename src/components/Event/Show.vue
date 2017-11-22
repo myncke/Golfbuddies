@@ -139,7 +139,7 @@ export default {
     },
     hasPermission () {
       let user = this.$store.getters.user
-      let permission = (this.model.invites[user.key] || {invited: false}).invited || !this.model.inviteOnly
+      let permission = (this.model.invites[user.key] || {invited: false}).invited || !this.model.inviteOnly || this.isMyGame
       if (!permission) {
         this.$router.push('/')
         return false
