@@ -52,6 +52,16 @@ export default class GameModel extends FirebaseSubColModel {
     await notification.save()
   }
 
+  canJoin (user) {
+    if (this.prefGameSex === 'Men Only') {
+      return user.sex === 'Male'
+    } else if (this.prefGameSex === 'Women Only') {
+      return user.sex === 'Female'
+    } else {
+      return true
+    }
+  }
+
   static getDefaultRange () {
     let date = new Date()
     let inTwoMonths = new Date()

@@ -1,7 +1,7 @@
 <template>
   <div v-if="gameModel !== undefined && gameModel.invites !== undefined">
     <p class="red--text caption" v-if="error">{{error}}</p>
-    <v-btn small flat value="going" :color="invited ? 'green' : hasPermission ? 'blue-grey' : 'red'" class="caption" @click="openDialog">
+    <v-btn small flat value="going" :color="invited ? 'green' : hasPermission ? 'blue-grey' : 'red'" class="caption" @click="invited ? openDialog : unjoinGame" :disabled="hasPermission">
       <v-icon left dark color="" class="caption">{{hasPermission ? 'check' : 'clear'}}</v-icon> Going
     </v-btn>
     <v-dialog v-model="openMe">
@@ -28,6 +28,8 @@
 
 <script>
   import GameModel, { GameUser } from '../../models/GameModel'
+  import GolfUserModel from '../../models/GolfUserModel'
+  import GolfGameModel from '../../models/GolfGameModel'
 
   export default {
     data: () => ({
@@ -35,6 +37,9 @@
       specialWishes: '',
       loading: false,
       gameUser: undefined,
+      myModel: undefined,
+      myGameModel: undefined,
+      subModel: undefined,
       users: [],
       error: ''
     }),
@@ -47,8 +52,8 @@
         return this.users.includes(this.$store.getters.user.key)
       },
       hasPermission () {
-        console.log(!this.gameModel.inviteOnly)
-        return (this.gameModel.invites[this.gameUser.key] || {invited: false}).invited || !this.gameModel.inviteOnly
+        let user = this.$store.getters.user
+        return this.myModel && this.gameModel && this.subModel && ((this.gameModel.invites[this.gameUser.key] || {invited: false}).invited || !this.gameModel.inviteOnly) && this.gameModel.canJoin(user) && this.subModel.canJoin(this.myModel)
       }
     },
     methods: {
@@ -77,11 +82,20 @@
           this.error = 'You don\'t have the permission to join this game'
         }
       },
-      initGameUser: function () {
-        console.log('CURRENT USER: ' + this.$store.getters.user.key)
-        let gameUser = new GameUser(this.$store.getters.user.key)
+      initGameUser: async function () {
+        let userKey = this.$store.getters.user.key
+        this.myModel = new GolfUserModel(this.userKey, false, model => { this.myModel = undefined; this.myModel = model }, error => { this.error = error.message })
+        console.log('CURRENT USER: ' + userKey)
+        let gameUser = new GameUser(userKey)
         gameUser.specialWishes = ''
         this.gameUser = gameUser
+        this.subModel = await GolfGameModel.getFromRef(this.gameModel.subGame, GolfGameModel, error => { this.error = error })
+      },
+      unjoinGame: async function () {
+        let userKey = this.$store.getters.user.key
+        this.gameModel.removeSubColDoc('GameUsers', userKey, error => { this.error = error })
+        delete this.gameModel.invites[userKey]
+        console.log('DELETED')
       }
     },
     props: {

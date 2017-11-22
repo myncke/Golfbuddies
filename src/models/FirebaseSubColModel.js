@@ -115,4 +115,9 @@ export default class FirebaseSubColModel extends FirebaseModel {
     ref = this.addRefOptions(ref, orderField, order, startAt, limit)
     this._listenToSubColRef(ref, key, onSuccess, onFailure)
   }
+
+  async removeSubColDoc (key, docKey, onFailure) {
+    await this._getDocRef().collection(key).doc(docKey).delete()
+    delete this.subCollectionResult[docKey]
+  }
 }

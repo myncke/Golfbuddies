@@ -72,6 +72,14 @@
             </v-flex>
 
             <v-flex sm6 xs12 class="pa-3">
+              <v-text-field
+                label="Phone Number"
+                v-model="model.phone"
+                :disabled="!editMode"
+              ></v-text-field>
+            </v-flex>
+
+            <v-flex sm6 xs12 class="pa-3">
               <v-radio-group v-model="model.sex">
                 <v-radio v-for="sex in sexes"
                          :key="sex"
