@@ -34,6 +34,10 @@ export default class FirebaseSubColModel extends FirebaseModel {
     }
   }
 
+  async getSubcollectionDoc (key, subkey, model, onFailure) {
+    return FirebaseSubColModel.getFromRef((await this._getDocRef().collection(key).doc(subkey)), model, onFailure)
+  }
+
   /**
    * Gets all the models of a docs subcollections from firebase
    * @param key = the collection key
