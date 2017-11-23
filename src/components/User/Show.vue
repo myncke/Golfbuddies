@@ -71,7 +71,7 @@
               ></v-text-field>
             </v-flex>
 
-            <v-flex sm6 xs12 class="pa-3">
+            <v-flex xs12 class="pa-3">
               <v-text-field
                 label="Phone Number"
                 v-model="model.phone"

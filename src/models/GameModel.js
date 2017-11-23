@@ -53,6 +53,15 @@ export default class GameModel extends FirebaseSubColModel {
   }
 
   canJoin (user) {
+    let count = 0
+    for (let obj of Object.values(this.invites)) {
+      if (obj && obj.accepted) {
+        count++
+      }
+    }
+    if (count > this.prefGroupSize) {
+      return false
+    }
     if (this.prefGameSex === 'Men Only') {
       return user.sex === 'Male'
     } else if (this.prefGameSex === 'Women Only') {

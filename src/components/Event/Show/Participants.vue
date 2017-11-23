@@ -12,11 +12,12 @@
           <template v-for="member of goingUsers">
             <v-list-tile avatar :to="`/profile/${member.key}`">
               <v-list-tile-avatar>
-                <img :src="makeInitialsImage(member)" class="initials-img" />
+                <img v-if="isUserModel(member)" :src="makeInitialsImage(member)" class="initials-img" />
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title class="capitalize">{{member.firstName}} {{member.lastName}}</v-list-tile-title>
-                <v-list-tile-sub-title>{{member.region}}, {{member.nationality}} &#9679; {{ isGoing(member) ? "Going" : "Invited"}}</v-list-tile-sub-title>
+                <v-list-tile-title v-if="isUserModel(member)" class="capitalize">{{member.firstName}} {{member.lastName}}</v-list-tile-title>
+                <v-list-tile-title v-else class="capitalize">{{member}}</v-list-tile-title>
+                <v-list-tile-sub-title v-if="isUserModel(member)">{{member.region}}, {{member.nationality}} &#9679; {{ isGoing(member) ? "Going" : "Invited"}}</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-list-tile>
           </template>
@@ -35,6 +36,7 @@
 <script>
   import UserModel from '../../../models/UserModel'
   import ImageUtils from '../../../utils/ImageUtils'
+  import StringUtils from '../../../utils/StringUtils'
 
   export default {
     data: () => ({
@@ -74,9 +76,14 @@
         let people = Object.keys(this.model.invites)
         for (let person of people) {
           if (this.model.invites[person].invited && !this.model.invites[person].accepted) {
-            this.invites.push(new UserModel(person, false, model => {
-              this.addModelToGoing(model)
-            }, error => console.log(error)))
+            if (StringUtils.isEmail(person)) {
+              this.invites.push(person)
+              this.addModelToGoing(person)
+            } else {
+              this.invites.push(new UserModel(person, false, model => {
+                this.addModelToGoing(model)
+              }, error => console.log(error)))
+            }
           }
         }
         console.log(this.invites)
@@ -91,7 +98,11 @@
         this.goingUsers.push(model)
         let object = {}
         for (let obj of this.goingUsers) {
-          object[obj.key] = obj
+          if (obj && obj.key) {
+            object[obj.key] = obj
+          } else {
+            object[obj] = StringUtils.translateEmail(obj)
+          }
         }
         this.goingUsers = Object.values(object)
       },
@@ -100,6 +111,9 @@
       },
       isGoing: function (object) {
         return this.going.includes(object)
+      },
+      isUserModel (model) {
+        return (model && model.firstName)
       }
     },
     props: {
