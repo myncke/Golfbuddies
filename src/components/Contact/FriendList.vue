@@ -7,17 +7,22 @@
           <v-card-text class="grey lighten-3 pa-0">
             <v-list two-line style="height: 60vh; overflow:scroll;">
               <template v-for="model in friendUserModels">
-                <v-list-tile avatar v-bind:key="model.user.key" @click="openConversation(model)" :to="'/contacts'">
+                <v-list-tile avatar v-bind:key="model.user.key">
                   <v-list-tile-avatar>
                     <img v-bind:src="'https://ui-avatars.com/api/?name=' + model.user.firstName + '+' + model.user.lastName + '&rounded=true'"/>
                   </v-list-tile-avatar>
-                  <v-list-tile-content>
+                  <v-list-tile-content @click="goToProfile(model.user)">
                     <v-list-tile-title v-html="model.user.nickname"></v-list-tile-title>
                     <v-list-tile-sub-title v-html="model.user.firstName + ' ' + model.user.lastName"></v-list-tile-sub-title>
                   </v-list-tile-content>
                   <v-list-tile-action>
-                    <v-icon v-if="model.friendship.closeFriend" large color="red">favorite</v-icon>
-                    <v-icon v-else large color="red">favorite_border</v-icon>
+                    <v-btn icon ripple @click="openConversation(model)">
+                      <v-icon color="grey lighten-1">comment</v-icon>
+                    </v-btn>
+                    <v-btn icon ripple @click="closeFriend(model.friendship)">
+                      <v-icon v-if="model.friendship.closeFriend" color="red">favorite</v-icon>
+                    <v-icon v-else color="red">favorite_border</v-icon>
+                    </v-btn>
                   </v-list-tile-action>
                 </v-list-tile>
                 <v-divider v-bind:inset="true"></v-divider>
@@ -32,7 +37,7 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-flex>
-  
+
 </template>
 
 <script>
@@ -134,6 +139,12 @@
       openConversation: async function (model) {
         var convo = (await ConversationGroupModel.getFromRef(model.friendship.conversationRef, ConversationGroupModel, this.onFailure))
         this.$store.dispatch('changeConversation', convo)
+        this.$router.push('/contacts')
+      },
+      async closeFriend (friendship) {
+        friendship.closeFriend = !friendship.closeFriend
+        await friendship.save()
+        console.log('SAVED')
       }
     },
     components: {
