@@ -33,12 +33,18 @@
                                     :allowedFunction="(date) => date >= addDays(-1,new Date())"
                   ></date-time-picker>
                 </v-flex>
-                <v-flex md6 xs12 class="input-field">
-                  <v-text-field label="End Date (Optional)" :mask="'date-with-time'" v-model="model.enddate" prepend-icon="date_range"
+                <v-flex xs12>
+                  <v-divider></v-divider>
+                </v-flex>
+                <v-flex xs12 class="input-field">
+                  <!--<v-text-field label="End Date (Optional)" :mask="'date-with-time'" v-model="model.enddate" prepend-icon="date_range"
                                 :rules="rules.enddateRules"
                                 placeholder="dd/mm/yyyy hh:mm"
                                 clearable
-                  ></v-text-field>
+                  ></v-text-field>-->
+                  <date-time-picker label="End" v-on:value-changed="val => { model.enddate = new Date(val) }"
+                                    :allowedFunction="(date) => date >= (model.date || addDays(-1,new Date()))"
+                  ></date-time-picker>
                 </v-flex>
                 <v-flex xs12 class="input-field">
                   <vuetify-google-autocomplete

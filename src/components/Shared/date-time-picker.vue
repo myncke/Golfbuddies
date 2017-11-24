@@ -38,7 +38,7 @@
   import DatePicker from './MenuDatePicker.vue'
   export default {
     data: () => ({
-      time: undefined,
+      time: '',
       date: undefined
     }),
     watch: {
@@ -51,6 +51,7 @@
     },
     methods: {
       valueChanged () {
+        if (this.date === undefined) return
         let result = this.date
         result.setHours(Number(this.time.split(':')[0] || '12'))
         result.setMinutes(Number(this.time.split(':')[1] || '00'))
