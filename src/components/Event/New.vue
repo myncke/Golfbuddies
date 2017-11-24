@@ -23,12 +23,15 @@
 
                 <!-- TODO: this needs to be filled in, no idea how though -->
 
-                <v-flex md6 xs12 class="input-field">
-                  <v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
+                <v-flex xs12 class="input-field">
+                  <!--<v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
                                 :rules="rules.dateRules"
                                 placeholder="dd/mm/yyyy hh:mm"
                                 clearable
-                  ></v-text-field>
+                  ></v-text-field>-->
+                  <date-time-picker label="Start" v-on:value-changed="val => { model.date = new Date(val) }"
+                                    :allowedFunction="(date) => date >= addDays(-1,new Date())"
+                  ></date-time-picker>
                 </v-flex>
                 <v-flex xs12 class="input-field">
                   <vuetify-google-autocomplete
@@ -124,6 +127,7 @@
   import UserModel from '../../models/UserModel'
   import VuetifyGoogleAutocomplete from 'vuetify-google-autocomplete'
   import UserSelectionView from './components/UserSelectionView'
+  import DateTimePicker from '../Shared/date-time-picker.vue'
 
   export default {
     data: () => ({
@@ -228,12 +232,16 @@
       getAddressData (addressData, placeResultData) {
         this.model.location = {latitude: addressData.latitude, longitude: addressData.longitude}
         this.model.locationString = placeResultData.formatted_address
+      },
+      addDays (amount, date) {
+        return DateUtils.addDays(amount, date)
       }
     },
     components: {
       'golf-new': GolfGameNew,
       'vuetify-google-autocomplete': VuetifyGoogleAutocomplete,
-      'user-selection': UserSelectionView
+      'user-selection': UserSelectionView,
+      'date-time-picker': DateTimePicker
     }
   }
 </script>
