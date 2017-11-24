@@ -34,6 +34,10 @@ export default class FirebaseSubColModel extends FirebaseModel {
     }
   }
 
+  async getSubcollectionDoc (key, subkey, model, onFailure) {
+    return FirebaseSubColModel.getFromRef((await this._getDocRef().collection(key).doc(subkey)), model, onFailure)
+  }
+
   /**
    * Gets all the models of a docs subcollections from firebase
    * @param key = the collection key
@@ -114,5 +118,10 @@ export default class FirebaseSubColModel extends FirebaseModel {
     let ref = this._getDocRef().collection(key)
     ref = this.addRefOptions(ref, orderField, order, startAt, limit)
     this._listenToSubColRef(ref, key, onSuccess, onFailure)
+  }
+
+  async removeSubColDoc (key, docKey, onFailure) {
+    await this._getDocRef().collection(key).doc(docKey).delete()
+    delete this.subCollectionResult[docKey]
   }
 }

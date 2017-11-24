@@ -15,6 +15,18 @@
           disabled
         ></v-checkbox>
 
+        <v-checkbox
+          label="Dinner"
+          v-model="model.dinner"
+          disabled
+        ></v-checkbox>
+
+        <v-checkbox
+          label="Carpool"
+          v-model="model.carpool"
+          disabled
+        ></v-checkbox>
+
         <p class="subheading">Preferred Group Size: {{model.prefGroupSize}} Players</p>
         <p class="subheading">Preferred Group Composition: {{model.prefGameSex}}</p>
       </v-flex>
