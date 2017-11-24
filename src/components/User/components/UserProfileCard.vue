@@ -63,6 +63,15 @@
 
           <v-flex xs12 class="pa-3">
             <v-text-field
+              label="Address"
+              v-model="model.address"
+              placeholder="Golfstreet 15 9000 Gent"
+              required
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs12 class="pa-3">
+            <v-text-field
               label="Phone Number"
               v-model="model.phone"
               :rules="requiredRule"
