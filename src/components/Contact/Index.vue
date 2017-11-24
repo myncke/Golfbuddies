@@ -58,7 +58,7 @@
               <v-layout row>
                 <v-flex v-if="message.by.path != 'Users/' + getCurrentUser().uid" sm6>
                   <v-card class="message-card">
-                    <p class="caption timestamp">{{message.timestamp | formatDate}}</p>
+                    <p class="caption timestamp">{{message.timestamp | moment("DD/MM/YYYY HH:mm:ss")}}</p>
                     <v-layout row>
                       <v-flex sm9>
                         <p class="message message-him">{{message.message}}</p>
@@ -71,7 +71,7 @@
                 </v-flex>
                 <v-flex v-else offset-sm6 sm6>
                   <v-card class="message-card">
-                    <p class="caption timestamp">{{message.timestamp | formatDate}}</p>
+                    <p class="caption timestamp">{{message.timestamp | moment("DD/MM/YYYY HH:mm:ss")}}</p>
                     <v-layout row>
                       <v-flex sm9>
                         <p class="message message-me">{{message.message}}</p>
@@ -254,7 +254,7 @@
         console.log(messageModel)
         messageModel.setBy(this.getCurrentUser().uid)
         messageModel.message = message
-        messageModel.timestamp = Date.now()
+        messageModel.timestamp = new Date()
         await this.currentConversation.addSubcollectionDoc('Messages', messageModel, this.onFailure)
         console.log('SENT')
       },
