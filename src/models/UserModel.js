@@ -53,7 +53,9 @@ export default class UserModel extends FirebaseModel {
     'nationality',
     'region',
     'sex',
-    'birthdate'
+    'birthdate',
+    'phone',
+    'address'
   ]
 
   static collectionName = 'Users'
@@ -74,6 +76,8 @@ export default class UserModel extends FirebaseModel {
   nationality
   region
   sex
+  phone = ''
+  address = ''
 
   // Integers
 

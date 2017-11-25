@@ -36,7 +36,7 @@
         <v-divider></v-divider>
 
         <v-toolbar>
-          <join-event v-on:user-joined="refreshModel" :gameModel="model"></join-event>
+          <join-event v-on:user-joined="refreshModel" v-on:user-quit="refreshModel" :gameModel="model"></join-event>
           <!-- <v-btn small flat value="maybe" color="blue-grey" class="caption">
             <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
           </v-btn>
@@ -139,13 +139,18 @@ export default {
     },
     hasPermission () {
       let user = this.$store.getters.user
-      let permission = (this.model.invites[user.key] || {invited: false}).invited || !this.model.inviteOnly
+      let permission = (this.model.invites[user.key] || {invited: false}).invited || !this.model.inviteOnly || this.isMyGame
       if (!permission) {
         this.$router.push('/')
         return false
       } else {
         return true
       }
+    }
+  },
+  watch: {
+    $route: function () {
+      this.initModel(this.$route.params.id)
     }
   },
   created: function () {
