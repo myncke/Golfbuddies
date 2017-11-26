@@ -24,6 +24,10 @@
 
       <v-btn color="primary" @click="joinGroup" block v-if="canJoin">Join Group</v-btn>
 
+      <v-btn color="green" dark @click="openConversation()" block v-if="hasFullPermission">
+        Open GroupChat <v-icon class="ml-3">comment</v-icon>
+      </v-btn>
+
       <v-tabs class="elevation-1 mt-3" scrollable grow>
         <v-tabs-bar class="white">
           <v-tabs-slider class="yellow"></v-tabs-slider>
@@ -105,7 +109,7 @@
       },
       hasFullPermission () {
         let user = this.$store.getters.user
-        return this.club.members[user.key] === true || !this.club.closed
+        return this.club.members[user.key] === true || this.isMyGroup
       },
       hasInformationPermission () {
         let permission = !this.club.closed
@@ -176,6 +180,11 @@
         this.club.members[user.key] = true
         await this.club.save()
         await this.updateConversation()
+      },
+      async openConversation () {
+        var convo = (await ConversationGroupModel.getFromRef(this.club.conversationKey, ConversationGroupModel, error => { throw error }))
+        this.$store.dispatch('changeConversation', convo)
+        this.$router.push('/contacts')
       }
     },
     components: {

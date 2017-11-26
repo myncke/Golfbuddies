@@ -52,6 +52,25 @@ export default class GameModel extends FirebaseSubColModel {
     await notification.save()
   }
 
+  canJoin (user) {
+    let count = 0
+    for (let obj of Object.values(this.invites)) {
+      if (obj && obj.accepted) {
+        count++
+      }
+    }
+    if (count > this.prefGroupSize) {
+      return false
+    }
+    if (this.prefGameSex === 'Men Only') {
+      return user.sex === 'Male'
+    } else if (this.prefGameSex === 'Women Only') {
+      return user.sex === 'Female'
+    } else {
+      return true
+    }
+  }
+
   static getDefaultRange () {
     let date = new Date()
     let inTwoMonths = new Date()
@@ -201,7 +220,10 @@ export default class GameModel extends FirebaseSubColModel {
     'subGame',
     'locationString',
     'title',
-    'invites'
+    'invites',
+    'enddate',
+    'carpool',
+    'dinner'
   ]
 
   static _subCollections = {
@@ -215,6 +237,8 @@ export default class GameModel extends FirebaseSubColModel {
   competition
   international
   inviteOnly
+  carpool = false
+  dinner = false
 
   // Strings
   prefGameSex
@@ -249,6 +273,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   // Timestamps
   date
+  enddate
 
   // Geopoints
   location

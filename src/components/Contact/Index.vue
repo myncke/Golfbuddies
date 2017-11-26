@@ -1,10 +1,10 @@
 <template>
-  <div ref="chatBox">
+  <div v-if="currentConversation && conversationPartner" ref="chatBox">
     <div class="loader" v-if="loading">
       <v-progress-circular style="display: inline-block;" indeterminate v-bind:size="100" color="green darken-1"></v-progress-circular>
     </div>
 
-    <div v-if="!loading">
+    <div v-else>
 
       <!-- CONTACTS PANE -->
 
@@ -52,26 +52,26 @@
         <v-flex sm12 xs12 class="hidden-xs-only" >
           <div style="height: 70vh; overflow: scroll" v-chat-scroll>
             <p class="red--text">{{error}}</p>
-            <p>{{this.$store.getters.conversation}}</p>
-            <p>{{this.conversationPartner.name}}</p>
+            <p class="title text-xs-center">{{currentConversation.name}}</p>
+            <v-divider></v-divider>
             <div v-for="message in messages">
               <v-layout row>
                 <v-flex v-if="message.by.path != 'Users/' + getCurrentUser().uid" sm6>
                   <v-card class="message-card">
-                    <p class="caption timestamp">{{message.timestamp | formatDate}}</p>
+                    <p class="caption timestamp">{{message.timestamp | moment("DD/MM/YYYY HH:mm:ss")}}</p>
                     <v-layout row>
-                      <v-flex sm3>
-                        <p class="caption by-him">{{message.byModel.nickname}}</p>
-                      </v-flex>
                       <v-flex sm9>
                         <p class="message message-him">{{message.message}}</p>
+                      </v-flex>
+                      <v-flex sm3>
+                        <p class="caption by-him">{{message.byModel.nickname}}</p>
                       </v-flex>
                     </v-layout>
                   </v-card>
                 </v-flex>
                 <v-flex v-else offset-sm6 sm6>
                   <v-card class="message-card">
-                    <p class="caption timestamp">{{message.timestamp | formatDate}}</p>
+                    <p class="caption timestamp">{{message.timestamp | moment("DD/MM/YYYY HH:mm:ss")}}</p>
                     <v-layout row>
                       <v-flex sm9>
                         <p class="message message-me">{{message.message}}</p>
@@ -152,19 +152,12 @@
       }
     },
     created () {
-      this.initFriends().then(
-        () => this.initConversations().then(
-          this.loading = false
-        )
-      )
-      this.openConversation(this.$store.getters.conversation)
-
-      let partnerId = this.$store.getters.user.key
-      this.conversationPartner = new UserModel(partnerId, false, () => {}, () => {})
+      this.init()
     },
     watch: {
       $store: function () {
         console.log(this.$store.getters.conversation)
+        this.init()
       }
     },
     computed: {
@@ -183,6 +176,17 @@
       }
     },
     methods: {
+      init: function () {
+        this.initFriends().then(
+          () => this.initConversations().then(
+            this.loading = false
+          )
+        )
+        this.openConversation(this.$store.getters.conversation)
+
+        let partnerId = this.$store.getters.user.key
+        this.conversationPartner = new UserModel(partnerId, false, () => {}, () => {})
+      },
       initFriends: async function () {
         try {
           let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
@@ -217,8 +221,6 @@
       },
       openConversation: async function (conversationModel) {
         try {
-          console.log(this.conversationModels)
-          console.log(conversationModel)
           this.currentConversation = conversationModel
           this.groupName = conversationModel.name
           this.messages = []
@@ -231,7 +233,6 @@
           }.bind(this), error => { this.error = error; throw error })
         } catch (error) {
           this.error = error.message
-          throw error
         }
       },
       openConversationFriend: async function (model) {
@@ -253,7 +254,7 @@
         console.log(messageModel)
         messageModel.setBy(this.getCurrentUser().uid)
         messageModel.message = message
-        messageModel.timestamp = Date.now()
+        messageModel.timestamp = new Date()
         await this.currentConversation.addSubcollectionDoc('Messages', messageModel, this.onFailure)
         console.log('SENT')
       },
@@ -294,7 +295,7 @@
   }
 
   .message-him{
-    text-align: end;
+    text-align: start;
   }
 
   .by-me{
