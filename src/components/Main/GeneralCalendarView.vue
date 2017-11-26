@@ -33,10 +33,15 @@
       },
       initLocationBroadcasts: async function () {
         this.locationBroadcasts = []
+        let resultObj = {}
         let friendList = await FriendshipModel.getFriendsOfCurrentUser(error => console.log(error))
         for (let model of friendList) {
-          this.locationBroadcasts.push(...(await LocationBroadcastModel.getBroadcastsFromUserOrdered(model.getFriendRef(), error => console.log(error))))
+          let result = await LocationBroadcastModel.getBroadcastsFromUserOrdered(model.getFriendRef(), error => console.log(error))
+          for (let obj of result) {
+            resultObj[obj.key] = obj
+          }
         }
+        this.locationBroadcasts = Object.values(resultObj)
         console.log(this.locationBroadcasts)
       },
       eventSelected: function (event, jsEvent, view) {
