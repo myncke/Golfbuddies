@@ -138,7 +138,7 @@ export default new Router({
     {
       path: '/',
       name: 'root',
-      component: Feed
+      component: GeneralCalendarView
     }
   ]
 })

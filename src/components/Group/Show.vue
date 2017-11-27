@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="club !== undefined && hasInformationPermission" class="pa-0 ma-0" fluid>
+  <v-container fill-height v-if="club !== undefined && hasInformationPermission" class="pa-0 ma-0">
     <v-layout column>
       <v-flex>
         <v-card>

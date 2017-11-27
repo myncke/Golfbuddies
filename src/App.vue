@@ -3,15 +3,16 @@
 
     <v-layout v-if="userIsAuthenticated">
       <sidebar ref="drawer"></sidebar>
-      <v-toolbar color="green darken-1" dark app clipped-left fixed dense style="z-index: 10000">
+      <v-toolbar class="gradient" color="green darken-1" dark app clipped-left fixed dense style="z-index: 10000">
         <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
           <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
-          <v-btn :to="'/'" flat dark>
             Golfbuddies
-          </v-btn>
         </v-toolbar-title>
         
         <v-spacer></v-spacer>
+        <v-btn flat :to="'/calendar'" class="" style="min-width:50px;">
+          <v-icon>events</v-icon> Calendar
+        </v-btn>
         <v-btn flat :to="'/contacts'" class="hidden-sm-and-up" style="min-width:50px;">
           <v-icon>contacts</v-icon>
         </v-btn>
@@ -24,11 +25,8 @@
 
       <main>
         <v-content>
-          <v-container fluid fill-height class="pa-0">
+          <v-container fluid class="pa-0 pb-5 green lighten-4" style="min-height:calc(100vh - 48px);" >
             <v-layout row>
-              <!-- <v-flex sm3 class="hidden-xs-only">
-                <aside-left ></aside-left>
-              </v-flex> -->
 
               <v-flex sm10 xs12 offset-xs1>
                 <v-container class="pt-5">
@@ -36,17 +34,13 @@
                 </v-container>
               </v-flex>
 
-              <!-- <v-flex sm3 class="hidden-xs-only">
-                <aside-right> </aside-right>
-              </v-flex> -->
-
             </v-layout>
           </v-container>
         </v-content>
-        <v-footer class="pa-3">
+        <!-- <v-footer class="pa-3">
           <v-spacer></v-spacer>
           <div>© {{ new Date().getFullYear() }}</div>
-        </v-footer>
+        </v-footer> -->
       </main>
     </v-layout>
 
@@ -106,5 +100,11 @@
 
   main > div.content{
     /* padding: 48px 0px !important; */
+  }
+
+  .gradient {
+    background: #11998e;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(120deg, #4caf50, #11998e);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(120deg, #4caf50, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
 </style>

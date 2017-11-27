@@ -1,5 +1,5 @@
 <template>
-  <v-flex>
+  <v-flex class="">
     <v-container class="pa-0">
       <v-layout>
         <v-flex sm12>
@@ -21,12 +21,13 @@
     </v-container>
 
     <v-container class="pa-0">
-      <event-nav-card></event-nav-card>
+      <feed-lite></feed-lite>
     </v-container>
 
+    <v-divider></v-divider>
     <v-container class="pa-0">
       <v-tabs dark grow>
-        <v-tabs-bar class="green lighten-2">
+        <v-tabs-bar class="green">
           <v-tabs-slider class="yellow"></v-tabs-slider>
           <v-tabs-item
             v-for="i in items"
@@ -36,6 +37,8 @@
             {{ i }}
           </v-tabs-item>
         </v-tabs-bar>
+        <v-divider></v-divider>
+        
         <v-tabs-items>
           <v-tabs-content
             v-for="i in items"
@@ -43,59 +46,46 @@
             :id="'tab-' + i"
           >
             <v-card flat>
-              <v-card-text>{{ text }}</v-card-text>
+
+               <div v-if="i == 'Groups'">
+                <v-container class="pa-0">
+                  <v-layout>
+                    <v-flex sm12>
+                      <v-card>
+                        <v-list>
+                          <v-layout row align-center>
+                            <v-btn outline flat class="" :to="'/groups'"> Search</v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn outline flat class="" :to="'/group/new'">Create</v-btn>
+                          </v-layout>
+
+                          <template v-for="group in clubModels">
+                            <v-list-tile avatar v-bind:key="group.id" :to="`/group/${group.key}`">
+                              <v-list-tile-avatar>
+                                <img v-bind:src="group.headerPic">
+                              </v-list-tile-avatar>
+                              <v-list-tile-content>
+                                <v-list-tile-title v-html="group.name"></v-list-tile-title>
+                              </v-list-tile-content>
+                            </v-list-tile>
+                            <v-divider v-if="!$last(group, clubModels)" :inset="true"></v-divider>
+                          </template>
+                        </v-list>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+               </div>
+
+               <div v-else>
+                 <friend-list></friend-list>
+               </div>
+
             </v-card>
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
     </v-container>
-
-    <v-container>
-      <v-layout>
-        <v-flex sm12>
-          <v-card>
-            <v-list>
-              <v-layout row align-center>
-                <v-btn flat class="green" :to="'/groups'"> Groups</v-btn>
-                <v-spacer></v-spacer>
-                <v-btn flat class="green" :to="'/group/new'">New</v-btn>
-              </v-layout>
-
-              <template v-for="group in clubModels">
-                <v-list-tile avatar v-bind:key="group.id" :to="`/group/${group.key}`">
-                  <v-list-tile-avatar>
-                    <img v-bind:src="group.headerPic">
-                  </v-list-tile-avatar>
-                  <v-list-tile-content>
-                    <v-list-tile-title v-html="group.name"></v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-                <v-divider v-if="!$last(group, clubModels)" :inset="true"></v-divider>
-              </template>
-            </v-list>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-
-    <!-- <v-container>
-      pictures
-    </v-container> -->
-
-    <!-- <v-container>
-      <v-layout>
-        <v-flex sm12 class="mb-4">
-          <v-card>
-            <v-list two-line>
-              <template v-for="item in tips">
-                <v-subheader v-if="item.header" v-text="item.header"></v-subheader>
-              </template>
-              <div class="placeholder">Coming Soon!</div>
-            </v-list>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container> -->
 
   </v-flex>
 </template>
@@ -104,6 +94,8 @@
 import SportClubModel from '../../models/SportClubModel'
 import EventNavCard from '../Event/components/NavCard'
 import ImageUtils from '../../utils/ImageUtils'
+import FeedLite from './FeedLite'
+import FriendList from '../Contact/FriendList'
 
 export default {
   computed: {
@@ -141,7 +133,9 @@ export default {
     }
   },
   components: {
-    'event-nav-card': EventNavCard
+    'event-nav-card': EventNavCard,
+    'feed-lite': FeedLite,
+    'friend-list': FriendList
   }
 }
 </script>

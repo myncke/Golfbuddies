@@ -1,6 +1,15 @@
 <template>
   <div>
-    <full-calendar :config="{contentHeight: 400}" v-on:event-selected="eventSelected" defaultView="month" :events="events"></full-calendar>
+    <h1 class="headline">Calendar</h1>
+    <v-card>
+      <v-card-text>
+        <full-calendar :config="{contentHeight: 400}" v-on:event-selected="eventSelected" defaultView="month" :events="events"></full-calendar>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn flat outline block color="green" :to="'/event/new'">Create new event</v-btn>
+        <v-btn flat outline block color="green" :to="'/locationBroadcast/new'">Add a travel</v-btn>
+      </v-card-actions>
+    </v-card>
     <br>
     <event-filter></event-filter>
   </div>
