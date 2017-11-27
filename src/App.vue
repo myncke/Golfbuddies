@@ -2,10 +2,10 @@
   <v-app id="app">
 
     <v-layout v-if="userIsAuthenticated">
-      <sidebar class="hidden-sm-and-up" ref="drawer"></sidebar>
+      <sidebar ref="drawer"></sidebar>
       <v-toolbar color="green darken-1" dark app clipped-left fixed dense style="z-index: 10000">
         <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-          <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()" class="hidden-sm-and-up"></v-toolbar-side-icon>
+          <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
           <v-btn :to="'/'" flat dark>
             Golfbuddies
           </v-btn>
@@ -15,7 +15,7 @@
         <v-btn flat :to="'/contacts'" class="hidden-sm-and-up" style="min-width:50px;">
           <v-icon>contacts</v-icon>
         </v-btn>
-        <notifications ></notifications>
+        <notifications></notifications>
         <v-btn flat right @click="$store.dispatch('signUserOut')" class="hidden-xs-only">
           <v-icon left>lock_open</v-icon>
           <p class="hidden-sm-and-down subheading mb-0"> SIGN OUT</p>
@@ -26,19 +26,19 @@
         <v-content>
           <v-container fluid fill-height class="pa-0">
             <v-layout row>
-              <v-flex sm3 class="hidden-xs-only">
+              <!-- <v-flex sm3 class="hidden-xs-only">
                 <aside-left ></aside-left>
-              </v-flex>
+              </v-flex> -->
 
-              <v-flex sm6 xs12>
-                <v-container>
+              <v-flex sm10 xs12 offset-xs1>
+                <v-container class="pt-5">
                   <router-view transition="slide-x-transition"></router-view>
                 </v-container>
               </v-flex>
 
-              <v-flex sm3 class="hidden-xs-only">
+              <!-- <v-flex sm3 class="hidden-xs-only">
                 <aside-right> </aside-right>
-              </v-flex>
+              </v-flex> -->
 
             </v-layout>
           </v-container>
@@ -105,6 +105,6 @@
   }
 
   main > div.content{
-    padding: 48px 0px !important;
+    /* padding: 48px 0px !important; */
   }
 </style>

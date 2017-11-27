@@ -22,7 +22,19 @@
         <hr class="divider">
         <br>
         <v-btn block color="blue darken-4" dark @click="signInWithFacebook()">Facebook</v-btn>
-        <v-btn block color="grey lighten-2" @click="signInWithGoogle()">Google</v-btn>
+        <v-btn block dark color="red " @click="signInWithGoogle()">Google</v-btn>
+        <br>
+        <hr class="divider">
+        <br>
+        <v-expansion-panel class="elevation-0">
+          <v-expansion-panel-content >
+            <div slot="header">Forgot your password?</div>
+            <v-card>
+              <forgot-password></forgot-password>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <br>
       </v-form>
     </v-card-text>
   </v-card>
@@ -31,6 +43,7 @@
 <script>
   import firebase from 'firebase'
   import LoginUtils from '../../utils/LoginUtils'
+  import ForgotPassword from '../Static/ForgotPassword.vue'
 
   export default {
     data: () => ({
@@ -65,6 +78,9 @@
           this.$emit('social-user', filledModel)
         }
       }
+    },
+    components: {
+      'forgot-password': ForgotPassword
     }
   }
 </script>

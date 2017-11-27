@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer persistent clipped app v-model="open" >
-    <v-list dense>
+  <v-navigation-drawer persistent clipped fixed app v-model="open" width='400'>
+    <!-- <v-list dense>
       <template v-for="(item, i) in items">
 
         <v-layout
@@ -20,7 +20,7 @@
 
         </v-layout>
 
-        <!-- With Childeren -->
+
         <v-list-group v-else-if="item.children" v-model="item.model" no-action>
           <v-list-tile slot="item" @click="">
             <v-list-tile-action>
@@ -49,7 +49,7 @@
           </v-list-tile>
         </v-list-group>
 
-        <!-- Single Tile -->
+
         <v-list-tile v-else @click="open = false" :key="item.name" :to="item.path">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -61,12 +61,14 @@
           </v-list-tile-content>
         </v-list-tile>
       </template>
-    </v-list>
+    </v-list> -->
+    <aside-left></aside-left>
   </v-navigation-drawer>
 </template>
 
 <script>
 import SportClubModel from '../../models/SportClubModel'
+import AsideLeft from '../Main/AsideLeft'
 
 export default {
   data: () => ({
@@ -108,6 +110,9 @@ export default {
       // this.$router.push({name: 'profile', params: {id: this.$store.getters.key}})
       return '/profile/' + this.$store.getters.user.key
     }
+  },
+  components: {
+    'aside-left': AsideLeft
   }
 }
 </script>

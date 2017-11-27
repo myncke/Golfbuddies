@@ -8,7 +8,7 @@
             <v-card class="section-def__card">
               <v-card-text class="pa-0">
                 <v-container class="pa-0">
-                  <v-tabs light fixed centered v-model="activeTab" >
+                  <v-tabs light grow centered v-model="activeTab" >
 
                     <v-tabs-bar dark class="white">
                       <v-tabs-slider class="yellow"></v-tabs-slider>
@@ -31,7 +31,7 @@
 
                         <sign-in v-on:social-user="socialUser" v-if="i == 'Sign In'"> </sign-in>
                         <sign-up ref="signup" v-else-if="i == 'Sign Up'"></sign-up>
-                        <forgot-password v-else></forgot-password>
+                        <!-- <forgot-password v-else></forgot-password> -->
 
                       </v-tabs-content>
                     </v-tabs-items>
@@ -50,13 +50,11 @@
 <script>
   import Signin from '../User/Signin'
   import Signup from '../User/Signup'
-  import ForgotPassword from './ForgotPassword.vue'
 
   export default {
     components: {
       'sign-in': Signin,
-      'sign-up': Signup,
-      'forgot-password': ForgotPassword
+      'sign-up': Signup
     },
     onCreate () {
       this.init()
@@ -67,7 +65,7 @@
       }
     },
     data: () => ({
-      items: [ 'Sign In', 'Sign Up', 'Forgot Pass' ],
+      items: [ 'Sign In', 'Sign Up' ],
       activeTab: 'tab-Sign In'
     }),
     methods: {

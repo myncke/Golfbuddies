@@ -1,5 +1,9 @@
 <template>
-  <full-calendar :config="{contentHeight: 400}" v-on:event-selected="eventSelected" defaultView="month" :events="events"></full-calendar>
+  <div>
+    <full-calendar :config="{contentHeight: 400}" v-on:event-selected="eventSelected" defaultView="month" :events="events"></full-calendar>
+    <br>
+    <event-filter></event-filter>
+  </div>
 </template>
 
 <script>
@@ -7,6 +11,7 @@
   import UserModel from '../../models/UserModel'
   import FriendshipModel from '../../models/FriendshipModel'
   import LocationBroadcastModel from '../../models/LocationBroadcastModel'
+  import EventFilter from '../Event/Index'
 
   export default {
     data: () => ({
@@ -79,6 +84,9 @@
         this.locationsToEvents()
         console.log(this.events)
       }
+    },
+    components: {
+      'event-filter': EventFilter
     }
   }
 

@@ -1,8 +1,8 @@
 <template>
   <v-card>
       <p class="title red--text">{{error}}</p>
-      <v-stepper v-model="page">
-        <v-stepper-header>
+      <v-stepper v-model="page" class="elevation-0">
+        <v-stepper-header class="elevation-1">
           <v-stepper-step step="1" :complete="page > 1">Account</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="2" :complete="page > 2">General</v-stepper-step>

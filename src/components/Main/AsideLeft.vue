@@ -1,6 +1,6 @@
 <template>
   <v-flex>
-    <v-container>
+    <v-container class="pa-0">
       <v-layout>
         <v-flex sm12>
           <v-card>
@@ -20,8 +20,34 @@
       </v-layout>
     </v-container>
 
-    <v-container>
+    <v-container class="pa-0">
       <event-nav-card></event-nav-card>
+    </v-container>
+
+    <v-container class="pa-0">
+      <v-tabs dark grow>
+        <v-tabs-bar class="green lighten-2">
+          <v-tabs-slider class="yellow"></v-tabs-slider>
+          <v-tabs-item
+            v-for="i in items"
+            :key="i"
+            :href="'#tab-' + i"
+          >
+            {{ i }}
+          </v-tabs-item>
+        </v-tabs-bar>
+        <v-tabs-items>
+          <v-tabs-content
+            v-for="i in items"
+            :key="i"
+            :id="'tab-' + i"
+          >
+            <v-card flat>
+              <v-card-text>{{ text }}</v-card-text>
+            </v-card>
+          </v-tabs-content>
+        </v-tabs-items>
+      </v-tabs>
     </v-container>
 
     <v-container>
@@ -91,7 +117,9 @@ export default {
     tips: [
       { header: 'Tips' }
     ],
-    error: ''
+    error: '',
+    items: ['Groups', 'Friends'],
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   }),
   created: function () {
     this.initModels()
