@@ -8,7 +8,7 @@
           <v-toolbar-side-icon @click.stop="$refs.drawer.switchOpenState()"></v-toolbar-side-icon>
             Golfbuddies
         </v-toolbar-title>
-        <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile" style="width:25%" ></user-search>
+        <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile" small style="width:25%" ></user-search>
         
         <v-spacer></v-spacer>
         <v-btn flat :to="'/calendar'" class="" style="min-width:50px;">

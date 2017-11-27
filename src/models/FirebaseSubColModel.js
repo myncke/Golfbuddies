@@ -71,8 +71,8 @@ export default class FirebaseSubColModel extends FirebaseModel {
   async _getAllFromRefFirebase (ref, key, onFailure) {
     let result = []
     try {
-      console.log('MODELCLASS:')
-      console.log(this.subCollectionMap[key])
+      // console.log('MODELCLASS:')
+      // console.log(this.subCollectionMap[key])
       let snapShot = await ref.get()
       snapShot.forEach(
         doc => {

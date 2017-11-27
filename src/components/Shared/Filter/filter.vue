@@ -41,6 +41,7 @@
     methods: {
       updateFilters: function () {
         let object = this.$refs.filter.getFilterObject()
+        console.log('HHFHHHFHAHFHHF')
         console.log(object)
         this.$emit('filter-update', object)
       }

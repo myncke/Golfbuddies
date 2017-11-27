@@ -5,7 +5,8 @@
 <script>
   export default {
     data: () => ({
-      events: []
+      events: [],
+      public_events: undefined
     }),
     props: {
       games: Array
@@ -28,10 +29,16 @@
     methods: {
       eventSelected: function (event, jsEvent, view) {
         this.$router.push({name: 'event', params: {id: event.id}})
+      },
+      initEvents: async function () {
+        this.public_events = await GameModel.getAllGamesWithFilter(this.filter, error => { throw error })
       }
+    },
+    created: function () {
+      initEvents()
+      console.log('GAMESSSSSS')
+      console.log(this.public_events)
     }
-    /* created: function () {
-    } */
   }
 </script>
 

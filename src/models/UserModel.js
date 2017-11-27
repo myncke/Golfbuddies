@@ -27,7 +27,7 @@ export default class UserModel extends FirebaseModel {
     let ref = this._getDocRef().collection('NotificationInfo').doc('deviceGroups')
     let object = await ref.get()
     let array = object.data().tokens
-    console.log(MessageHandler.token)
+    // console.log(MessageHandler.token)
     array = array.filter(obj => obj !== MessageHandler.token)
     array.push(MessageHandler.token)
     await ref.set({
@@ -39,7 +39,7 @@ export default class UserModel extends FirebaseModel {
     let ref = this._getDocRef().collection('NotificationInfo').doc('deviceGroups')
     let object = await ref.get()
     let array = object.data().tokens
-    console.log(MessageHandler.token)
+    // console.log(MessageHandler.token)
     array = array.filter(obj => obj !== MessageHandler.token)
     await ref.set({
       tokens: array

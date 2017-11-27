@@ -81,14 +81,12 @@
           let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
             this.error = error.message
           })
-          console.log(list)
           this.friendUserModels = []
           list.forEach(model => {
             model.getFriend(error => { this.error = error.message }).then(
               uModel => {
                 this.friendUserModels.push({user: uModel, friendship: model})
                 this.loading = false
-                console.log(uModel)
               }
             )
           })
@@ -118,12 +116,10 @@
         let message = this.text
         this.text = ''
         let messageModel = new MessageModel()
-        console.log(messageModel)
         messageModel.setBy(this.getCurrentUser().uid)
         messageModel.message = message
         messageModel.timestamp = Date.now()
         await this.currentConversation.addSubcollectionDoc('Messages', messageModel, this.onFailure)
-        console.log('SENT')
       },
       renameGroup: async function () {
         let group = this.currentConversation

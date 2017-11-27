@@ -34,7 +34,7 @@ export default class MessagingHandler {
     MessagingHandler.messaging.getToken()
       .then((currentToken) => {
         if (currentToken) {
-          console.log(currentToken)
+          // console.log(currentToken)
           MessagingHandler.token = currentToken
           // sendTokenToServer(currentToken);
           // updateUIForPushEnabled(currentToken);

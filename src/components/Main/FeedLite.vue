@@ -7,7 +7,7 @@
         </v-list>
 
 
-        <div style="height:25vh; overflow: scroll;">
+        <div style="max-height:25vh; overflow: scroll;">
           <template v-for="item in events.reverse()" >
             <div :key="item.id">
               <v-container class="pa-1">
@@ -19,14 +19,14 @@
 
 
                   <v-flex column sm10>
-                    
+
                     <v-layout row>
                       <v-btn flat small nuxt color="primary" class="pa-0" @click="goToEvent(item.key)">{{item.title}}</v-btn>
                       <v-spacer></v-spacer>
                       <join-event :gameModel="item"></join-event>
                     </v-layout>
                     <p class="pl-4 ma-0 caption">{{ item.date | moment("hh:mm a") }} &#9679; {{item.locationString}} </p>
-                    
+
                   </v-flex>
 
                 </v-layout>

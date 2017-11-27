@@ -78,14 +78,12 @@
           let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
             this.error = error.message
           })
-          console.log(list)
           this.friendUserModels = []
           list.forEach(model => {
             model.getFriend(error => { this.error = error.message }).then(
               uModel => {
                 this.friendUserModels.push({user: uModel, friendship: model})
                 this.loading = false
-                console.log(uModel)
               }
             )
           })

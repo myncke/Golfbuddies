@@ -63,7 +63,6 @@
     methods: {
       init () {
         let user = this.$store.getters.user
-        console.log(user)
         if (!user.isAdmin) {
           this.$router.push('/')
           console.log('MISSING PERMISSION!')
@@ -112,12 +111,10 @@
         }
       },
       previous: async function () {
-        console.log(this.currentModels)
         console.log(this.allModels.slice(this.startAt - this.limit, this.startAt))
         this.startAt -= this.limit
         this.currentModels = undefined
         this.currentModels = this.allModels.slice(this.startAt - this.limit, this.startAt)
-        console.log(this.startAt, this.limit)
       },
       filterModels: function (model) {
         this.allModels = this.allModels.filter((obj) => obj.key !== model.key)
