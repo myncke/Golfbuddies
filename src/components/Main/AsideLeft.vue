@@ -95,7 +95,7 @@ import SportClubModel from '../../models/SportClubModel'
 import EventNavCard from '../Event/components/NavCard'
 import ImageUtils from '../../utils/ImageUtils'
 import FeedLite from './FeedLite'
-import FriendList from '../Contact/FriendList'
+import FriendList from '../Contact/FriendListLite'
 
 export default {
   computed: {
