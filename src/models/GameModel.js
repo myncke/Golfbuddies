@@ -73,6 +73,7 @@ export default class GameModel extends FirebaseSubColModel {
 
   static getDefaultRange () {
     let date = new Date()
+    date.setDate(date.getDate() - 1)
     let inTwoMonths = new Date()
     inTwoMonths.setMonth(inTwoMonths.getMonth() + 2)
     return {

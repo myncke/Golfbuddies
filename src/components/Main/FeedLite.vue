@@ -74,6 +74,13 @@
     },
     components: {
       'join-event': Join
+    },
+    watch: {
+      $route () {
+        if (this.$route.path === '/') {
+          this.initFeed()
+        }
+      }
     }
   }
 </script>
