@@ -1,5 +1,5 @@
 <template>
-  <v-menu v-model="input" offset-y>
+  <v-menu v-model="inputStr" offset-y>
     <p class="red--text" v-if="error != ''">{{error}}</p>
     <v-text-field slot="activator" :solo="toolbar" prepend-icon="search" placeholder="Search User" v-on:keyup.enter="search()" v-model="inputStr"></v-text-field>
     <v-list>
@@ -21,7 +21,7 @@
       error: ''
     }),
     watch: {
-      input () {
+      inputStr () {
         this.items = []
       }
     },

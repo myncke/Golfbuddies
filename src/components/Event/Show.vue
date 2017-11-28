@@ -47,6 +47,9 @@
           <!-- <v-btn small flat value="ignore" color="blue-grey" class="caption">
             <v-icon left dark color="" class="caption">share</v-icon>Share
           </v-btn> -->
+          <v-btn class="mr-5" v-if="isMyGame" flat @click="deleteEvent()">
+            <v-icon>clear</v-icon> Delete Event
+          </v-btn>
         </v-toolbar>
         </v-card>
       </v-flex>
@@ -192,6 +195,9 @@ export default {
       this.model = undefined
       this.model = model
       this.$refs.participants.init()
+    },
+    async deleteEvent () {
+      await this.model.deleteObject()
     }
   },
   components: {

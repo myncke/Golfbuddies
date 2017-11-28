@@ -23,7 +23,7 @@
                 <v-btn icon ripple @click="openSpecialWishes(member)">
                   <v-icon color="grey lighten-1">comment</v-icon>
                 </v-btn>
-                <v-btn icon ripple @click="removeUser(member)">
+                <v-btn icon ripple v-if="member.key !== model.getCreator()" @click="removeUser(member)">
                   <v-icon color="grey lighten-1">clear</v-icon>
                 </v-btn>
               </v-list-tile-action>
@@ -101,6 +101,9 @@
         for (let i = 0; i < userlist.length; i++) {
           this.going.push(new UserModel(userlist[i].key, false, model => { this.addModelToGoing(model) }, error => console.log(error)))
         }
+        let creator = await UserModel.getFromRef(this.model.creator, UserModel, error => { console.log(error) })
+        this.going.push(creator)
+        this.addModelToGoing(creator)
       },
       initInvites: async function () {
         let people = Object.keys(this.model.invites)
