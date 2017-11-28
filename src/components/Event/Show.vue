@@ -167,6 +167,7 @@ export default {
       // this.messages = await this.model.getFirstXMessages(0, 100, error => { this.error = error.message })
       this.messages = await this.model.initSubcollection('Messages', this.onFailure)
       this.initCreator()
+      this.refreshModel(this.model)
     },
     initCreator: async function () {
       this.creator = await UserModel.getFromRef(this.model.creator, UserModel, this.onFailure)
