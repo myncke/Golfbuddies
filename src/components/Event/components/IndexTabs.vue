@@ -2,7 +2,7 @@
   <v-flex>
     <v-card flat class="content">
       <v-layout row wrap>
-        <v-flex v-for="game in exploreData.games" :key="game.key" xs12 sm6 lg12>
+        <v-flex v-for="game in exploreData.games" :key="game.key" xs12 sm12 lg12>
           <game-card :game="game"></game-card>
         </v-flex>
       </v-layout>
