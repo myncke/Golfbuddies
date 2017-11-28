@@ -35,6 +35,8 @@
                   <date-time-picker label="End" v-on:value-changed="val => { model.enddate = new Date(val) }"
                                     :allowedFunction="(date) => date >= (model.date || addDays(-1,new Date()))"
                   ></date-time-picker>
+                  <p class="caption">Don't fill in when it's only on one day.</p>
+                  <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 class="input-field">
                   <vuetify-google-autocomplete
@@ -208,7 +210,7 @@
         }
       },
       nextPage: async function () {
-        if (!this.valid || (this.page === 2 && this.$refs.subModelComponent.isValid())) return
+        if (!this.valid || (this.page === 2 && !this.$refs.subModelComponent.isValid())) return
         if (this.page < this.maxPage) {
           this.page += 1
         } else {

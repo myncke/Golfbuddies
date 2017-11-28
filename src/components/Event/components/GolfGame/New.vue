@@ -68,7 +68,7 @@
         return this.model
       },
       isValid () {
-        return this.valid
+        return this.model.roundPrice !== undefined && this.model.minHdc !== undefined
       }
     },
     props: {
