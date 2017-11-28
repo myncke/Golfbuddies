@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer persistent clipped fixed app v-model="open" width='400' class="pb-0">
+  <v-navigation-drawer persistent clipped fixed app v-model="open" width='400' class="pb-0" style="z-index:1000">
     <aside-left></aside-left>
   </v-navigation-drawer>
 </template>

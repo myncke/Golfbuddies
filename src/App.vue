@@ -12,10 +12,7 @@
         
         <v-spacer></v-spacer>
         <v-btn flat :to="'/calendar'" class="" style="min-width:50px;">
-          <v-icon>events</v-icon> Calendar
-        </v-btn>
-        <v-btn flat :to="'/contacts'" class="hidden-sm-and-up" style="min-width:50px;">
-          <v-icon>contacts</v-icon>
+          <v-icon>events</v-icon> <p class="hidden-sm-and-down subheading mb-0">Calendar</p> 
         </v-btn>
         <notifications></notifications>
         <v-btn flat right @click="$store.dispatch('signUserOut')" class="hidden-xs-only">
@@ -29,7 +26,7 @@
           <v-container fluid class="pa-0 pb-5 green lighten-4" style="min-height:calc(100vh - 48px);" >
             <v-layout row>
 
-              <v-flex sm10 xs12 offset-xs1>
+              <v-flex sm10 xs12 offset-sm1>
                 <v-container class="pt-5">
                   <router-view transition="slide-x-transition"></router-view>
                 </v-container>

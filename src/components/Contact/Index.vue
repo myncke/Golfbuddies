@@ -9,47 +9,7 @@
       <!-- CONTACTS PANE -->
 
       <v-layout row fill-height wrap style=" min-height: 100vh">
-        <!-- <v-flex sm4 xs12 fill-height>
-          <v-list two-line dark style="height: 100vh; overflow:scroll;">
-            <v-list-tile>
-              <v-subheader v-text="'Friends'"></v-subheader>
-            </v-list-tile>
-            <template v-for="model in friendUserModels">
-              <v-list-tile avatar v-bind:key="model.user.key" @click="openConversationFriend(model)">
-                <v-list-tile-avatar>
-                  <img v-bind:src="'https://ui-avatars.com/api/?name=' + model.user.firstName + '+' + model.user.lastName + '&rounded=true'"/>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="model.user.nickname"></v-list-tile-title>
-                  <v-list-tile-sub-title v-html="model.user.firstName + ' ' + model.user.lastName"></v-list-tile-sub-title>
-                </v-list-tile-content>
-                <v-list-tile-action>
-                  <v-icon v-if="model.friendship.closeFriend" large color="red">favorite</v-icon>
-                  <v-icon v-else large color="red">favorite_border</v-icon>
-                </v-list-tile-action>
-              </v-list-tile>
-              <v-divider v-bind:inset="true"></v-divider>
-            </template>
-            <v-list-tile>
-              <v-subheader v-text="'Group Conversations'"></v-subheader>
-            </v-list-tile>
-            <template v-for="group in conversationModels">
-              <v-list-tile avatar v-bind:key="group.key" @click="openConversationGroup(group)">
-                <v-list-tile-avatar>
-                  <img v-bind:src="makeInitialsImage({ firsName: group.name, lastName: '' })"/>
-                </v-list-tile-avatar>
-                <v-list-tile-content>
-                  <v-list-tile-title v-html="group.name"></v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-divider v-bind:inset="true"></v-divider>
-            </template>
-          </v-list>
-        </v-flex> -->
-
-        <!-- CHAT PANE -->
-
-        <v-flex sm12 xs12 class="hidden-xs-only" >
+        <v-flex sm12 xs12 class="" >
           <div style="height: 70vh; overflow: scroll" v-chat-scroll>
             <p class="red--text">{{error}}</p>
             <p class="title text-xs-center">{{currentConversation.name}}</p>

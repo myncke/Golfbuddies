@@ -15,6 +15,8 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
+            <user-search class="elevation1 hidden-sm-and-up" v-on:search-selected="goToProfile" small style="width:100%" ></user-search>
+            <v-divider class="hidden-sm-and-up"></v-divider>
           </v-card>
         </v-flex>
       </v-layout>
@@ -96,6 +98,7 @@ import EventNavCard from '../Event/components/NavCard'
 import ImageUtils from '../../utils/ImageUtils'
 import FeedLite from './FeedLite'
 import FriendList from '../Contact/FriendListLite'
+import UserSelection from '../Shared/Search/UserSearch.vue'
 
 export default {
   computed: {
@@ -130,9 +133,13 @@ export default {
     },
     makeInitialsImage: function (user) {
       return ImageUtils.makeInitialsImage(user)
+    },
+    goToProfile: function (user) {
+      this.$router.push({name: 'profile', params: {id: user.key}})
     }
   },
   components: {
+    'user-search': UserSelection,
     'event-nav-card': EventNavCard,
     'feed-lite': FeedLite,
     'friend-list': FriendList
