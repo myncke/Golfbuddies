@@ -9,8 +9,13 @@
       <p class="hidden-sm-and-down subheading mb-0"> NOTIFICATIONS</p>
     </v-btn>
     <v-list dark>
-      <v-list-tile v-for="model in models" :key="model.key" @click="clickedItem(model)">
-        <v-list-tile-title>{{model.message}}</v-list-tile-title>
+      <v-list-tile v-for="model in models" :key="model.key">
+        <v-list-tile-title @click="clickedItem(model)">{{model.message}}</v-list-tile-title>
+        <v-list-tile-action>
+          <v-btn icon @click="removeNotification(model)">
+            <v-icon>clear</v-icon>
+          </v-btn>
+        </v-list-tile-action>
       </v-list-tile>
     </v-list>
   </v-menu>
@@ -42,6 +47,10 @@
       },
       countUnseenNotifications: function () {
         return this.models.filter(model => !model.receivers[this.$store.getters.user.key].seen).length
+      },
+      async removeNotification (model) {
+        await model.deleteObject()
+        this.models = this.models.filter(obj => obj.key !== model.key)
       }
     }
   }

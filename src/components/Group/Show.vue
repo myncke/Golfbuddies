@@ -24,6 +24,7 @@
 
       <v-btn color="primary" @click="joinGroup" block v-if="canJoin">Join Group</v-btn>
       <v-btn color="primary" @click="leaveGroup" block v-if="hasFullPermission && !isMyGroup">Leave Group</v-btn>
+      <v-btn color="primary" @click="deleteGroup" block v-if="isMyGroup">Delete Group</v-btn>
 
       <v-btn color="green" dark @click="openConversation()" block v-if="hasFullPermission">
         Open GroupChat <v-icon class="ml-3">comment</v-icon>
@@ -192,6 +193,10 @@
         var convo = (await ConversationGroupModel.getFromRef(this.club.conversationKey, ConversationGroupModel, error => { throw error }))
         this.$store.dispatch('changeConversation', convo)
         this.$router.push('/contacts')
+      },
+      deleteGroup: async function () {
+        await this.model.deleteObject()
+        this.$router.push('/')
       }
     },
     components: {

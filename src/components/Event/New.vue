@@ -250,7 +250,7 @@
         this.model.specialWishes = this.model.specialWishes || ''
         this.model.creator = UserModel.getNormalRef(UserModel).doc((new UserModel()).key)
         this.model.subGame = subModel._getDocRef()
-        this.model.location = this.model.location || await this.getLocation() || {latitude: 0, longitude: 0}
+        this.model.location = this.model.location || (await this.getLocation()) || {latitude: 0, longitude: 0}
         console.log(this.model.location)
 
         subModel.gameKey = GameModel.getNormalRef(GameModel).doc(this.model.key)
