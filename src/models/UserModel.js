@@ -2,6 +2,8 @@ import firebase from 'firebase'
 import FirebaseModel from './FirebaseModel'
 import StringUtils from '../utils/StringUtils'
 import MessageHandler from '../utils/MessagingHandler'
+import GameModel from './GameModel'
+import FriendshipModel from './FriendshipModel'
 
 let sexes = ['Male', 'Female']
 export {sexes}
@@ -21,6 +23,16 @@ export default class UserModel extends FirebaseModel {
 
   static async searchUser (input, onFailure) {
     return await this.getAllFromRef(this.getNormalRef(UserModel).where('nickname', '>=', input.toLowerCase()).where('nickname', '<', StringUtils.makeLexiNext(input).toLowerCase()), UserModel, onFailure)
+  }
+
+  async canViewSecretInfo (onFailure) {
+    let games = (await GameModel.getGamesJoinedByUserCreatedByMe(this.key, onFailure))
+    let friendship = (await FriendshipModel.getFriendship(this.key, (new UserModel()).key, onFailure))
+    console.log('SECRET')
+    console.log(games)
+    console.log(friendship)
+    console.log((new UserModel()).key === this.key)
+    return (new UserModel()).key === this.key || games.length > 0 || friendship
   }
 
   async addDeviceToken () {

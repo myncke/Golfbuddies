@@ -197,6 +197,10 @@ export default class GameModel extends FirebaseSubColModel {
     return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('creator', '==', (new UserModel())._getDocRef()), GameModel, onFailure)
   }
 
+  static async getGamesJoinedByUserCreatedByMe (userKey, onFailure) {
+    return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('creator', '==', (new UserModel())._getDocRef()).where('invites.' + userKey + '.accepted', '==', true), GameModel, onFailure)
+  }
+
   async getFirstXMessages (start, limit, onFailure) {
     return await this._getAllFromSubCollectionOrdered('Messages', 'timestamp', 'desc', start, limit, onFailure)
   }

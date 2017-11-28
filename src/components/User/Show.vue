@@ -73,6 +73,7 @@
 
             <v-flex xs12 class="pa-3">
               <v-text-field
+                v-if="canViewSecrets"
                 label="Address"
                 v-model="model.address"
                 :disabled="!editMode"
@@ -81,6 +82,7 @@
 
             <v-flex xs12 class="pa-3">
               <v-text-field
+                v-if="canViewSecrets"
                 label="Phone Number"
                 v-model="model.phone"
                 :disabled="!editMode"
@@ -139,7 +141,8 @@
       sexes: [],
       snackbar: false,
       loading: false,
-      isFriend: undefined
+      isFriend: undefined,
+      canViewSecrets: false
     }),
     computed: {
       isMyProfile: function () {
@@ -172,6 +175,7 @@
         this.model = new UserModel(pId, false, model => {
           this.model = undefined
           this.model = model
+          this.initSecret()
           if (!this.isMyProfile) {
             this.initIsFriend()
           }
@@ -179,6 +183,9 @@
       },
       initIsFriend: async function () {
         this.isFriend = (await FriendshipModel.getFriendship(this.model.key, this.$store.getters.user.key, error => console.log(error)))
+      },
+      initSecret: async function () {
+        this.canViewSecrets = await this.model.canViewSecretInfo(error => { this.error = error.message })
       },
       setEditMode: function (mode) {
         for (let ref of refs) {
@@ -221,7 +228,7 @@
         this.setEditMode(val)
       },
       $route: function (newVal) {
-        this.initUserModel()
+        this.init()
       }
     },
     components: {
