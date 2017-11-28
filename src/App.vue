@@ -69,7 +69,7 @@
       }
     },
     data: () => ({
-      drawer: false
+      drawer: true
     }),
     props: {
       source: String

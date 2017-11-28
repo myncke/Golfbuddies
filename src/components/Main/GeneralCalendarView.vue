@@ -70,8 +70,8 @@
           this.events.push({
             title: '[Event] ' + game.title,
             start: game.date,
-            color: 'yellow',
-            textColor: 'black',
+            color: 'blue',
+            textColor: 'white',
             id: game.key,
             isEvent: true
           })
