@@ -1,7 +1,7 @@
 <template>
   <v-menu v-model="menuOpen" offset-y>
     <p class="red--text" v-if="error != ''">{{error}}</p>
-    <v-text-field slot="activator" :solo="toolbar" prepend-icon="search" placeholder="Search Club" v-on:keyup.enter="search()" @input="val => input = val"></v-text-field>
+    <v-text-field slot="activator" :solo="toolbar" prepend-icon="search" placeholder="Search Club" v-on:keyup.enter="search()" v-model="inputStr"></v-text-field>
     <v-list>
       <v-list-tile v-for="item in items" :key="item.key" @click="emitSelect(item)">
         <v-list-tile-title>{{capitalize(item.name)}}</v-list-tile-title>
@@ -16,7 +16,7 @@
 
   export default {
     data: () => ({
-      input: '',
+      inputStr: '',
       items: [],
       error: '',
       menuOpen: false
@@ -28,7 +28,7 @@
     },
     methods: {
       search: async function () {
-        this.items = await SportClubModel.searchClub(this.input, error => { this.error = error.message })
+        this.items = await SportClubModel.searchClub(this.inputStr, error => { this.error = error.message })
       },
       emitSelect: function (item) {
         this.$emit('search-selected', item)
