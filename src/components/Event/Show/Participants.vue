@@ -73,7 +73,7 @@
     }),
     computed: {
       amountGoing: function () {
-        return this.going.length
+        return this.going.length + 1
       },
       amountInvited: function () {
         return this.invites.length
@@ -83,10 +83,7 @@
       }
     },
     created () {
-      this.initGoing()
-      this.initInvites()
-      console.log(this.model.invites)
-      console.log(this.going)
+      this.init()
     },
     methods: {
       init: async function () {
@@ -97,13 +94,15 @@
         await this.initInvites()
       },
       initGoing: async function () {
+        this.going = []
         let userlist = await this.model.initSubcollection('GameUsers', error => { console.log(error) })
         for (let i = 0; i < userlist.length; i++) {
           this.going.push(new UserModel(userlist[i].key, false, model => { this.addModelToGoing(model) }, error => console.log(error)))
         }
+
         let creator = await UserModel.getFromRef(this.model.creator, UserModel, error => { console.log(error) })
-        this.going.push(creator)
         this.addModelToGoing(creator)
+        this.deduplicateArray(this.going)
       },
       initInvites: async function () {
         let people = Object.keys(this.model.invites)
@@ -125,7 +124,14 @@
           console.log(array)
           return array.length === 0
         })
-        // console.log(this.invites)
+        this.deduplicateArray(this.going)
+      },
+      deduplicateArray (array) {
+        let result = {}
+        for (let obj of array) {
+          result[obj.key] = obj
+        }
+        return Object.values(result)
       },
       addModelToGoing (model) {
         this.goingUsers.push(model)

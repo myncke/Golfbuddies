@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;">
+  <div style="width: 100%;" v-if="model">
     <v-stepper v-model="page">
       <v-stepper-header>
         <v-stepper-step step="1" :complete="page > 1">General Game Information</v-stepper-step>
@@ -24,11 +24,6 @@
                 <!-- TODO: this needs to be filled in, no idea how though -->
 
                 <v-flex xs12 class="input-field">
-                  <!--<v-text-field label="Date" :mask="'date-with-time'" v-model="model.date" prepend-icon="date_range" required
-                                :rules="rules.dateRules"
-                                placeholder="dd/mm/yyyy hh:mm"
-                                clearable
-                  ></v-text-field>-->
                   <date-time-picker label="Start" v-on:value-changed="val => { model.date = new Date(val) }"
                                     :allowedFunction="(date) => date >= addDays(-1,new Date())"
                   ></date-time-picker>
@@ -37,11 +32,6 @@
                   <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 class="input-field">
-                  <!--<v-text-field label="End Date (Optional)" :mask="'date-with-time'" v-model="model.enddate" prepend-icon="date_range"
-                                :rules="rules.enddateRules"
-                                placeholder="dd/mm/yyyy hh:mm"
-                                clearable
-                  ></v-text-field>-->
                   <date-time-picker label="End" v-on:value-changed="val => { model.enddate = new Date(val) }"
                                     :allowedFunction="(date) => date >= (model.date || addDays(-1,new Date()))"
                   ></date-time-picker>

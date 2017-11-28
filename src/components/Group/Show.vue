@@ -23,6 +23,7 @@
       </v-dialog>
 
       <v-btn color="primary" @click="joinGroup" block v-if="canJoin">Join Group</v-btn>
+      <v-btn color="primary" @click="leaveGroup" block v-if="hasFullPermission && !isMyGroup">Leave Group</v-btn>
 
       <v-btn color="green" dark @click="openConversation()" block v-if="hasFullPermission">
         Open GroupChat <v-icon class="ml-3">comment</v-icon>
@@ -180,6 +181,12 @@
         this.club.members[user.key] = true
         await this.club.save()
         await this.updateConversation()
+      },
+      leaveGroup: async function () {
+        let user = this.$store.getters.user
+        delete this.club.members[user.key]
+        await this.club.save()
+        this.$router.push('/')
       },
       async openConversation () {
         var convo = (await ConversationGroupModel.getFromRef(this.club.conversationKey, ConversationGroupModel, error => { throw error }))
