@@ -6,9 +6,8 @@
           <v-subheader>Upcoming events &#9679; {{events.length}}</v-subheader>
         </v-list>
 
-
         <div style="max-height:25vh; overflow: scroll;">
-          <template v-for="item in events.reverse()" >
+          <template v-for="item in events">
             <div :key="item.id">
               <v-container class="pa-1">
                 <v-layout row>
@@ -17,16 +16,13 @@
                     <div class="caption text-sm-right">{{ item.date | moment("dddd") }}</div>
                   </v-flex>
 
-
                   <v-flex column sm10>
-
                     <v-layout row>
                       <v-btn flat small nuxt color="primary" class="pa-0" @click="goToEvent(item.key)">{{item.title}}</v-btn>
                       <v-spacer></v-spacer>
                       <join-event :gameModel="item"></join-event>
                     </v-layout>
                     <p class="pl-4 ma-0 caption">{{ item.date | moment("hh:mm a") }} &#9679; {{item.locationString}} </p>
-
                   </v-flex>
 
                 </v-layout>
@@ -50,17 +46,15 @@
 
   export default {
     data: () => ({
-      items: [
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Photos', date: '9 Jan', day: 'THU', time: '20:00', location: 'Oostende' },
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Recipes', date: '17 Jan', day: 'FRI', time: '20:00', location: 'Oostende' },
-        { icon: 'folder', iconClass: 'grey lighten-1 white--text', title: 'Work', date: '28 Jan', day: 'SUN', time: '20:00', location: 'Oostende' }
-      ],
       travels: [],
       events: null
     }),
     computed: {
       dateMonth (item) {
-        return `${item.date.getDay} ${item.date.getMonth()}`
+        return `${item.date.getDay()} ${item.date.getMonth()}`
+      },
+      reverseEvent () {
+        return this.events.reverse()
       }
     },
     created: function () {
