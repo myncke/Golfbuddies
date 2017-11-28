@@ -11,14 +11,35 @@
         <user-search class="hidden-sm-and-down" v-on:search-selected="goToProfile" small style="width:25%" ></user-search>
         
         <v-spacer></v-spacer>
-        <v-btn flat :to="'/calendar'" class="" style="min-width:50px;">
+        <v-btn flat :to="'/calendar'" class="hidden-xs-only" style="min-width:50px;">
           <v-icon>events</v-icon> <p class="hidden-sm-and-down subheading mb-0">Calendar</p> 
         </v-btn>
-        <notifications></notifications>
+        <notifications class="mobile-notifications"></notifications>
         <v-btn flat right @click="$store.dispatch('signUserOut')" class="hidden-xs-only">
           <v-icon left>lock_open</v-icon>
           <p class="hidden-sm-and-down subheading mb-0"> SIGN OUT</p>
         </v-btn>
+
+        <div class="hidden-sm-and-up mobile-menu">
+          <v-menu offset-y>
+            <v-btn color="" flat dark slot="activator" class="" > <v-icon class="pa-0">more_vert</v-icon> </v-btn>
+            <v-list>
+              <v-list-tile>
+                <v-btn flat :to="'/calendar'" class="pa-0">
+                  <v-icon right>events</v-icon> <p class="subheading mb-0">Calendar</p> 
+                </v-btn>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-btn flat right @click="$store.dispatch('signUserOut')" >
+                  <v-icon>lock_open</v-icon>
+                  <p class="subheading mb-0"> SIGN OUT</p>
+                </v-btn>
+              </v-list-tile>
+
+            </v-list>
+          </v-menu>
+        </div>
       </v-toolbar>
 
       <main>
@@ -105,4 +126,23 @@
     background: -webkit-linear-gradient(120deg, #4caf50, #11998e);  /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(120deg, #4caf50, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
+
+  @media screen and (max-width: 600px) {
+    .mobile-notifications {
+      /* margin: 0px; */
+      width: 25px;
+      z-index: 100;
+    }
+
+    .mobile-menu {
+      margin-right: 0px !important;
+      /* width: 24px; */
+      /* margin: 0px; */
+    }
+
+    .mobile-menu > div.menu {
+      /* width: 24px; */
+    }
+  }
+
 </style>
