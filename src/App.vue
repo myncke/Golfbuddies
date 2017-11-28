@@ -127,7 +127,7 @@
     background: linear-gradient(120deg, #4caf50, #11998e); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 480px) {
     .mobile-notifications {
       /* margin: 0px; */
       width: 25px;
