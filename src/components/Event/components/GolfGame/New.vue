@@ -66,6 +66,9 @@
         this.model.overnight = this.model.buggie || false
 
         return this.model
+      },
+      isValid () {
+        return this.valid
       }
     },
     props: {

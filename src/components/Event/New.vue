@@ -208,7 +208,7 @@
         }
       },
       nextPage: async function () {
-        if (!this.valid) return
+        if (!this.valid || (this.page === 2 && this.$refs.subModelComponent.isValid())) return
         if (this.page < this.maxPage) {
           this.page += 1
         } else {
