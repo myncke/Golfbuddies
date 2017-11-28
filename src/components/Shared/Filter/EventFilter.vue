@@ -79,7 +79,6 @@
     }),
     methods: {
       getFilterObject: function () {
-        console.log(this.start)
         return {
           start: this.start,
           end: this.end,

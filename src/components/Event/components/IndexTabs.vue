@@ -26,13 +26,16 @@
       filter: Object
     },
     watch: {
+      filter () {
+        this.init()
+      }
     },
     created: function () {
       this.init()
     },
     methods: {
       init: async function () {
-        // console.log(this.filter)
+        console.log('FILTER', this.filter)
         this.exploreData.games = await GameModel.getAllGamesWithFilter(this.filter, error => { throw error })
         // console.log(this.exploreData.games)
       }
