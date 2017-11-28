@@ -13,7 +13,7 @@
         <v-list-tile-title @click="clickedItem(model)">{{model.message}}</v-list-tile-title>
         <v-list-tile-action>
           <v-btn icon @click="removeNotification(model)">
-            <v-icon>clear</v-icon>
+            <v-icon dark>clear</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-list-tile>
