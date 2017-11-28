@@ -28,7 +28,7 @@
     </v-flex>
 
     <v-flex sm6 xs12>
-      <p class="subheading">Minimum Handicap: {{model.minHdc}}</p>
+      <p class="subheading">Maximum Handicap: {{model.minHdc}}</p>
     </v-flex>
 
   </v-layout>

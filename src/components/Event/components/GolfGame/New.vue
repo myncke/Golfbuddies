@@ -26,7 +26,7 @@
             ></v-text-field>
           </v-flex>
           <v-flex sm6 xs12 class="input-field">
-            <v-text-field label="Minimum Handicap" :mask="'##'" v-model="model.minHdc" required
+            <v-text-field label="Maximum Handicap" :mask="'##'" v-model="model.minHdc" required
                           :rules="rules.hdcRules"
             ></v-text-field>
           </v-flex>

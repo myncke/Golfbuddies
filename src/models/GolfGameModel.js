@@ -3,7 +3,7 @@ import FirebaseModel from './FirebaseModel'
 export default class GolfGameModel extends FirebaseModel {
 
   canJoin (golfUser) {
-    return golfUser.hdc > this.minHdc
+    return golfUser.hdc <= this.minHdc
   }
 
   static _firestoreFields = [
