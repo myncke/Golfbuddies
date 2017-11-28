@@ -1,7 +1,7 @@
 <template>
   <v-menu v-model="input" offset-y>
     <p class="red--text" v-if="error != ''">{{error}}</p>
-    <v-text-field slot="activator" :solo="toolbar" prepend-icon="search" placeholder="Search User" v-on:keyup.enter="search()" @input="val => { input = val }"></v-text-field>
+    <v-text-field slot="activator" :solo="toolbar" prepend-icon="search" placeholder="Search User" v-on:keyup.enter="search()" v-model="inputStr"></v-text-field>
     <v-list>
       <v-list-tile v-for="item in items" :key="item.key" @click="emitSelect(item)">
         <v-list-tile-title>{{capitalize(item.nickname)}} - {{capitalize(item.firstName)}} {{capitalize(item.lastName)}}</v-list-tile-title>
@@ -16,7 +16,7 @@
 
   export default {
     data: () => ({
-      input: '',
+      inputStr: '',
       items: [],
       error: ''
     }),
@@ -27,9 +27,9 @@
     },
     methods: {
       search: async function () {
-        console.log(this.input)
-        if (this.input) {
-          this.items = await UserModel.searchUser(this.input, error => { this.error = error.message })
+        console.log(this.inputStr)
+        if (this.inputStr) {
+          this.items = await UserModel.searchUser(this.inputStr, error => { this.error = error.message })
         } else {
           this.items = []
         }
