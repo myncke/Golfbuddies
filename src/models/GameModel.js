@@ -85,7 +85,7 @@ export default class GameModel extends FirebaseSubColModel {
     let result = []
     console.log('USER:', (new UserModel())._getDocRef())
     result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
-    result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
+    // result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
     result.push(...(await GameModel.getAllMyAcceptedUpcomingGames(onFailure)))
     result.push(...(await GameModel.getAllUpcomingGamesByUser((new UserModel())._getDocRef(), onFailure)))
 
@@ -94,7 +94,9 @@ export default class GameModel extends FirebaseSubColModel {
       resultObject[obj.key] = obj
     }
 
-    return Object.values(resultObject)
+    result = Object.values(resultObject)
+    result.sort((obj1, obj2) => obj1.date - obj2.date)
+    return result
   }
 
   static async getAllUpcomingOpenGames (onFailure) {
