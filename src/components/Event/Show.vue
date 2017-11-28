@@ -182,6 +182,7 @@ export default {
         this.model.invites[invites] = invitees.invites[invites]
       }
       this.inviting = false
+      this.refreshModel(this.model)
       await this.model.save()
       await this.model.sendInviteNotification(Object.keys(invitees.invites))
     },

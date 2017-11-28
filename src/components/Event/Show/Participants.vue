@@ -152,6 +152,8 @@
         delete this.model.invites[model.key]
         this.model.save()
         this.model.removeSubColDoc('GameUsers', model.key, error => { this.error = error.message })
+
+        this.goingUsers = this.goingUsers.filter(obj => obj.key !== model.key)
       },
       async openSpecialWishes (model) {
         console.log(model.key)
