@@ -22,7 +22,13 @@ export default class UserModel extends FirebaseModel {
   }
 
   static async searchUser (input, onFailure) {
-    return await this.getAllFromRef(this.getNormalRef(UserModel).where('nickname', '>=', input.toLowerCase()).where('nickname', '<', StringUtils.makeLexiNext(input).toLowerCase()), UserModel, onFailure)
+    let result = await this.getAllFromRef(this.getNormalRef(UserModel).where('nickname', '>=', input.toLowerCase()).where('nickname', '<', StringUtils.makeLexiNext(input).toLowerCase()), UserModel, onFailure)
+    result.push(...(await this.getAllFromRef(this.getNormalRef(UserModel).where('firstName', '>=', input.toLowerCase()).where('firstName', '<', StringUtils.makeLexiNext(input).toLowerCase()), UserModel, onFailure)))
+    let resultObj = {}
+    for (let obj of result) {
+      resultObj[obj.key] = obj
+    }
+    return Object.values(resultObj)
   }
 
   async canViewSecretInfo (onFailure) {
