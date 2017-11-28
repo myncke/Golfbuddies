@@ -3,7 +3,7 @@
     <v-flex class="">
       <v-card class="elevation-0">
         <v-list dense two-line subheader>
-          <v-subheader>Upcoming events &#9679; {{events.length}}</v-subheader>
+          <v-subheader>Upcoming personal events &#9679; {{events.length}}</v-subheader>
         </v-list>
 
         <div style="max-height:25vh; overflow: scroll;">
