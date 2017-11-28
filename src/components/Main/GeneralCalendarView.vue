@@ -42,7 +42,13 @@
     },
     methods: {
       initGames: async function () {
-        this.games = await GameModel.getJoinedGames(error => console.log(error))
+        let result = await GameModel.getJoinedGames(error => console.log(error))
+        result.push(...(await GameModel.getMyGames(error => console.log(error))))
+        let object = {}
+        for (let obj of result) {
+          object[obj.key] = obj
+        }
+        this.games = Object.values(object)
         console.log(this.games)
       },
       initLocationBroadcasts: async function () {
