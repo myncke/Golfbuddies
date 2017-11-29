@@ -1,6 +1,5 @@
 <template>
   <div style="width: 100%;" v-if="model">
-    <p class="title red--text">{{error}}</p>
     <v-stepper v-model="page">
       <v-stepper-header>
         <v-stepper-step step="1" :complete="page > 1">General Game Information</v-stepper-step>
@@ -9,6 +8,7 @@
         <v-divider></v-divider>
         <v-stepper-step step="3" :complete="page > 3" v-if="maxPage > 2">Invite Users <small>Optional</small></v-stepper-step>
       </v-stepper-header>
+      <p class="ma-3 title red--text">{{error}}</p>
       <v-stepper-content step="1">
         <v-card>
           <v-card-title>
