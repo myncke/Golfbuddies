@@ -15,7 +15,7 @@
       </v-flex>
 
       <v-btn color="primary" @click="inviting = true" block v-if="isMyGroup">Add Members</v-btn>
-      <v-dialog v-if="isMyGroup" v-model="inviting" persistent>
+      <v-dialog v-if="isMyGroup" v-model="inviting">
         <v-card>
           <selection-view :model="invitees"></selection-view>
           <v-btn block color="primary" @click="addPeople">Add People</v-btn>
