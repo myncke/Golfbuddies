@@ -149,7 +149,7 @@
         return ImageUtils.makeInitialsImage(user)
       },
       isGoing: function (object) {
-        return this.going.includes(object)
+        return this.going.includes(object) || object.key === this.model.getCreator()
       },
       isUserModel (model) {
         return (model && model.firstName)
