@@ -26,8 +26,7 @@
         (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
       ],
       email: '',
-      error: '',
-      message: ''
+      error: ''
     }),
     methods: {
       sendEmail: async function () {
@@ -36,6 +35,12 @@
           firebase.auth().sendPasswordResetEmail(this.email)
           this.message = 'Reset email has been send to your email.'
         }
+      }
+    },
+    props: {
+      message: {
+        default: '',
+        type: String
       }
     }
   }

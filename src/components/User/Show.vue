@@ -115,6 +115,11 @@
         Save
       </v-btn>
     </v-flex>
+    <v-flex class="mt-3" xs12>
+      <v-divider></v-divider>
+      <forgot-password message="Send a mail to reset your password">
+      </forgot-password>
+    </v-flex>
     <v-snackbar
       :timeout="6000"
       color="success"
@@ -130,6 +135,7 @@
   import LocationUtils from '../../utils/LocationUtils'
   import GolfuserProfileCard from './components/GolfuserProfileCard'
   import FriendshipModel from '../../models/FriendshipModel'
+  import ForgotPassword from '../Static/ForgotPassword'
 
   let refs = ['golf']
 
@@ -234,7 +240,8 @@
       }
     },
     components: {
-      'golf-info': GolfuserProfileCard
+      'golf-info': GolfuserProfileCard,
+      'forgot-password': ForgotPassword
     }
   }
 </script>
