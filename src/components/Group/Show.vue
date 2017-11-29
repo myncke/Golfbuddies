@@ -196,7 +196,7 @@
         this.$router.push('/contacts')
       },
       deleteGroup: async function () {
-        await this.model.deleteObject()
+        await this.club.deleteObject()
         this.$router.push('/')
       }
     },
