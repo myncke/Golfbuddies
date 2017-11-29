@@ -47,6 +47,12 @@ export default class FriendshipModel extends FirebaseModel {
       .where('friends.' + user2, '==', true), FriendshipModel, onFailure))[0]
   }
 
+  static async hasSentFriendship (user1, user2, onFailure) {
+    let mutual = (await FriendshipModel.getFriendship(user1, user2, onFailure))
+    let oneWay = (await FriendshipModel.getAllFromRef(FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + user1, '==', false).where('friends.' + user2, '==', true), FriendshipModel, onFailure))[0]
+    return mutual || oneWay
+  }
+
   getFriendRef () {
     for (let key of Object.keys(this.friends)) {
       if (key !== (new UserModel()).key) {

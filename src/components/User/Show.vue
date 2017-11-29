@@ -182,7 +182,7 @@
         }, error => { this.error = error.message })
       },
       initIsFriend: async function () {
-        this.isFriend = (await FriendshipModel.getFriendship(this.model.key, this.$store.getters.user.key, error => console.log(error)))
+        this.isFriend = (await FriendshipModel.hasSentFriendship(this.model.key, this.$store.getters.user.key, error => console.log(error)))
       },
       initSecret: async function () {
         this.canViewSecrets = await this.model.canViewSecretInfo(error => { this.error = error.message })
@@ -216,11 +216,13 @@
           } else {
             this.isFriend.friends[this.$store.getters.user.key] = true
             await this.isFriend.save()
+            this.isFriend = true
           }
         }
       },
       removeFriend: async function () {
         this.isFriend.deleteObject()
+        this.isFriend = undefined
       }
     },
     watch: {
