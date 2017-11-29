@@ -105,7 +105,7 @@
       initGameUser: async function () {
         let userKey = this.$store.getters.user.key
         this.myModel = new GolfUserModel(userKey, false, model => { this.myModel = undefined; this.myModel = model }, error => { this.error = error.message })
-        console.log('CURRENT USER: ' + userKey)
+        // console.log('CURRENT USER: ' + userKey)
         let gameUser = new GameUser(userKey)
         gameUser.specialWishes = ''
         this.gameUser = gameUser

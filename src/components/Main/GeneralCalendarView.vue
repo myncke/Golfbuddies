@@ -49,20 +49,28 @@
           object[obj.key] = obj
         }
         this.games = Object.values(object)
-        console.log(this.games)
+        // console.log(this.games)
       },
       initLocationBroadcasts: async function () {
         this.locationBroadcasts = []
         let resultObj = {}
         let friendList = await FriendshipModel.getFriendsOfCurrentUser(error => console.log(error))
+
+        // Friends
         for (let model of friendList) {
           let result = await LocationBroadcastModel.getBroadcastsFromUserOrdered(model.getFriendRef(), error => console.log(error))
           for (let obj of result) {
             resultObj[obj.key] = obj
           }
         }
+
+        // Current user
+        let personalTravels = await LocationBroadcastModel.getBroadcastsFromUserOrdered((this.$store.getters.user._getDocRef()), error => console.log(error))
+        for (let obj of personalTravels) {
+          resultObj[obj.key] = obj
+        }
         this.locationBroadcasts = Object.values(resultObj)
-        console.log(this.locationBroadcasts)
+        // console.log(this.locationBroadcasts)
       },
       eventSelected: function (event, jsEvent, view) {
         if (event.isEvent) {
@@ -102,7 +110,7 @@
         this.events = []
         this.gamesToEvents()
         this.locationsToEvents()
-        console.log(this.events)
+        // console.log(this.events)
       }
     },
     components: {
