@@ -41,6 +41,16 @@
           </v-flex>
 
           <v-flex xs12 class="pa-3">
+            <v-text-field
+              label="Home Club"
+              v-model="model.homeclub"
+              :rules="requiredRule"
+              placeholder="ROGC"
+              required
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs12 class="pa-3">
             <v-select :items="countries"
                       v-model="model.nationality"
                       label="Select"

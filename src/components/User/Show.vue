@@ -47,6 +47,16 @@
 
             <v-flex xs12></v-flex>
 
+            <v-flex xs12 class="pa-3">
+              <v-text-field
+                label="Home Club"
+                v-model="model.homeclub"
+                :disabled="!editMode"
+                placeholder="ROGC"
+                required
+              ></v-text-field>
+            </v-flex>
+
             <v-flex sm6 xs12 class="pa-3">
               <v-select v-if="editMode"
                         :items="countries"

@@ -73,7 +73,8 @@ export default class UserModel extends FirebaseModel {
     'sex',
     'birthdate',
     'phone',
-    'address'
+    'address',
+    'homeclub'
   ]
 
   static collectionName = 'Users'
@@ -96,7 +97,7 @@ export default class UserModel extends FirebaseModel {
   sex
   phone = ''
   address = ''
-
+  homeclub = ''
   // Integers
 
   // References
