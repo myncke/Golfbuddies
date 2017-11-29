@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <v-form v-model="valid">
+      <v-form lazy-validation v-model="valid" ref="form">
         <v-layout row wrap>
 
           <!-- Text Fields -->
@@ -66,7 +66,6 @@
               label="Address"
               v-model="model.address"
               placeholder="Golfstreet 15 9000 Gent"
-              required
             ></v-text-field>
           </v-flex>
 
@@ -91,7 +90,6 @@
               ></v-radio>
             </v-radio-group>
           </v-flex>
-
         </v-layout>
       </v-form>
     </v-card-text>
@@ -127,6 +125,9 @@
       },
       setModel (model) {
         this.model = model
+      },
+      submit () {
+        return this.$refs.form.validate()
       }
     },
     components: {

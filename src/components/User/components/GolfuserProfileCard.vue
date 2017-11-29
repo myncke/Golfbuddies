@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form ref="form" v-model="valid">
     <v-layout row wrap v-if="model !== undefined">
 
       <v-flex xs12 class="pa-3">
@@ -10,7 +10,6 @@
           label="Federaal Nummer"
           v-model="model.federaalNummer"
           :disabled="!editMode"
-          :rules="requiredRule"
         ></v-text-field>
       </v-flex>
 
@@ -62,6 +61,9 @@
       },
       isValid () {
         return this.valid
+      },
+      submit () {
+        return this.$refs.form.validate()
       }
     },
     props: {

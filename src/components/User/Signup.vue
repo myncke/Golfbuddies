@@ -10,7 +10,7 @@
           <v-stepper-step step="3" :complete="page > 3">Golf</v-stepper-step>
         </v-stepper-header>
         <v-stepper-content step="1">
-          <v-form v-model="valid">
+          <v-form ref="form" v-model="valid">
 
             <v-layout row>
               <v-flex xs-12>
@@ -59,7 +59,7 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-card>
-            <golf-card :editMode="true" ref="golf"></golf-card>
+            <golf-card  :editMode="true" ref="golf"></golf-card>
           </v-card>
         </v-stepper-content>
       </v-stepper>
@@ -125,9 +125,19 @@ export default {
       // this.$store.dispatch('signUserUp', { email: this.email, password: this.password })
     },
     nextPage: async function () {
+      let golf = this.$refs.golf
+      let user = this.$refs.user
+      let pageObject = {2: user, 3: golf}
       if (!this.valid) return
       if (this.page < 3) {
-        this.page += 1
+        if (this.page === 1) {
+          if (this.$refs.form.validate()) {
+            this.page += 1
+          }
+        }
+        if (pageObject[this.page].submit()) {
+          this.page += 1
+        }
       } else {
         this.submit()
         // this.$router.push({name: 'event', params: {id: this.model.key}})
