@@ -2,7 +2,7 @@
   <v-flex class="mb-4 white">
     <v-card class="elevation-0">
       <v-card-text class="grey lighten-3 pa-0">
-        <v-list two-line style="height: 25vh; overflow:scroll;" class="white">
+        <v-list two-line style="" class="white">
           <template v-for="model in friendUserModels">
             <v-list-tile avatar v-bind:key="model.user.key">
               <v-list-tile-avatar>
