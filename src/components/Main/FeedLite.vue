@@ -33,7 +33,17 @@
         </div>
 
         <v-card-actions >
-          <v-btn flat block small color="primary" :to="'/calendar'" class="mb-1">See all upcoming events</v-btn>
+          <v-layout row wrap>
+            <v-flex xs12>
+              <v-btn flat block small color="primary" :to="'/calendar'" class="mb-1">See all upcoming events</v-btn>
+            </v-flex>
+            <v-flex class="pr-1" sm6 xs12>
+              <v-btn flat outline block color="blue" :to="'/event/new'">Create new event</v-btn>
+            </v-flex>
+            <v-flex class="pl-1" sm6 xs12>
+              <v-btn flat outline block color="yellow darken-2" :to="'/locationBroadcast/new'">Add a travel</v-btn>
+            </v-flex>
+          </v-layout>
         </v-card-actions>
       </v-card>
     </v-flex>
