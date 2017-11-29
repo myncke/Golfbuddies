@@ -69,6 +69,9 @@
       },
       isValid () {
         return this.model.roundPrice !== undefined && this.model.minHdc !== undefined
+      },
+      validate () {
+        return this.$refs.form.validate()
       }
     },
     props: {

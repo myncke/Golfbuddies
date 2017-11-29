@@ -1,5 +1,6 @@
 <template>
   <div style="width: 100%;" v-if="model">
+    <p class="title red--text">{{error}}</p>
     <v-stepper v-model="page">
       <v-stepper-header>
         <v-stepper-step step="1" :complete="page > 1">General Game Information</v-stepper-step>
@@ -184,7 +185,8 @@
       loading: false,
       maxPage: 3,
       subModel: undefined,
-      isEdit: false
+      isEdit: false,
+      error: ''
     }),
     created: function () {
       this.init()
@@ -210,12 +212,15 @@
         }
       },
       nextPage: async function () {
-        if (!this.valid || (this.page === 2 && !this.$refs.subModelComponent.isValid())) return
+        if (!this.valid || (this.page === 2 && !this.$refs.subModelComponent.validate())) return
         if (this.page < this.maxPage) {
           this.page += 1
         } else {
           this.loading = true
-          await this.submit()
+          if (!(await this.submit())) {
+            this.loading = false
+            return
+          }
           this.loading = false
           this.$router.push({name: 'event', params: {id: this.model.key}})
         }
@@ -232,6 +237,10 @@
         let subModel = this.$refs.subModelComponent.getModel()
         // await this.getLocation()
 
+        if (!this.model.locationString) {
+          this.error = 'Please fill in a location'
+          return false
+        }
         // Fix some fields
         this.model.competition = this.model.competition || false
         this.model.international = this.model.international || false
@@ -250,6 +259,7 @@
         this.model.specialWishes = this.model.specialWishes || ''
         this.model.creator = UserModel.getNormalRef(UserModel).doc((new UserModel()).key)
         this.model.subGame = subModel._getDocRef()
+
         this.model.location = this.model.location || (await this.getLocation()) || {latitude: 0, longitude: 0}
         console.log(this.model.location)
 
@@ -261,6 +271,7 @@
         if (!this.isEdit) {
           await this.model.sendInviteNotification()
         }
+        return true
       },
       getAddressData (addressData, placeResultData) {
         this.model.location = {latitude: addressData.latitude, longitude: addressData.longitude}
