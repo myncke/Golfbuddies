@@ -5,13 +5,14 @@
     </v-card-title>
     <v-card-text>
       <p class="subheading red--text">{{error}}</p>
-      <v-form>
+      <v-form ref="form" v-model="valid">
         <v-layout row wrap>
           <v-flex xs12 class="input-field">
             <v-text-field
               name="Group Name"
               label="Group Name"
               v-model="model.name"
+              :rules="requiredRule"
               required
             ></v-text-field>
           </v-flex>
@@ -41,15 +42,13 @@
               name="Group Information"
               label="Group Information"
               v-model="model.information"
-              required
               multiLine
             ></v-text-field>
           </v-flex>
           <v-flex sm6 xs12 class="input-field">
             <v-checkbox label="Private"
                         v-model="model.closed"
-                        color="primary"
-                        required>
+                        color="primary">
             </v-checkbox>
           </v-flex>
           <v-flex sm6 xs12 class="input-field">
@@ -65,6 +64,7 @@
               name="Header Picture"
               v-model="model.headerPic"
               type="url"
+              :rules="requiredRule"
               required
             ></v-text-field>
           </v-flex>
@@ -84,11 +84,12 @@
     data: () => ({
       model: {},
       sportTypeMap: {},
-      rules: {
-
-      },
+      requiredRule: [
+        (val) => !!val || 'This field is required'
+      ],
       loading: false,
-      isEdit: false
+      isEdit: false,
+      valid: false
     }),
     watch: {
       $route: function (newVal) {
@@ -114,11 +115,20 @@
         this.model.sportType = 'golf'
       },
       createClub: async function () {
+        if (!this.$refs.form.validate()) {
+          return
+        }
+
         this.loading = true
         this.model.sportType = this.sportTypeMap[this.model.sportType]
         this.model.closed = this.model.closed || false
         this.model.name = this.model.name.toLowerCase()
-        await this.getLocation()
+        // await this.getLocation()
+        if (!this.model.locationString || !this.model.location) {
+          this.loading = false
+          this.error = 'Please fill in the location!'
+          return
+        }
         let user = this.$store.getters.user
         this.model.members = {}
         this.model.members[user.key] = true
