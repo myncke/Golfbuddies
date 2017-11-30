@@ -1,12 +1,12 @@
 <template>
   <div v-if="gameModel !== undefined && gameModel.invites !== undefined">
     <p class="red--text caption" v-if="error">{{error}}</p>
-    <v-btn v-if="!isMyGame" small flat 
-           value="going" 
-           :color="invited ? (!accepted ? 'green' : 'red') : 'blue-grey'" 
-           class="caption" @click="accepted ? unjoinGame() : openDialog()" 
+    <v-btn v-if="!isMyGame" small flat
+           value="going"
+           :color="invited ? (!accepted ? 'green' : 'red') : 'blue-grey'"
+           class="caption" @click="accepted ? unjoinGame() : openDialog()"
            :disabled="(!hasPermission && !accepted) || isMyGame">
-      <v-icon left dark color="" class="caption">{{!accepted ? 'check' : 'clear'}}</v-icon> {{accepted ? 'Cancel invitation' : (hasPermission ? 'Going' : 'Not allowed')}}
+      <v-icon left dark color="" class="caption">{{!accepted ? 'check' : 'clear'}}</v-icon> {{accepted ? 'Cancel invitation' : (hasPermission ? 'Join' : 'Not allowed')}}
     </v-btn>
     <v-btn flat small v-else disabled class="caption">
       My event

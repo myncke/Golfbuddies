@@ -49,6 +49,7 @@
 
             <v-flex xs12 class="pa-3">
               <v-text-field
+                v-if="canViewSecrets"
                 label="Home Club"
                 v-model="model.homeclub"
                 :disabled="!editMode"
@@ -66,7 +67,7 @@
                         prepend-icon="map"
               ></v-select>
 
-              <v-text-field v-else
+              <v-text-field v-else-if="canViewSecrets"
                 label="Nationality"
                 v-model="model.nationality"
                 :disabled="!editMode"
@@ -75,6 +76,7 @@
 
             <v-flex sm6 xs12 class="pa-3">
               <v-text-field
+                v-if="canViewSecrets"
                 label="Region/Province"
                 v-model="model.region"
                 :disabled="!editMode"
@@ -114,7 +116,7 @@
 
           <v-divider></v-divider>
 
-          <golf-info :pId="this.model.key" ref="golf"></golf-info>
+          <golf-info v-if="canViewSecrets" :pId="this.model.key" ref="golf"></golf-info>
 
 
         </v-card-text>
@@ -125,13 +127,13 @@
         Save
       </v-btn>
     </v-flex>
-    <v-flex class="mt-3" xs12>
+    <v-flex v-if="isMyProfile" class="mt-3" xs12>
       <v-divider></v-divider>
       <forgot-password message="Send a mail to reset your password">
       </forgot-password>
     </v-flex>
 
-    <v-flex xs12>
+    <v-flex v-if="isMyProfile" xs12>
       <email-change></email-change>
     </v-flex>
 
