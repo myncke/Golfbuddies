@@ -45,9 +45,8 @@
                     append-icon="search"
                     prepend-icon="location_on"
                     classname="form-control"
-                    placeholder="Event Location"
                     v-on:placechanged="getAddressData"
-                    :placeholder="model.locationString"
+                    :placeholder="model.locationString || 'Event Location (REQUIRED)'"
                     v-on:inputChange="(locationString) => { model.locationString = locationString.newVal }"
                     types="address"
                   >
