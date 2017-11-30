@@ -22,7 +22,7 @@ export default class GolfGameModel extends FirebaseModel {
 
   // Integers
   minHdc
-  roundPrice
+  roundPrice = 0
 
   // References
   gameKey

@@ -92,9 +92,11 @@
         if (this.hasPermission) {
           this.loading = true
           await this.gameModel.addSubcollectionDoc('GameUsers', this.gameUser, error => { this.error = error.message })
-          let key = this.$store.getters.user.key
-          this.gameModel.invites[key] = {invited: (this.gameModel.invites[key] || {invited: false}).invited, accepted: true}
+          let user = this.$store.getters.user
+          this.gameModel.invites[user.key] = {invited: (this.gameModel.invites[user.key] || {invited: false}).invited, accepted: true}
+          this.users.push(user)
           await this.gameModel.save()
+          this.refreshModel()
           this.loading = false
           this.openMe = false
           this.$emit('user-joined', this.gameModel)
@@ -116,8 +118,16 @@
         let userKey = this.$store.getters.user.key
         this.gameModel.removeSubColDoc('GameUsers', userKey, error => { this.error = error })
         delete this.gameModel.invites[userKey]
+        this.gameModel.save()
         console.log('DELETED')
+        this.users = this.users.filter(obj => obj.key !== userKey)
+        this.refreshModel()
         this.$emit('user-quit', this.gameModel)
+      },
+      refreshModel () {
+        let model = this.gameModel
+        this.gameModel = undefined
+        this.gameModel = model
       }
     },
     props: {

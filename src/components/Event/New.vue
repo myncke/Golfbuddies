@@ -222,6 +222,7 @@
           }
           this.loading = false
           this.$router.push({name: 'event', params: {id: this.model.key}})
+          this.$router.go()
         }
       },
       getLocation: async function () {
