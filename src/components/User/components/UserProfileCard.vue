@@ -28,8 +28,6 @@
             <v-text-field
               label="Nickname"
               v-model="model.nickname"
-              :rules="requiredRule"
-              required
             ></v-text-field>
           </v-flex>
 
@@ -56,8 +54,6 @@
                       label="Select"
                       single-line
                       prepend-icon="map"
-                      :rules="requiredRule"
-                      required
             ></v-select>
           </v-flex>
 
@@ -65,9 +61,7 @@
             <v-text-field
               label="Region/Province"
               v-model="model.region"
-              :rules="requiredRule"
               placeholder="Oost-Vlaanderen"
-              required
             ></v-text-field>
           </v-flex>
 
@@ -83,9 +77,7 @@
             <v-text-field
               label="Phone Number"
               v-model="model.phone"
-              :rules="requiredRule"
               placeholder="0477112233"
-              required
             ></v-text-field>
           </v-flex>
 

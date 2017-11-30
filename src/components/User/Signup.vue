@@ -156,14 +156,13 @@ export default {
       }
 
       let userModel = user.getModel()
-      userModel.nickname = userModel.nickname.toLowerCase()
+      userModel.nickname = userModel.nickname.toLowerCase() || ''
       userModel.firstName = userModel.firstName.toLowerCase()
       userModel.lastName = userModel.lastName.toLowerCase()
 
       let golfModel = golf.getModel()
 
       if (userModel && !userModel.isSocial) {
-        console.log('MAKING ACCOUNT!')
         await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message; this.loading = false })
         let uid = firebase.auth().currentUser.uid
         userModel.key = uid
@@ -174,8 +173,6 @@ export default {
 
       golfModel.userKey = userModel._getDocRef()
 
-      console.log('SAVING')
-      console.log(firebase.auth().currentUser)
       userModel.save()
       golfModel.save()
 
@@ -183,10 +180,8 @@ export default {
     },
     makeSocialUser: function (filledModel) {
       this.model = filledModel
-      console.log(filledModel)
       this.$refs.user.setModel(filledModel)
       this.page = 2
-      console.log('MAKING SOCIAL USER')
     }
   },
   components: {

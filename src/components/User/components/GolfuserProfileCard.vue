@@ -10,6 +10,8 @@
           label="Federaal Nummer"
           v-model="model.federaalNummer"
           :disabled="!editMode"
+          :rules="requiredRule"
+          required
         ></v-text-field>
       </v-flex>
 

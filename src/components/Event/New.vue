@@ -99,14 +99,14 @@
                     v-bind:items="sexes"
                     v-model="model.prefGameSex"
                     :rules="rules.prefGameSexRules"
-                    label="Prefered Participant Sexes"
+                    label="Preferred Participant Sexes"
                     single-line
                     bottom
                     required
                   ></v-select>
                 </v-flex>
                 <v-flex sm6 xs12 class="input-field">
-                  <v-text-field label="Prefered Group Size" :mask="'##'" v-model="model.prefGroupSize" required
+                  <v-text-field label="Preferred Group Size" :mask="'##'" v-model="model.prefGroupSize" required
                                 :rules="rules.groupSizeRules"
                   ></v-text-field>
                 </v-flex>
@@ -174,10 +174,10 @@
           (v) => !!v || 'Location is required'
         ],
         groupSizeRules: [
-          (v) => !!v || 'Prefered Group Size is required'
+          (v) => !!v || 'Preferred Group Size is required'
         ],
         prefGameSexRules: [
-          (v) => !!v || 'Prefered Participants Sex is required'
+          (v) => !!v || 'Preferred Participants Sex is required'
         ]
       },
       sportType: 'Golf',

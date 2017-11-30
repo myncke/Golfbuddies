@@ -19,8 +19,7 @@
             </v-checkbox>
           </v-flex>
           <v-flex sm6 xs12 class="input-field">
-            <v-text-field label="Price per Round" :mask="'####'" v-model="model.roundPrice" required
-                          :rules="rules.roundPriceRules"
+            <v-text-field label="Price per Round" :mask="'####'" v-model="model.roundPrice"
             ></v-text-field>
           </v-flex>
           <v-flex sm6 xs12 class="input-field">
@@ -41,10 +40,6 @@
     data: () => ({
       valid: false,
       rules: {
-        roundPriceRules: [
-          (v) => !!v || 'Round Price is required',
-          (v) => v >= 0 || 'Round Price should be positive'
-        ],
         hdcRules: [
           (v) => !!v || 'Minimum Handicap is required'
         ]

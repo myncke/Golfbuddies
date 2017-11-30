@@ -91,9 +91,9 @@ export default class UserModel extends FirebaseModel {
   // Strings
   firstName
   lastName
-  nickname
-  nationality
-  region
+  nickname = ''
+  nationality = ''
+  region = ''
   sex
   phone = ''
   address = ''
@@ -103,7 +103,7 @@ export default class UserModel extends FirebaseModel {
   // References
 
   // Timestamps
-  birthdate
+  birthdate = new Date()
 
   // Geopoints
 
