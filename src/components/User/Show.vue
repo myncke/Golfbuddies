@@ -130,6 +130,11 @@
       <forgot-password message="Send a mail to reset your password">
       </forgot-password>
     </v-flex>
+
+    <v-flex xs12>
+      <email-change></email-change>
+    </v-flex>
+
     <v-snackbar
       :timeout="6000"
       color="success"
@@ -146,6 +151,7 @@
   import GolfuserProfileCard from './components/GolfuserProfileCard'
   import FriendshipModel from '../../models/FriendshipModel'
   import ForgotPassword from '../Static/ForgotPassword'
+  import EmailChangeComponent from './components/EmailChangeComponent'
 
   let refs = ['golf']
 
@@ -251,7 +257,8 @@
     },
     components: {
       'golf-info': GolfuserProfileCard,
-      'forgot-password': ForgotPassword
+      'forgot-password': ForgotPassword,
+      'email-change': EmailChangeComponent
     }
   }
 </script>
