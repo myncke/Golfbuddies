@@ -157,6 +157,13 @@ export default {
   watch: {
     $route: function () {
       this.initModel(this.$route.params.id)
+    },
+    model () {
+      // this.invitees.model = {} // this.model
+      this.invitees = Object.assign({}, this.model)
+      this.invitees.invites = {}
+      this.invitees.canJoin = this.model.canJoin
+      console.log('OBJECT:', this.invitees)
     }
   },
   created: function () {

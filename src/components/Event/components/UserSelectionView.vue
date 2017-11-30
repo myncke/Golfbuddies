@@ -88,25 +88,33 @@
     }),
     props: {
       model: Object,
+      subModel: Object,
       email: {
         type: Boolean,
         default: false
       }
     },
     watch: {
-      model: function (newVal) {
-        console.log(newVal)
-      }
+      /* model: function (newVal) {
+      } */
+    },
+    created () {
+      console.log(this.model)
     },
     methods: {
       removeUser: function (user) {
         this.removeObjectFromArray(this.invitedUsers, user)
         this.removeUserFromInvites(user.key)
       },
-      addUser: function (user) {
+      addUser: async function (user) {
+        this.user = ''
         if (this.invitedUsers.indexOf(user) < 0) {
-          this.invitedUsers.push(user)
-          this.addUserToInvites(user.key)
+          if (this.model.canJoin(user)) {
+            this.invitedUsers.push(user)
+            this.addUserToInvites(user.key)
+          } else {
+            this.error = 'Can\'t invite this user according to your event\'s rules'
+          }
         }
       },
       addEmail: function () {
@@ -144,7 +152,7 @@
         }
       },
       addUserToInvites: function (userKey) {
-        this.model.invites[userKey] = {invited: true, accepted: false}
+        this.model.invites[userKey] = {invited: true, accepted: (this.model.invites[userKey] || {accepted: false}).accepted}
       },
       removeUserFromInvites: function (userKey) {
         delete this.model.invites[userKey]
