@@ -175,6 +175,7 @@ export default {
         this.$store.commit('setUser', userModel)
       }
       golfModel.userKey = userModel._getDocRef()
+      golfModel.key = userModel.key
       golfModel.save()
       userModel.save()
       console.log('Saved these objects:', golfModel, userModel)

@@ -9,7 +9,6 @@ export default {
     provider.addScope('user_birthday')
     try {
       let result = await firebase.auth().signInWithPopup(provider)
-      console.log(result)
       let userModel = new UserModel(result.user.uid)
       userModel.isSocial = true
       return userModel
@@ -23,7 +22,6 @@ export default {
     let provider = new firebase.auth.GoogleAuthProvider()
     try {
       let result = await firebase.auth().signInWithPopup(provider)
-      console.log(result)
       let userModel = new UserModel(result.user.uid)
       userModel.isSocial = true
       let profile = result.additionalUserInfo.profile

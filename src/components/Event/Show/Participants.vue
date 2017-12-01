@@ -14,7 +14,7 @@
               <v-list-tile-avatar>
                 <img v-if="isUserModel(member)" :src="makeInitialsImage(member)" class="initials-img" />
               </v-list-tile-avatar>
-              <v-list-tile-content :to="`/profile/${member.key}`">
+              <v-list-tile-content @click="$router.push('/profile/' + member.key)" :to="`/profile/${member.key}`">
                 <v-list-tile-title v-if="isUserModel(member)" class="capitalize">{{member.firstName}} {{member.lastName}}</v-list-tile-title>
                 <v-list-tile-title v-else class="capitalize">{{member}}</v-list-tile-title>
                 <v-list-tile-sub-title v-if="isUserModel(member)">{{member.region}}, {{member.nationality}} &#9679; {{ isGoing(member) ? "Going" : "Invited"}}</v-list-tile-sub-title>
