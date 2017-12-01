@@ -109,7 +109,8 @@
       addUser: async function (user) {
         this.user = ''
         if (this.invitedUsers.indexOf(user) < 0) {
-          if (this.model.canJoin(user)) {
+          // TODO: this, we need the golfuser to check the subModels things
+          if (!this.subModel || (this.model.canJoin(user) /* && this.subModel.canJoin(user) */)) {
             this.invitedUsers.push(user)
             this.addUserToInvites(user.key)
           } else {

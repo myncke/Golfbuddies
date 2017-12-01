@@ -65,7 +65,7 @@
         <v-btn color="primary" block @click="inviting = true">Invite Friends</v-btn>
         <v-dialog max-width="500" v-model="inviting">
           <v-card>
-            <selection-view email :model="invitees"></selection-view>
+            <selection-view email :model="invitees" :subModel="subModel"></selection-view>
             <v-btn block color="primary" @click="addPeople">Add People</v-btn>
           </v-card>
         </v-dialog>

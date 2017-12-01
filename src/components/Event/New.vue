@@ -124,7 +124,7 @@
       </v-stepper-content>
       <v-stepper-content v-if="maxPage > 2" step="3">
         <!--<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>-->
-        <user-selection email :model="model"></user-selection>
+        <user-selection email :model="model" :subModel="this.subModel"></user-selection>
       </v-stepper-content>
     </v-stepper>
     <v-layout row style="height: auto">
@@ -223,6 +223,10 @@
           this.loading = false
           this.$router.push({name: 'event', params: {id: this.model.key}})
           this.$router.go()
+        }
+
+        if (this.page === this.maxPage) {
+          this.subModel = this.$refs.subModelComponent.getModel()
         }
       },
       getLocation: async function () {
