@@ -1,6 +1,7 @@
 import FirebaseModel from './FirebaseModel'
 import UserModel from './UserModel'
 import ConversationGroupModel from './ConversationGroupModel'
+import NotificationModel, { NotificationMessages } from './NotificationModel'
 
 export default class FriendshipModel extends FirebaseModel {
 
@@ -11,6 +12,18 @@ export default class FriendshipModel extends FirebaseModel {
   ]
 
   static collectionName = 'Friendship'
+
+  async sendNotification (toModel, fromModel) {
+    let notification = new NotificationModel()
+    notification.message = NotificationMessages.friendRequest + fromModel.firstName + ' ' + fromModel.lastName
+    notification.seen = false
+    notification.link = '/profile/' + fromModel.key
+    notification.receivers = {}
+    notification.receivers[toModel.key] = {seen: false, received: true}
+    console.log('SAVING NOTIF')
+    await notification.save()
+    console.log('SAVED NOTIF: ', notification)
+  }
 
   async initConversationModel (onFailure) {
     let conversationModel = new ConversationGroupModel()

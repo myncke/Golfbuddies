@@ -17,7 +17,7 @@
           required
         ></v-text-field>
 
-        <v-btn block color="primary" dark @click="signIn()">Sign In</v-btn>
+        <v-btn block color="primary" :loading="loading" dark @click="signIn()">Sign In</v-btn>
         <br>
         <hr class="divider">
         <br>
@@ -53,16 +53,20 @@
       ],
       user: {email: '', password: ''},
       open: false,
-      error: ''
+      error: '',
+      loading: false
     }),
     methods: {
       signIn: async function () {
+        this.loading = true
         this.error = ''
         firebase.auth().signInWithEmailAndPassword(this.user.email, this.user.password).catch(_ => {
           this.error = 'Invalid username or password'
+          this.loading = false
         }).then(() => {
           if (this.error === '') {
             this.$store.dispatch('signUserIn', this.user)
+            this.loading = false
           }
         })
       },

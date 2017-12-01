@@ -7,11 +7,14 @@
           <v-spacer></v-spacer>
           <v-switch label="Edit Mode" v-model="editMode" v-if="isMyProfile"></v-switch>
           <div v-else>
-            <v-btn v-if="isAFriend" @click="removeFriend" flat>
-              Remove Friend
-            </v-btn>
-            <v-btn v-else @click="addFriendRequest" flat>
+            <v-btn v-if="!isAFriend" @click="addFriendRequest" flat>
               Add Friend
+            </v-btn>
+            <v-btn v-else-if="sentInvite" disabled flat>
+              Sent Friendrequest
+            </v-btn>
+            <v-btn v-else @click="removeFriend" flat>
+              Remove Friend
             </v-btn>
           </div>
         </v-card-title>
@@ -169,8 +172,10 @@
         return this.model.key === this.$store.getters.user.key
       },
       isAFriend: function () {
-        console.log(this.isFriend)
-        return (this.isFriend !== undefined && this.isFriend.friends[this.$store.getters.user.key] === true)
+        return (this.isFriend && this.isFriend.friends[this.$store.getters.user.key])
+      },
+      sentInvite: function () {
+        return (this.isFriend && this.isFriend.friends[this.$store.getters.user.key] && !this.isFriend.friends[this.model.key])
       }
     },
     created: function () {
@@ -226,19 +231,15 @@
         this.snackbar = true
       },
       addFriendRequest: async function () {
+        let user = this.$store.getters.user
         if (this.isFriend === undefined) {
           this.isFriend = await FriendshipModel.sendRequest(this.model.key, false, error => console.log(error))
         } else {
-          let isFriend = this.isFriend.friends[this.$store.getters.user.key]
-          if (isFriend) {
-            await this.isFriend.deleteObject() // TODO: rethink this
-            this.isFriend = undefined
-          } else {
-            this.isFriend.friends[this.$store.getters.user.key] = true
-            await this.isFriend.save()
-            this.isFriend = true
-          }
+          this.isFriend.friends[user.key] = true
+          await this.isFriend.save()
+          // this.isFriend
         }
+        await this.isFriend.sendNotification(this.model, user)
       },
       removeFriend: async function () {
         this.isFriend.deleteObject()
