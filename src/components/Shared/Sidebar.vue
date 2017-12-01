@@ -1,16 +1,15 @@
 <template>
-  <v-navigation-drawer persistent clipped fixed app v-model="open" width='400' class="pb-0" style="z-index:1000">
+  <v-navigation-drawer disable-route-watcher persistent clipped fixed app v-model="open" width='400' class="pb-0" style="z-index:1000">
     <aside-left></aside-left>
   </v-navigation-drawer>
 </template>
 
 <script>
-import SportClubModel from '../../models/SportClubModel'
 import AsideLeft from '../Main/AsideLeft'
 
 export default {
   data: () => ({
-    open: true,
+    open: false,
     items: [
       { text: 'Upcoming', icon: 'update', path: '/feed', info: 'All upcoming events you are invited to or are going to.' },
       { text: 'Calendar', icon: 'events', path: '/calendar', info: 'Calendar of all upcoming events and travels.' },
@@ -38,11 +37,11 @@ export default {
   methods: {
     switchOpenState () {
       this.open = !this.open
-      console.log(
+      /* console.log(
         SportClubModel.getAllFromRef(
           SportClubModel.getNormalRef(SportClubModel).where('members.' + this.$store.getters.user.key, '==', true), SportClubModel, () => ({})
         )
-      )
+      ) */
     },
     goToProfile: function () {
       // this.$router.push({name: 'profile', params: {id: this.$store.getters.key}})
