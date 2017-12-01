@@ -82,8 +82,10 @@
           list.forEach(model => {
             model.getFriend(error => { this.error = error.message }).then(
               uModel => {
-                this.friendUserModels.push({user: uModel, friendship: model})
-                this.loading = false
+                if (uModel) {
+                  this.friendUserModels.push({user: uModel, friendship: model})
+                  this.loading = false
+                }
               }
             )
           })

@@ -3,7 +3,10 @@ import FirebaseModel from './FirebaseModel'
 export default class GolfGameModel extends FirebaseModel {
 
   canJoin (golfUser) {
-    return parseFloat((golfUser.hdc).replace('A', '').replace('I', '')) <= this.minHdc
+    if (!golfUser) return false
+    let hdcNr = golfUser.hdc
+    if (typeof golfUser.hdc === 'string') hdcNr = parseFloat((golfUser.hdc).replace('A', '').replace('I', ''))
+    return hdcNr <= this.minHdc
   }
 
   static _firestoreFields = [

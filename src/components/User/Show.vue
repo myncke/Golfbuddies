@@ -10,8 +10,8 @@
             <v-btn v-if="!isAFriend" @click="addFriendRequest" flat>
               Add Friend
             </v-btn>
-            <v-btn v-else-if="sentInvite" disabled flat>
-              Sent Friendrequest
+            <v-btn v-else-if="sentInvite" @click="removeFriend" flat>
+              Cancel Friendrequest
             </v-btn>
             <v-btn v-else @click="removeFriend" flat>
               Remove Friend
@@ -69,14 +69,14 @@
                         prepend-icon="map"
               ></v-select>
 
-              <v-text-field v-else-if="canViewSecrets"
+              <v-text-field v-else
                 label="Nationality"
                 v-model="model.nationality"
                 :disabled="!editMode"
               ></v-text-field>
             </v-flex>
 
-            <v-flex v-if="canViewSecrets" sm6 xs12 class="pa-3">
+            <v-flex sm6 xs12 class="pa-3">
               <v-text-field
                 label="Region/Province"
                 v-model="model.region"
@@ -134,6 +134,13 @@
 
     <v-flex v-if="isMyProfile" xs12>
       <email-change></email-change>
+    </v-flex>
+
+    <v-flex xs12 v-if="isMyProfile">
+      <!-- TODO: make the remove account -->
+      <v-btn block color="red" dark @click="removeAccount">
+        Remove account
+      </v-btn>
     </v-flex>
 
     <v-snackbar
@@ -244,6 +251,13 @@
       removeFriend: async function () {
         this.isFriend.deleteObject()
         this.isFriend = undefined
+      },
+      async removeAccount () {
+        if (this.isFriend) await this.isFriend.deleteObject()
+        await this.model.deleteObject()
+        await this.$refs.golf.getModel().deleteObject()
+        this.$router.push('/')
+        this.$router.go('/')
       }
     },
     watch: {
