@@ -77,6 +77,7 @@
   import UserSearch from '../../Shared/Search/UserSearch'
   import GroupSearch from '../../Shared/Search/GroupSearch'
   import StringUtils from '../../../utils/StringUtils'
+  import GolfUserModel from '../../../models/GolfUserModel'
   export default {
     data: () => ({
       invitedUsers: [],
@@ -110,7 +111,13 @@
         this.user = ''
         if (this.invitedUsers.indexOf(user) < 0) {
           // TODO: this, we need the golfuser to check the subModels things
-          if (!this.subModel || (this.model.canJoin(user) /* && this.subModel.canJoin(user) */)) {
+          if (!this.subModel) {
+            this.invitedUsers.push(user)
+            this.addUserToInvites(user.key)
+          }
+          let golfuser = await GolfUserModel.getFromRef(GolfUserModel.getNormalRef(GolfUserModel).doc(user.key), GolfUserModel, error => { this.error = error })
+          console.log('USER INVITE', golfuser)
+          if (this.model.canJoin(user) && this.subModel.canJoin(golfuser)) {
             this.invitedUsers.push(user)
             this.addUserToInvites(user.key)
           } else {

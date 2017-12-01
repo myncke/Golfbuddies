@@ -59,7 +59,7 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <v-card>
-            <golf-card  :editMode="true" ref="golf"></golf-card>
+            <golf-card v-on:error="updateError"  :editMode="true" ref="golf"></golf-card>
           </v-card>
         </v-stepper-content>
       </v-stepper>
@@ -161,27 +161,32 @@ export default {
       userModel.lastName = userModel.lastName.toLowerCase()
 
       let golfModel = golf.getModel()
-
+      console.log('GOLFMODEL', golfModel)
+      if (!golfModel) {
+        this.loading = false
+        return
+      }
       if (userModel && !userModel.isSocial) {
-        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error.message; this.loading = false })
+        await firebase.auth().createUserWithEmailAndPassword(this.email, this.password).catch(error => { this.error = error; console.log(error); this.loading = false })
         let uid = firebase.auth().currentUser.uid
         userModel.key = uid
         golfModel.key = uid
       } else {
         this.$store.commit('setUser', userModel)
       }
-
       golfModel.userKey = userModel._getDocRef()
-
-      userModel.save()
       golfModel.save()
-
+      userModel.save()
+      console.log('Saved these objects:', golfModel, userModel)
       this.loading = false
     },
     makeSocialUser: function (filledModel) {
       this.model = filledModel
       this.$refs.user.setModel(filledModel)
       this.page = 2
+    },
+    updateError (error) {
+      this.error = error
     }
   },
   components: {

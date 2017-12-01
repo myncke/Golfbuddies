@@ -95,6 +95,7 @@ class FirebaseModel {
       return model
     } else {
       onFailure('Something went wrong, we couldn\'t find the document, doc: ' + doc.key)
+      return null
     }
   }
 

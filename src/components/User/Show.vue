@@ -47,9 +47,8 @@
 
             <v-flex xs12></v-flex>
 
-            <v-flex xs12 class="pa-3">
+            <v-flex v-if="canViewSecrets" xs12 class="pa-3">
               <v-text-field
-                v-if="canViewSecrets"
                 label="Home Club"
                 v-model="model.homeclub"
                 :disabled="!editMode"
@@ -74,34 +73,31 @@
               ></v-text-field>
             </v-flex>
 
-            <v-flex sm6 xs12 class="pa-3">
+            <v-flex v-if="canViewSecrets" sm6 xs12 class="pa-3">
               <v-text-field
-                v-if="canViewSecrets"
                 label="Region/Province"
                 v-model="model.region"
                 :disabled="!editMode"
               ></v-text-field>
             </v-flex>
 
-            <v-flex xs12 class="pa-3">
+            <v-flex v-if="canViewSecrets" xs12 class="pa-3">
               <v-text-field
-                v-if="canViewSecrets"
                 label="Address"
                 v-model="model.address"
                 :disabled="!editMode"
               ></v-text-field>
             </v-flex>
 
-            <v-flex xs12 class="pa-3">
+            <v-flex v-if="canViewSecrets" xs12 class="pa-3">
               <v-text-field
-                v-if="canViewSecrets"
                 label="Phone Number"
                 v-model="model.phone"
                 :disabled="!editMode"
               ></v-text-field>
             </v-flex>
 
-            <v-flex sm6 xs12 class="pa-3">
+            <v-flex xs12 class="pa-3">
               <v-radio-group v-model="model.sex">
                 <v-radio v-for="sex in sexes"
                          :key="sex"
@@ -116,7 +112,7 @@
 
           <v-divider></v-divider>
 
-          <golf-info v-if="canViewSecrets" :pId="this.model.key" ref="golf"></golf-info>
+          <golf-info :secrets="canViewSecrets" :pId="this.model.key" ref="golf"></golf-info>
 
 
         </v-card-text>

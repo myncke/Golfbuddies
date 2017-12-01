@@ -5,7 +5,7 @@
       <v-flex xs12 class="pa-3">
         <p class="subheading">Golf Information</p>
       </v-flex>
-      <v-flex sm6 xs12 class="pa-3">
+      <v-flex v-if="secrets" sm6 xs12 class="pa-3">
         <v-text-field
           label="Federaal Nummer"
           v-model="model.federaalNummer"
@@ -18,6 +18,7 @@
       <v-flex sm6 xs12 class="pa-3">
         <v-text-field
           label="Handicap"
+          placeholder="10.1I Or 10.1A"
           v-model="model.hdc"
           :disabled="!editMode"
           :rules="requiredRule"
@@ -54,11 +55,18 @@
         this.editMode = val
       },
       save: async function () {
-        if (typeof this.model.hdc === 'string') this.model.hdc = parseInt(this.model.hdc)
+        if (!/^[0-9]*.[0-9][AI]$/.test(this.model.hdc)) {
+          this.$emit('error', 'Hdc should be of the format xx.xA or xx.xI')
+          return null
+        }
         await this.model.save()
         console.log('SAVED GOLFUSER')
       },
       getModel: function () {
+        if (!/^[0-9]*.[0-9][AI]$/.test(this.model.hdc)) {
+          this.$emit('error', 'Hdc should be of the format xx.xA or xx.xI')
+          return null
+        }
         return this.model
       },
       isValid () {
@@ -72,6 +80,10 @@
       pId: String,
       editMode: {
         default: false,
+        type: Boolean
+      },
+      secrets: {
+        default: true,
         type: Boolean
       }
     }
