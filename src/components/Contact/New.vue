@@ -6,7 +6,7 @@
         <p class="caption">On their profile, there will be a button 'Add Friend'</p>
       </div>
       <v-card-content>
-        <user-search :toolbar="false" style="width: 100%;" class="pa-3"></user-search>
+        <user-search v-on:search-selected="selectedUser" :toolbar="false" style="width: 100%;" class="pa-3"></user-search>
       </v-card-content>
     </v-card>
   </v-container>
@@ -18,6 +18,11 @@
     data: () => ({
 
     }),
+    methods: {
+      selectedUser (user) {
+        this.$router.push({name: 'profile', params: {id: user.key}})
+      }
+    },
     components: {
       'user-search': UserSearch
     }
