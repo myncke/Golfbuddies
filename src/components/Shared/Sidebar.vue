@@ -9,7 +9,7 @@ import AsideLeft from '../Main/AsideLeft'
 
 export default {
   data: () => ({
-    open: false,
+    open: true,
     items: [
       { text: 'Upcoming', icon: 'update', path: '/feed', info: 'All upcoming events you are invited to or are going to.' },
       { text: 'Calendar', icon: 'events', path: '/calendar', info: 'Calendar of all upcoming events and travels.' },

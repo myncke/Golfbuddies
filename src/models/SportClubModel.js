@@ -93,7 +93,7 @@ export default class SportClubModel extends FirebaseSubColModel {
   closed // Boolean to show if the club is private or not (private is a keyword <.<)
 
   // Strings
-  information
+  information = ''
   name
   headerPic
   locationString
@@ -118,7 +118,7 @@ export default class SportClubModel extends FirebaseSubColModel {
     }
   }
 
-  sportType // Reference to SportTypes
+  sportType = 'SportType/Golf'// Reference to SportTypes
 
   /**
    * Returns the key of the SportType
@@ -127,7 +127,7 @@ export default class SportClubModel extends FirebaseSubColModel {
    * @returns {string}
    */
   getSportType () {
-    return this.creator.path.substr('SportTypes/'.length)
+    return this.sportType.path.substr('SportTypes/'.length)
   }
 
   /**
@@ -136,9 +136,9 @@ export default class SportClubModel extends FirebaseSubColModel {
    */
   setSportType (sportType) {
     if (typeof sportType === 'string') {
-      this.admin.path = 'SportTypes/' + sportType
+      this.sportType.path = 'SportTypes/' + sportType
     } else {
-      this.admin.path = 'SportTypes/' + sportType.key
+      this.sportType.path = 'SportTypes/' + sportType.key
     }
   }
 

@@ -66,7 +66,7 @@
         return this.gameModel.getCreator() === user.key
       },
       canJoin () {
-        return !this.invited && this.hasPermission
+        return !this.accepted && this.hasPermission
       },
       hasReadPermission () {
         return (this.invited || !this.gameModel.inviteOnly)
@@ -84,7 +84,7 @@
         }
       },
       openDialog: function () {
-        if (!this.invited && this.hasPermission) {
+        if (this.canJoin) {
           this.openMe = true
         }
       },

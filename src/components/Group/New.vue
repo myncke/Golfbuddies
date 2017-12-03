@@ -120,6 +120,7 @@
         }
 
         this.loading = true
+        this.model.sportType = 'golf'
         this.model.sportType = this.sportTypeMap[this.model.sportType]
         this.model.closed = this.model.closed || false
         this.model.name = this.model.name.toLowerCase()
