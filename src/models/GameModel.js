@@ -86,7 +86,7 @@ export default class GameModel extends FirebaseSubColModel {
     let result = []
     console.log('USER:', (new UserModel())._getDocRef())
     result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
-    // result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
+    result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
     result.push(...(await GameModel.getAllMyAcceptedUpcomingGames(onFailure)))
     result.push(...(await GameModel.getAllUpcomingGamesByUser((new UserModel())._getDocRef(), onFailure)))
 
