@@ -29,13 +29,18 @@
       search: async function () {
         console.log(this.inputStr)
         if (this.inputStr) {
-          this.items = await UserModel.searchUser(this.inputStr, error => { this.error = error.message })
+          this.items = (await UserModel.searchUser(this.inputStr, error => { this.error = error.message }))
+          if (this.items.length === 0) {
+            this.items = [{firstName: 'No results', nickname: '', lastName: '', noResult: true}]
+          }
         } else {
           this.items = []
         }
       },
       emitSelect: function (item) {
-        this.$emit('search-selected', item)
+        if (!item.noResult) {
+          this.$emit('search-selected', item)
+        }
       },
       capitalize: function (c) {
         return StringUtils.capitalize(c)

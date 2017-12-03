@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 // Contact
 import ContactIndex from '../components/Contact/Index'
+import NewFriend from '../components/Contact/New'
 
 // Event
 import Event from '../components/Event/Show'
@@ -99,6 +100,11 @@ export default new Router({
       path: '/contacts',
       name: 'contacts',
       component: ContactIndex
+    },
+    {
+      path: '/friends/new',
+      name: 'newFriend',
+      component: NewFriend
     },
     {
       path: '/settings',

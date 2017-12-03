@@ -1,6 +1,9 @@
 <template>
   <v-flex class="mb-4 white">
     <v-card class="elevation-0">
+      <v-layout row align-center>
+        <v-btn outline flat block class="ma-3" :to="'/friends/new'">Add Friend</v-btn>
+      </v-layout>
       <v-card-text class="grey lighten-3 pa-0">
         <v-list two-line style="" class="white">
           <template v-for="model in friendUserModels">
