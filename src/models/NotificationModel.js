@@ -4,7 +4,8 @@ import UserModel from './UserModel'
 let NotificationMessages = {
   invited: 'You have been invited to a game: ',
   eventUpdate: 'An event you are going to has been updated: ',
-  friendRequest: 'A user want so be your friend: '
+  friendRequest: 'A user want so be your friend: ',
+  friendAccepted: 'A user accepted your friend request: '
 }
 
 export {NotificationMessages}

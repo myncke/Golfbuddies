@@ -13,6 +13,9 @@
             <v-btn v-else-if="sentInvite" @click="removeFriend" flat>
               Cancel Friendrequest
             </v-btn>
+            <v-btn v-else-if="receivedInvite" @click="addFriendRequest" flat>
+              Accept Request
+            </v-btn>
             <v-btn v-else @click="removeFriend" flat>
               Remove Friend
             </v-btn>
@@ -179,10 +182,13 @@
         return this.model.key === this.$store.getters.user.key
       },
       isAFriend: function () {
-        return (this.isFriend && this.isFriend.friends[this.$store.getters.user.key])
+        return (this.isFriend /* && this.isFriend.friends[this.$store.getters.user.key] */)
       },
       sentInvite: function () {
         return (this.isFriend && this.isFriend.friends[this.$store.getters.user.key] && !this.isFriend.friends[this.model.key])
+      },
+      receivedInvite: function () {
+        return (this.isFriend && !this.isFriend.friends[this.$store.getters.user.key] && this.isFriend.friends[this.model.key])
       }
     },
     created: function () {
@@ -246,7 +252,11 @@
           await this.isFriend.save()
           // this.isFriend
         }
-        await this.isFriend.sendNotification(this.model, user)
+        if (!this.isFriend.friends[this.model.key]) {
+          await this.isFriend.sendNotification(this.model, user)
+        } else {
+          await this.isFriend.sendAcceptedNotification(this.model, user)
+        }
       },
       removeFriend: async function () {
         this.isFriend.deleteObject()

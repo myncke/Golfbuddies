@@ -25,6 +25,18 @@ export default class FriendshipModel extends FirebaseModel {
     console.log('SAVED NOTIF: ', notification)
   }
 
+  async sendAcceptedNotification (toModel, fromModel) {
+    let notification = new NotificationModel()
+    notification.message = NotificationMessages.friendAccepted + fromModel.firstName + ' ' + fromModel.lastName
+    notification.seen = false
+    notification.link = '/profile/' + fromModel.key
+    notification.receivers = {}
+    notification.receivers[toModel.key] = {seen: false, received: true}
+    console.log('SAVING NOTIF')
+    await notification.save()
+    console.log('SAVED NOTIF: ', notification)
+  }
+
   async initConversationModel (onFailure) {
     let conversationModel = new ConversationGroupModel()
     let name = ''
@@ -40,7 +52,6 @@ export default class FriendshipModel extends FirebaseModel {
     this.conversationRef = conversationModel._getDocRef()
   }
 
-  // TODO: needs testing
   static async getFriendsOfCurrentUser (onFailure) {
     let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', true)
     let result = await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)
@@ -72,7 +83,9 @@ export default class FriendshipModel extends FirebaseModel {
   static async hasSentFriendship (user1, user2, onFailure) {
     let mutual = (await FriendshipModel.getFriendship(user1, user2, onFailure))
     let oneWay = (await FriendshipModel.getAllFromRef(FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + user1, '==', false).where('friends.' + user2, '==', true), FriendshipModel, onFailure))[0]
-    return mutual || oneWay
+    let otherWay = (await FriendshipModel.getAllFromRef(FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + user2, '==', false).where('friends.' + user1, '==', true), FriendshipModel, onFailure))[0]
+    console.log(mutual, oneWay, otherWay)
+    return mutual || oneWay || otherWay
   }
 
   getFriendRef () {
