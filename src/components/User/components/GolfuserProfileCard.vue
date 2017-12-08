@@ -7,7 +7,7 @@
       </v-flex>
       <v-flex v-if="secrets" sm6 xs12 class="pa-3">
         <v-text-field
-          label="Federaal Nummer"
+          label="Federal Number"
           v-model="model.federaalNummer"
           :disabled="!editMode"
           :rules="requiredRule"
