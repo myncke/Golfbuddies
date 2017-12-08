@@ -1,6 +1,6 @@
 <template>
   <v-card v-if="model !== undefined && userModel !== undefined">
-    <v-card-media src="https://images.unsplash.com/photo-1504723246034-0977641ea907?auto=format&fit=crop&w=1744&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D" height="200px">
+    <v-card-media src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1506&q=80&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D" height="300px">
     </v-card-media>
     <v-card-title>
       <p class="title">{{userModel.nickname}} is Traveling!</p>
