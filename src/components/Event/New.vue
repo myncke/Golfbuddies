@@ -130,7 +130,7 @@
     <v-layout row style="height: auto">
       <v-btn color="primary" :disabled="page === 1 || loading" @click.native="page = Math.max(1,page-1)">Back</v-btn>
       <v-spacer style="height: 1px"></v-spacer>
-      <v-btn color="primary" :disabled="!valid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
+      <v-btn color="primary" :disabled="!isValid || loading" :loading="loading" @click.native="nextPage()">Continue</v-btn>
     </v-layout>
   </div>
 </template>
@@ -157,7 +157,7 @@
             if (typeof v === 'string') {
               return DateUtils.stringToDate(v) >= new Date() || 'Date should be in the future'
             }
-            return !!v
+            return !!v || 'Start date is required'
           }
         ],
         enddateRules: [
@@ -190,6 +190,11 @@
     created: function () {
       this.init()
     },
+    computed: {
+      isValid () {
+        return this.valid && this.model.date
+      }
+    },
     methods: {
       initSubModel: async function () {
         let modelClass = GameTypeNames[this.sportType]
@@ -211,7 +216,11 @@
         }
       },
       nextPage: async function () {
-        if (!this.valid || (this.page === 2 && !this.$refs.subModelComponent.validate())) return
+        if (!this.isValid || (this.page === 2 && !this.$refs.subModelComponent.validate())) {
+          this.error = 'Please fill in all required information'
+          return
+        }
+
         if (this.page < this.maxPage) {
           this.page += 1
         } else {
