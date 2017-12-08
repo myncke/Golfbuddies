@@ -82,22 +82,28 @@ export default class GameModel extends FirebaseSubColModel {
     }
   }
 
-  static async getAllUpcomingGames (onFailure) {
+  static async getAllUpcomingGames (onUpdate, onFailure) {
     let result = []
     console.log('USER:', (new UserModel())._getDocRef())
-    result.push(...(await GameModel.getAllMyInvitedUpcomingGames(onFailure)))
-    result.push(...(await GameModel.getAllUpcomingFriendlyGames(onFailure)))
-    result.push(...(await GameModel.getAllMyAcceptedUpcomingGames(onFailure)))
-    result.push(...(await GameModel.getAllUpcomingGamesByUser((new UserModel())._getDocRef(), onFailure)))
+    result.push(GameModel.getAllMyInvitedUpcomingGamesRef())
+    result.push(...(await GameModel.getAllUpcomingFriendlyGamesRef(onFailure)))
+    result.push(GameModel.getAllMyAcceptedUpcomingGamesRef())
+    result.push(GameModel.getAllUpcomingGamesRefByUser((new UserModel())._getDocRef(), onFailure))
 
-    let resultObject = {}
-    for (let obj of result) {
-      resultObject[obj.key] = obj
+    console.log(result)
+
+    for (let reference of result) {
+      GameModel.listenToAllFromFirebase(reference, GameModel, function (modelArray) {
+        let range = GameModel.getDefaultRange()
+        modelArray.added = modelArray.added.filter(obj => obj.date >= range.start && obj.date < range.end)
+        let resultObject = {}
+        for (let obj of modelArray.added) {
+          resultObject[obj.key] = obj
+        }
+        modelArray.added = Object.values(resultObject)
+        onUpdate(modelArray)
+      }, onFailure)
     }
-
-    result = Object.values(resultObject)
-    result.sort((obj1, obj2) => obj1.date - obj2.date)
-    return result
   }
 
   static async getAllUpcomingOpenGames (onFailure) {
@@ -105,37 +111,27 @@ export default class GameModel extends FirebaseSubColModel {
     return await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('inviteOnly', '==', false).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc'), GameModel, onFailure)
   }
 
-  static async getAllMyInvitedUpcomingGames (onFailure) {
-    let range = GameModel.getDefaultRange()
-    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.invited', '==', true), GameModel, onFailure)
-    list = list.filter(obj => obj.date >= range.start && obj.date < range.end)
-    console.log(list)
-    list.sort((a, b) => b.date - a.date)
-    console.log(list)
-    return list
+  static getAllMyInvitedUpcomingGamesRef () {
+    return GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.invited', '==', true)
   }
 
-  static async getAllMyAcceptedUpcomingGames (onFailure) {
-    let range = GameModel.getDefaultRange()
-    let list = await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.accepted', '==', true), GameModel, onFailure)
-    list = list.filter(obj => obj.date >= range.start && obj.date < range.end)
-    list.sort((a, b) => b.date - a.date)
-    return list
+  static getAllMyAcceptedUpcomingGamesRef () {
+    return GameModel.getNormalRef(GameModel).where('invites.' + (new UserModel()).key + '.accepted', '==', true)
   }
 
-  static async getAllUpcomingFriendlyGames (onFailure) {
+  static async getAllUpcomingFriendlyGamesRef (onFailure) {
     let friends = await FriendshipModel.getFriendsOfCurrentUser(onFailure)
     console.log(friends)
     let result = []
     for (let friend of friends) {
-      result.push(...(await GameModel.getAllUpcomingGamesByUser(friend.getFriendRef(), onFailure)))
+      result.push(GameModel.getAllUpcomingGamesRefByUser(friend.getFriendRef(), onFailure))
     }
     return result
   }
 
-  static async getAllUpcomingGamesByUser (userRef, onFailure) {
+  static getAllUpcomingGamesRefByUser (userRef, onFailure) {
     let range = GameModel.getDefaultRange()
-    return (await GameModel.getAllFromRef(GameModel.getNormalRef(GameModel).where('creator', '==', userRef).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc'), GameModel, onFailure))
+    return GameModel.getNormalRef(GameModel).where('creator', '==', userRef).where('date', '>=', range.start).where('date', '<', range.end).orderBy('date', 'asc')
   }
 
   static async getAllGamesWithFilter (filterObject, onFailure) {

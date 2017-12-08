@@ -10,7 +10,7 @@
         <v-btn flat nuxt color="primary" class="ma-0 pa-0" @click="goToEvent(model.game.key)">{{model.game.title}}</v-btn>
         <p class="pl-3 ma-0">{{ model.game.date | moment("hh:mm a") }} &#9679; {{model.game.locationString}} </p>
         <p class="pl-3 ma-0">GroupSize: {{ model.game.prefGroupSize }}</p>
-        <p class="pl-3 ma-0">Preferred Sex: {{ model.game.prefGameSex }}</p>
+        <p class="pl-3 ma-0">Gender: {{ model.game.prefGameSex }}</p>
         <p class="pl-3 ma-0">Max Hdc: {{ model.minHdc }}</p>
         <div>
           <join-event :gameModel="model.game"></join-event>

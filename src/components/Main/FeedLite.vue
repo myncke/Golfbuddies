@@ -78,8 +78,16 @@
         })
       },
       initFeed: async function () {
-        this.events = await GameModel.getAllUpcomingGames(error => console.log(error))
-        console.log(this.events)
+        GameModel.getAllUpcomingGames((array) => {
+          this.events = this.events || []
+          this.events.push(...(array.added))
+          let resultObject = {}
+          this.events.forEach(model => { resultObject[model.key] = model })
+          array.removed.forEach(model => {
+            delete resultObject[model.key]
+          })
+          this.events = Object.values(resultObject)
+        }, error => console.log(error))
       }
     },
     components: {

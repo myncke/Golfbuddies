@@ -110,6 +110,33 @@ class FirebaseModel {
   }
 
   /**
+   * Listens to the given reference from firebase
+   * @param ref = {Reference to listen to}
+   * @param modelClass = {Class of the model}
+   * @param onUpdate = {function(Array<ModelClass)}
+   * @param onFailure = {function(errorMessage)}
+   */
+  static listenToAllFromFirebase (ref, modelClass, onUpdate, onFailure) {
+    try {
+      ref.onSnapshot(doc => {
+        let result = {added: [], modified: [], removed: []}
+        doc.docChanges.forEach(change => {
+          result[change.type].push(FirebaseModel._mapFields(modelClass, undefined, change.doc, onFailure))
+          if (change.type === 'removed') {
+            console.log('Removed Game: ', change.doc.data())
+          }
+        })
+        /* doc.forEach(document => {
+          result.push(FirebaseModel._mapFields(modelClass, undefined, document, onFailure))
+        }) */
+        onUpdate(result)
+      })
+    } catch (error) {
+      onFailure(error)
+    }
+  }
+
+  /**
    * Gets a normal ref to the collection of the given modelClass
    * @param modelClass
    * @returns {firebase.firestore.CollectionReference}
