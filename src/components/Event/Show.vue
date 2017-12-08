@@ -211,7 +211,6 @@ export default {
     async deleteEvent () {
       await this.model.deleteObject()
       this.$router.push({name: 'root'})
-      this.$router.go('/')
     },
     editEvent () {
       this.$router.push({name: 'editEvent', params: {id: this.model.key}})

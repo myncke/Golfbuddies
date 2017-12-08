@@ -1,6 +1,7 @@
 <template>
   <v-container fill-height class="background ma-0">
-    <v-layout row justify-center>
+    <v-progress-circular style="margin: auto" v-if="isLoading" indeterminate v-bind:size="200" v-bind:width="4" color="white"></v-progress-circular>
+    <v-layout v-else row justify-center>
       <v-flex xs12 sm6>
         <v-card flat dark class="green darken-2 border__card">
           <v-card-text class="pa-3">
@@ -31,8 +32,6 @@
 
                         <sign-in v-on:social-user="socialUser" v-if="i == 'Sign In'"> </sign-in>
                         <sign-up ref="signup" v-else-if="i == 'Sign Up'"></sign-up>
-                        <!-- <forgot-password v-else></forgot-password> -->
-
                       </v-tabs-content>
                     </v-tabs-items>
 
@@ -64,6 +63,11 @@
         this.init()
       }
     },
+    computed: {
+      isLoading () {
+        return (this.$store.getters.user === undefined)
+      }
+    },
     data: () => ({
       items: [ 'Sign In', 'Sign Up' ],
       activeTab: 'tab-Sign In'
@@ -84,7 +88,8 @@
 
 <style scoped>
   .background {
-    background-image: url('/static/img/latem.jpg');
+    background-color: lightgreen;
+    /* background-image: url('/static/img/latem.jpg'); */
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 100vh;

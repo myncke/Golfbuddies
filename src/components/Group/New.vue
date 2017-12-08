@@ -138,7 +138,6 @@
         await this.model.save()
         this.loading = false
         this.$router.push({name: 'group', params: { id: this.model.key }})
-        this.$router.go()
       },
       getLocation: async function () {
         /* try {

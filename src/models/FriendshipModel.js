@@ -52,6 +52,20 @@ export default class FriendshipModel extends FirebaseModel {
     this.conversationRef = conversationModel._getDocRef()
   }
 
+  static listenToFriends (onUpdate, onFailure) {
+    let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', true)
+    FriendshipModel.listenToAllFromFirebase(ref, FriendshipModel, object => {
+      object.added = object.added.filter(obj => {
+        for (let key of Object.keys(obj.friends)) {
+          if (key !== (new UserModel()).key) {
+            return obj.friends[key]
+          }
+        }
+      })
+      onUpdate(object)
+    }, onFailure)
+  }
+
   static async getFriendsOfCurrentUser (onFailure) {
     let ref = FriendshipModel.getNormalRef(FriendshipModel).where('friends.' + (new UserModel()).key, '==', true)
     let result = await FriendshipModel.getAllFromRef(ref, FriendshipModel, onFailure)

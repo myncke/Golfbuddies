@@ -4,7 +4,7 @@ import GameModel from '../../models/GameModel'
 
 // initial state
 const state = {
-  user: null
+  user: undefined
 }
 
 // getters
@@ -90,6 +90,8 @@ const actions = {
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         makeUser(user.uid)
+      } else {
+        commit('setUser', null)
       }
     })
   }

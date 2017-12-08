@@ -60,6 +60,11 @@ export default class SportClubModel extends FirebaseSubColModel {
     return await SportClubModel.getAllFromRef(SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true), SportClubModel, onFailure)
   }
 
+  static listenToMyClubs (onUpdate, onFailure) {
+    let ref = SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true)
+    SportClubModel.listenToAllFromFirebase(ref, SportClubModel, onUpdate, onFailure)
+  }
+
   /**
    * Search a club by prefix
    * @param input {String} (the prefix to search for)

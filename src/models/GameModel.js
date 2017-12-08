@@ -84,13 +84,10 @@ export default class GameModel extends FirebaseSubColModel {
 
   static async getAllUpcomingGames (onUpdate, onFailure) {
     let result = []
-    console.log('USER:', (new UserModel())._getDocRef())
     result.push(GameModel.getAllMyInvitedUpcomingGamesRef())
     result.push(...(await GameModel.getAllUpcomingFriendlyGamesRef(onFailure)))
     result.push(GameModel.getAllMyAcceptedUpcomingGamesRef())
     result.push(GameModel.getAllUpcomingGamesRefByUser((new UserModel())._getDocRef(), onFailure))
-
-    console.log(result)
 
     for (let reference of result) {
       GameModel.listenToAllFromFirebase(reference, GameModel, function (modelArray) {

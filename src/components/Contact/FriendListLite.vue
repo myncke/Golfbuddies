@@ -78,19 +78,27 @@
       },
       initFriends: async function () {
         try {
-          let list = await FriendshipModel.getFriendsOfCurrentUser(error => {
-            this.error = error.message
-          })
-          this.friendUserModels = []
-          list.forEach(model => {
-            model.getFriend(error => { this.error = error.message }).then(
-              uModel => {
-                if (uModel) {
-                  this.friendUserModels.push({user: uModel, friendship: model})
-                  this.loading = false
+          FriendshipModel.listenToFriends(array => {
+            array.added.forEach(model => {
+              model.getFriend(error => { this.error = error.message }).then(
+                uModel => {
+                  if (uModel) {
+                    this.friendUserModels.push({user: uModel, friendship: model})
+                    this.loading = false
+                  }
+                }
+              )
+            })
+            this.friendUserModels = this.friendUserModels.filter(obj => {
+              for (let obj2 of array.removed) {
+                if (obj.key === obj2.key) {
+                  return false
                 }
               }
-            )
+              return true
+            })
+          }, error => {
+            this.error = error.message
           })
         } catch (error) {
           this.error = error.message

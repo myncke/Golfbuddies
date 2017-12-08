@@ -267,7 +267,6 @@
         await this.model.deleteObject()
         await this.$refs.golf.getModel().deleteObject()
         this.$router.push('/')
-        this.$router.go('/')
       }
     },
     watch: {

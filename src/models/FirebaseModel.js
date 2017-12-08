@@ -122,13 +122,7 @@ class FirebaseModel {
         let result = {added: [], modified: [], removed: []}
         doc.docChanges.forEach(change => {
           result[change.type].push(FirebaseModel._mapFields(modelClass, undefined, change.doc, onFailure))
-          if (change.type === 'removed') {
-            console.log('Removed Game: ', change.doc.data())
-          }
         })
-        /* doc.forEach(document => {
-          result.push(FirebaseModel._mapFields(modelClass, undefined, document, onFailure))
-        }) */
         onUpdate(result)
       })
     } catch (error) {

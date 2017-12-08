@@ -42,7 +42,7 @@
           </v-tabs-item>
         </v-tabs-bar>
         <v-divider></v-divider>
-        
+
         <v-tabs-items>
           <v-tabs-content
             v-for="i in items"
@@ -124,9 +124,23 @@ export default {
   methods: {
     initModels: async function () {
       this.clubModels = []
-      let list = (await SportClubModel.getMyClubs(error => { this.error = error }))
+      SportClubModel.listenToMyClubs(object => {
+        let models = this.clubModels
+        models.push(...(object.added))
+        models = models.filter(obj => {
+          for (let obj2 of object.removed) {
+            if (obj.key === obj2.key) {
+              return false
+            }
+          }
+          return true
+        })
+        this.clubModels = []
+        this.clubModels = models
+      })
+      // let list = (await SportClubModel.getMyClubs(error => { this.error = error }))
       // list.push(...(await SportClubModel.getMyClubs(error => { this.error = error })))
-      this.clubModels = list
+      // this.clubModels = list
     },
     goToGroupDetails: function (key) {
       this.$router.push({
