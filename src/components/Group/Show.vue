@@ -24,6 +24,7 @@
 
       <v-btn color="primary" @click="joinGroup" block v-if="canJoin">Join Group</v-btn>
       <v-btn color="primary" @click="leaveGroup" block v-if="hasFullPermission && !isMyGroup">Leave Group</v-btn>
+      <v-btn color="primary" @click="editGroup" block v-if="isMyGroup">Edit Group</v-btn>
       <v-btn color="primary" @click="deleteGroup" block v-if="isMyGroup">Delete Group</v-btn>
 
       <v-btn color="green" dark @click="openConversation()" block v-if="hasFullPermission">
@@ -198,6 +199,9 @@
       deleteGroup: async function () {
         await this.club.deleteObject()
         this.$router.push('/')
+      },
+      editGroup () {
+        this.$router.push({name: 'editGroup', params: {id: this.club.key}})
       }
     },
     components: {

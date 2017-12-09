@@ -18,6 +18,12 @@ export default class NotificationModel extends FirebaseModel {
     return await NotificationModel.getAllFromRef(ref, NotificationModel, onFailure)
   }
 
+  static listenToNotifications (onUpdate, onFailure) {
+    let key = (new UserModel()).key
+    let ref = NotificationModel.getNormalRef(NotificationModel).where('receivers.' + key + '.received', '==', true)
+    NotificationModel.listenToAllFromFirebase(ref, NotificationModel, onUpdate, onFailure)
+  }
+
   static _firestoreFields = [
     'receivers',
     'message',

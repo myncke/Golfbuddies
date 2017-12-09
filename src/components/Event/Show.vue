@@ -36,7 +36,7 @@
         <v-divider></v-divider>
 
         <v-toolbar>
-          <join-event v-on:user-joined="refreshModel" v-on:user-quit="refreshModel" :gameModel="model"></join-event>
+          <join-event v-if="!isOver" v-on:user-joined="refreshModel" v-on:user-quit="refreshModel" :gameModel="model"></join-event>
           <!-- <v-btn small flat value="maybe" color="blue-grey" class="caption">
             <v-icon left dark color="" class="body-1">help_outline</v-icon> maybe
           </v-btn>
@@ -61,7 +61,7 @@
         <participants-card ref="participants" :model="model"></participants-card>
       </v-flex>
 
-      <v-flex v-if="isMyGame" class="mt-3">
+      <v-flex v-if="isMyGame && !isOver" class="mt-3">
         <v-btn color="primary" block @click="inviting = true">Invite Friends</v-btn>
         <v-dialog max-width="500" v-model="inviting">
           <v-card>
@@ -152,6 +152,9 @@ export default {
       } else {
         return true
       }
+    },
+    isOver: function () {
+      return this.model.date < new Date()
     }
   },
   watch: {
@@ -190,7 +193,10 @@ export default {
       this.invitees = {invites: {}}
       console.log('invites:' + this.invitees)
       for (let invites of Object.keys(invitees.invites)) {
-        this.model.invites[invites] = invitees.invites[invites]
+        if (!this.model.invites[invites]) {
+          this.model.invites[invites] = {invited: false, accepted: false}
+        }
+        this.model.invites[invites].invited = invitees.invites[invites].invited
       }
       this.inviting = false
       this.refreshModel(this.model)

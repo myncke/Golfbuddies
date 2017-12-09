@@ -34,7 +34,18 @@
     },
     methods: {
       initModels: async function () {
-        this.models = await NotificationModel.getMyNotifications(error => { throw error })
+        NotificationModel.listenToNotifications(object => {
+          this.models.push(...(object.added))
+          this.models = this.models.filter(model => {
+            for (let obj of object.removed) {
+              if (model.key === obj.key) {
+                return false
+              }
+            }
+            return true
+          })
+        }, error => { this.error = error.message })
+        // this.models = await NotificationModel.getMyNotifications(error => { throw error })
       },
       clickedItem: function (model) {
         this.$router.push(model.link)
