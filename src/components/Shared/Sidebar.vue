@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer disable-route-watcher persistent clipped fixed app v-model="open" width='400' class="pb-0" style="z-index:1000">
+  <v-navigation-drawer disable-route-watcher temporary persistent clipped fixed app v-model="open" width='320' class="pb-0" style="z-index:1000">
     <aside-left></aside-left>
   </v-navigation-drawer>
 </template>
