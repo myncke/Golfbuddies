@@ -52,11 +52,15 @@
         if (this.myDate) {
           this.valueChanged()
         }
+      },
+      date () {
+        if (!this.myDate) {
+          this.init()
+        }
       }
     },
     created () {
-      this.time = this.date.getHours() + ':' + this.date.getMinutes()
-      this.myDate = this.$moment(this.date).format('YYYY-MM-DD')
+      this.init()
     },
     methods: {
       valueChanged () {
@@ -65,6 +69,10 @@
         result.setHours(Number(this.time.split(':')[0] || '12'))
         result.setMinutes(Number(this.time.split(':')[1] || '00'))
         this.$emit('value-changed', result)
+      },
+      init () {
+        this.time = this.date.getHours() + ':' + this.date.getMinutes()
+        this.myDate = this.$moment(this.date).format('YYYY-MM-DD')
       }
     },
     props: {
