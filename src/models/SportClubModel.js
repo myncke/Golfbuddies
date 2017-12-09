@@ -3,6 +3,7 @@ import FirebaseSubColModel from './FirebaseSubColModel'
 import firebase from 'firebase'
 import StringUtils from '../utils/StringUtils'
 import ConversationGroupModel from './ConversationGroupModel'
+import UserModel from './UserModel'
 
 /**
  * Class that only holds a key which is the name of this sportType
@@ -61,7 +62,8 @@ export default class SportClubModel extends FirebaseSubColModel {
   }
 
   static listenToMyClubs (onUpdate, onFailure) {
-    let ref = SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true)
+    // let ref = SportClubModel.getNormalRef(SportClubModel).where('members.' + firebase.auth().currentUser.uid, '==', true)
+    let ref = SportClubModel.getNormalRef(SportClubModel).where('admin', '==', (new UserModel())._getDocRef())
     SportClubModel.listenToAllFromFirebase(ref, SportClubModel, onUpdate, onFailure)
   }
 

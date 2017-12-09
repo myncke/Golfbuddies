@@ -11,6 +11,12 @@
       </v-card-actions>
     </v-card>
     <br>
+    <v-divider></v-divider>
+    <br>
+    <p class="title text-xs-center">Discover</p>
+    <p class="caption text-xs-center">Find new Public events</p>
+    <v-divider></v-divider>
+    <br>
     <event-filter></event-filter>
   </div>
 </template>

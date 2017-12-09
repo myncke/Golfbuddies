@@ -50,7 +50,6 @@
             :id="'tab-' + i"
           >
             <v-card flat>
-
                <div v-if="i == 'Groups'">
                 <v-container class="pa-0">
                   <v-layout>
@@ -58,7 +57,7 @@
                       <v-card>
                         <v-list>
                           <v-layout row align-center>
-                            <v-btn outline flat class="" :to="'/groups'"> Search Groups</v-btn>
+                            <v-btn outline flat class="" :to="'/groups'">Search Groups</v-btn>
                             <v-spacer></v-spacer>
                             <v-btn outline flat class="" :to="'/group/new'">Create group</v-btn>
                           </v-layout>

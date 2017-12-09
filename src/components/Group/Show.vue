@@ -116,7 +116,7 @@
       },
       hasInformationPermission () {
         let user = this.$store.getters.user
-        let permission = (this.club.members[user.key] === true || this.isMyGroup)
+        let permission = (this.club.members[user.key] === true || this.isMyGroup || !this.club.closed)
         if (!permission) {
           this.$router.push('/')
           return false
