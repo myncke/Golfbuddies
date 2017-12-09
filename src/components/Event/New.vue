@@ -27,6 +27,7 @@
                 <v-flex xs12 class="input-field">
                   <date-time-picker label="Start" v-on:value-changed="val => { model.date = new Date(val) }"
                                     :allowedFunction="(date) => date >= addDays(-1,new Date())"
+                                    :date="model.date"
                   ></date-time-picker>
                 </v-flex>
                 <v-flex xs12>
@@ -35,6 +36,7 @@
                 <v-flex xs12 class="input-field">
                   <date-time-picker label="End" v-on:value-changed="val => { model.enddate = new Date(val) }"
                                     :allowedFunction="(date) => date >= (model.date || addDays(-1,new Date()))"
+                                    :date="model.enddate"
                   ></date-time-picker>
                   <p class="caption">Don't fill in when it's only on one day.</p>
                   <v-divider></v-divider>

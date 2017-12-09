@@ -125,6 +125,7 @@
           return array.length === 0
         })
         this.deduplicateArray(this.going)
+        this.deduplicateArray(this.invites)
       },
       deduplicateArray (array) {
         let result = {}

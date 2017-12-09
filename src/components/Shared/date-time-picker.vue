@@ -5,6 +5,7 @@
         v-on:date-chosen="val => { date = new Date(val) }"
         :allowedFunction="allowedFunction"
         :label="label + ' Date'"
+        :date="myDate"
       ></date-picker>
     </v-flex>
     <v-flex md6 xs12>
@@ -39,15 +40,23 @@
   export default {
     data: () => ({
       time: '',
-      date: undefined
+      myDate: undefined
     }),
     watch: {
       time () {
-        this.valueChanged()
+        if (this.time) {
+          this.valueChanged()
+        }
       },
-      date () {
-        this.valueChanged()
+      myDate () {
+        if (this.myDate) {
+          this.valueChanged()
+        }
       }
+    },
+    created () {
+      this.time = this.date.getHours() + ':' + this.date.getMinutes()
+      this.myDate = this.$moment(this.date).format('YYYY-MM-DD')
     },
     methods: {
       valueChanged () {
@@ -63,6 +72,10 @@
       label: {
         default: 'Picker in menu',
         type: String
+      },
+      date: {
+        default: null,
+        type: Date
       }
     },
     components: {

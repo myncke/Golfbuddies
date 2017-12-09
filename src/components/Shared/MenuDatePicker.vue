@@ -17,7 +17,7 @@
       prepend-icon="event"
       readonly
     ></v-text-field>
-    <v-date-picker v-model="date" no-title scrollable actions
+    <v-date-picker v-model="myDate" no-title scrollable actions
                    :allowed-dates="allowedFunction">
       <template slot-scope="{ save, cancel }">
         <v-card-actions>
@@ -33,14 +33,17 @@
 <script>
 export default {
   data: () => ({
-    date: null,
+    myDate: null,
     menu: false
   }),
   watch: {
-    date: function (newVal) {
-      console.log(this.date)
+    myDate: function (newVal) {
+      console.log(this.myDate)
       this.$emit('date-chosen', newVal)
     }
+  },
+  created () {
+    this.myDate = this.date
   },
   methods: {
   },
@@ -48,6 +51,10 @@ export default {
     allowedFunction: Function,
     label: {
       default: 'Picker in menu',
+      type: String
+    },
+    date: {
+      default: null,
       type: String
     }
   }
