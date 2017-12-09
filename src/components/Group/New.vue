@@ -24,7 +24,7 @@
               classname="form-control"
               placeholder="Start typing"
               v-on:placechanged="getAddressData"
-              :placeholder="'Group Location'"
+              :placeholder="model.locationString || 'Group Location'"
               types="address"
             >
             </vuetify-google-autocomplete>
