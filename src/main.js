@@ -33,6 +33,7 @@ Vue.use(VueChatScroll)
 Vue.use(VueResource)
 Vue.use(require('vue-moment'))
 Vue.use(FullCalendar)
+Vue.use(require('v-media-query').default)
 
 Vue.config.productionTip = false
 
