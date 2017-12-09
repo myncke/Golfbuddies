@@ -6,7 +6,7 @@
            :color="invited ? (!accepted ? 'green' : 'red') : 'blue-grey'"
            class="caption" @click="accepted ? unjoinGame() : openDialog()"
            :disabled="(!hasPermission && !accepted) || isMyGame">
-      <v-icon left dark color="" class="caption">{{!accepted ? 'check' : 'clear'}}</v-icon> {{accepted ? "Can't go" : (hasPermission ? 'Join' : 'Not allowed')}}
+      <v-icon left dark color="" class="caption">{{!accepted ? 'check' : 'clear'}}</v-icon> {{accepted ? "Cancel Registration" : (hasPermission ? 'Join' : 'Not allowed')}}
     </v-btn>
     <v-btn flat small v-else disabled class="caption">
       My event
