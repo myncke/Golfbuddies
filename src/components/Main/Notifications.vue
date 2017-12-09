@@ -11,11 +11,11 @@
     <v-list dark>
       <v-list-tile v-for="model in models" :key="model.key">
         <v-list-tile-title @click="clickedItem(model)">{{model.message}}</v-list-tile-title>
-        <v-list-tile-action>
+        <!--<v-list-tile-action>
           <v-btn icon @click="removeNotification(model)">
             <v-icon dark>clear</v-icon>
           </v-btn>
-        </v-list-tile-action>
+        </v-list-tile-action>-->
       </v-list-tile>
     </v-list>
   </v-menu>
@@ -48,13 +48,15 @@
         // this.models = await NotificationModel.getMyNotifications(error => { throw error })
       },
       clickedItem: function (model) {
+        model.receivers[this.$store.getters.user.key].seen = true
+        model.deleteObject()
         this.$router.push(model.link)
       },
       seenNotifications: function () {
-        for (let model of this.models) {
+        /* for (let model of this.models) {
           model.receivers[this.$store.getters.user.key].seen = true
           model.save()
-        }
+        } */
       },
       countUnseenNotifications: function () {
         return this.models.filter(model => !model.receivers[this.$store.getters.user.key].seen).length
